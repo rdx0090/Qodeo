@@ -18,18 +18,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return; // Stop execution
     }
 
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // Set current year in footer
+    const yearSpan = document.getElementById('year');
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }
+    
     let currentLogoBase64 = null;
 
     if (typeof QRCodeStyling === 'undefined') {
         console.error("QRCodeStyling library is not loaded.");
         qrCanvasContainer.innerHTML = "<p style='color:red;'>Error: QR Library not loaded. Check internet or script link.</p>";
+        updateQrButton.disabled = true; // Disable button if library not loaded
+        // Disable other controls too if needed
         return;
     }
 
     const qrCodeInstance = new QRCodeStyling({
-        width: 280,
-        height: 280,
+        width: 280, // Initial width, can be adjusted based on qrCanvasContainer size
+        height: 280, // Initial height
         type: 'svg',
         data: qrDataInput.value || "https://qodeo.pro",
         image: '',
@@ -44,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             crossOrigin: 'anonymous',
             margin: 10,
             imageSize: 0.35,
-            hideBackgroundDots: true // Initial setting
+            hideBackgroundDots: true
         },
         qrOptions: {
             errorCorrectionLevel: 'H'
@@ -53,18 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     qrCodeInstance.append(qrCanvasContainer);
 
-    // CHANGE 1: Make function async and add button state handling
     async function updateQRCodeView() {
-        // Double check elements inside function in case they are dynamically removed (less likely here)
-        if (!qrDataInput || !dotColorInput || !backgroundColorInput || !dotStyleSelect) {
-            console.error("UI elements not found for QR update.");
-            return;
-        }
+        if (!updateQrButton) return; // Should not happen due to initial check, but good practice
 
-        if (updateQrButton) { // Ensure button exists before trying to modify it
-            updateQrButton.disabled = true;
-            updateQrButton.textContent = 'Generating...';
-        }
+        updateQrButton.disabled = true;
+        updateQrButton.textContent = 'Generating...';
 
         const options = {
             data: qrDataInput.value || "https://qodeo.pro",
@@ -76,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 color: backgroundColorInput.value,
             },
             image: currentLogoBase64 || '',
-            qrOptions: {
+            qrOptions: { // Ensure these are always passed
                 errorCorrectionLevel: 'H'
             },
-            imageOptions: {
+            imageOptions: { // Ensure these are always passed
                 crossOrigin: 'anonymous',
                 margin: 10,
                 imageSize: 0.35,
@@ -88,21 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            // Simulate a small delay for user to see "Generating..."
-            // In a real complex scenario, qrCodeInstance.update could be wrapped if it were async
-            await new Promise(resolve => setTimeout(resolve, 50)); // Reduced delay
-            
+            await new Promise(resolve => setTimeout(resolve, 50)); // Small delay for UX
             qrCodeInstance.update(options);
-
         } catch (error) {
             console.error("Error updating QR Code:", error);
             if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red;'>Error updating QR. Please try again.</p>";
-            // You might want to display a more user-friendly error message on the UI
+            // Consider a more user-friendly UI alert here
         } finally {
-            if (updateQrButton) { // Ensure button exists
-                updateQrButton.disabled = false;
-                updateQrButton.textContent = 'Generate / Update QR Code';
-            }
+            updateQrButton.disabled = false;
+            updateQrButton.textContent = 'Generate / Update QR Code';
         }
     }
 
@@ -117,27 +111,31 @@ document.addEventListener('DOMContentLoaded', () => {
                         logoPreview.src = e.target.result;
                         logoPreview.style.display = 'block';
                     }
-                    // updateQRCodeView(); // Decide if auto-update is wanted here
+                    // Optional: updateQRCodeView(); // Auto-update on logo select
                 };
                 reader.onerror = function() {
                     console.error("Error reading file for logo.");
-                    alert("Could not load the logo file. Please try a different image.");
+                    alert("Could not load the logo file. Please try a different image or check file permissions.");
                 };
                 reader.readAsDataURL(file);
             } else {
                 currentLogoBase64 = null;
                 if (logoPreview) {
-                    logoPreview.src = "#";
+                    logoPreview.src = "#"; // Clear preview
                     logoPreview.style.display = 'none';
                 }
-                // updateQRCodeView(); // Or here if logo is cleared
+                // Optional: updateQRCodeView(); // Auto-update if logo is cleared
             }
         });
     }
 
-    if (updateQrButton) {
-        updateQrButton.addEventListener('click', updateQRCodeView);
-    }
+    updateQrButton.addEventListener('click', updateQRCodeView);
+
+    // Add listeners for auto-update on input change if desired (can be resource intensive)
+    // qrDataInput.addEventListener('input', updateQRCodeView);
+    // dotColorInput.addEventListener('input', updateQRCodeView);
+    // backgroundColorInput.addEventListener('input', updateQRCodeView);
+    // dotStyleSelect.addEventListener('change', updateQRCodeView);
 
     if (downloadSvgButton) {
         downloadSvgButton.addEventListener('click', () => {
@@ -151,5 +149,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial QR code generation
-    updateQRCodeView(); // Call it once to load initial QR
+    updateQRCodeView();
 });
