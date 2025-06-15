@@ -98,8 +98,8 @@ h2 {
 }
 
 .control-group label {
-    display: flex; /* For aligning icon and text */
-    align-items: center; /* Vertically align icon and text */
+    display: flex; 
+    align-items: center; 
     margin-bottom: 8px;
     font-weight: 500;
     color: var(--text-secondary);
