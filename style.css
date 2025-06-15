@@ -1,35 +1,289 @@
-/* style.css mein neeche add karein (existing code ke baad) */
+/* === Qodeo Dark Theme - Inspired by Hotstar === */
+
+/* --- Global Resets & Variables --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color Palette - Dark Theme */
+    --primary-brand-color: #1f80e0; /* Bright Blue for accents */
+    --background-primary: #0c111b; /* Very Dark Blue/Black */
+    --background-secondary: #192133; /* Slightly Lighter Dark Blue for cards/panels */
+    --background-tertiary: #2c3850; /* For hover states or less important elements */
+    --text-primary: #ffffff; /* White text */
+    --text-secondary: #a9b0bb; /* Lighter grey for secondary text */
+    --border-color: #313c57; /* Borders */
+    --input-background: #131a28; /* Dark input fields */
+    --success-color: #28a745; /* Green for success actions */
+    --success-hover: #1e7e34;
+    --font-primary: 'Inter', 'Segoe UI', Roboto, sans-serif; /* Modern, clean font */
+}
+
+body {
+    font-family: var(--font-primary);
+    line-height: 1.7;
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    width: 90%;
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+/* --- Header Styling --- */
+header {
+    background-color: var(--background-secondary);
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1000;
+}
+
+header #logo {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-brand-color);
+    letter-spacing: -0.5px;
+}
+
+/* --- Main App Layout --- */
+main {
+    flex-grow: 1;
+    padding: 20px 0;
+}
+
+.app-layout {
+    display: flex;
+    flex-direction: column; 
+    gap: 20px;
+}
+
+.controls-panel, .preview-panel {
+    background-color: var(--background-secondary);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.preview-panel {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+}
+
+/* --- Form Controls Styling --- */
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.control-group input[type="text"],
+.control-group input[type="file"],
+.control-group select {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--input-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.control-group input[type="color"] {
+    width: 100%;
+    height: 48px;
+    padding: 5px;
+    background-color: var(--input-background);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+}
+.control-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.control-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
+
+.control-group input[type="text"]:focus,
+.control-group input[type="file"]:focus,
+.control-group input[type="color"]:focus,
+.control-group select:focus {
+    border-color: var(--primary-brand-color);
+    box-shadow: 0 0 0 3px rgba(31, 128, 224, 0.3);
+    outline: none;
+}
+
+#logoPreview {
+    border: 1px dashed var(--border-color);
+    padding: 5px;
+    border-radius: 4px;
+    background-color: var(--input-background);
+    display: block;
+    margin-top: 10px;
+}
+#logoPreview img { /* This rule was missing in one of the versions, make sure it's there */
+    max-width: 100%;
+    height: auto;
+    display: block; /* If the img tag itself is used inside logoPreview */
+}
+
+
+/* --- Buttons Styling --- */
+button, .button-primary { 
+    display: inline-block;
+    width: 100%; 
+    background-color: var(--primary-brand-color);
+    color: var(--text-primary);
+    padding: 14px 20px; 
+    margin-bottom: 10px; 
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem; 
+    font-weight: 600; 
+    text-align: center;
+    transition: background-color 0.2s ease, opacity 0.2s ease; /* Added opacity transition for disabled */
+    letter-spacing: 0.5px; 
+}
+.actions button:last-child { margin-bottom: 0; }
+
+button:hover, .button-primary:hover {
+    background-color: #1869c0; 
+}
+button:active, .button-primary:active {
+    background-color: #165ca8; 
+}
+/* Style for disabled button */
+button:disabled, .button-primary:disabled {
+    background-color: var(--background-tertiary); /* More muted color */
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.7; /* Make it look disabled */
+}
+
+
+#updateQrButton {
+    background-color: var(--success-color); 
+    font-size: 1.05rem; 
+}
+#updateQrButton:hover:not(:disabled) { /* Ensure hover only works when not disabled */
+    background-color: var(--success-hover);
+}
+
+
+.actions button {
+    background-color: var(--background-tertiary); 
+}
+.actions button:hover {
+    background-color: #3b4a69; 
+}
+
+/* --- QR Code Canvas Styling --- */
+#qrCanvasContainer {
+    width: 100%; 
+    max-width: 280px; 
+    height: auto; 
+    aspect-ratio: 1 / 1; 
+    margin-bottom: 20px;
+    border: 2px dashed var(--border-color); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px; 
+    background-color: var(--background-primary); 
+    border-radius: 8px;
+    transition: border-color 0.3s ease; 
+}
+
+#qrCanvasContainer > * { 
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 4px; 
+}
 
 /* --- Scannability Tips Styling --- */
 .scannability-tips {
-    margin-top: 30px; /* Thoda space upar se update button ke baad */
+    margin-top: 30px; 
     padding: 15px;
-    background-color: var(--input-background); /* Similar to input fields for consistency */
+    background-color: var(--input-background); 
     border: 1px solid var(--border-color);
-    border-radius: 6px; /* Match other rounded corners */
-    font-size: 0.85rem; /* Thoda chhota text */
+    border-radius: 6px; 
+    font-size: 0.85rem; 
 }
 
 .scannability-tips h4 {
     color: var(--text-primary);
     margin-bottom: 10px;
-    font-size: 0.9rem; /* Heading ka size */
-    font-weight: 600; /* Thoda bold */
-    border-bottom: 1px solid var(--border-color); /* Optional: separator for heading */
-    padding-bottom: 8px; /* Space below heading before list */
+    font-size: 0.9rem; 
+    font-weight: 600; 
+    border-bottom: 1px solid var(--border-color); 
+    padding-bottom: 8px; 
 }
 
 .scannability-tips ul {
-    list-style-type: disc; /* Standard bullet points */
-    list-style-position: inside; /* Bullets andar ki taraf */
-    padding-left: 0; /* Remove default browser padding for ul */
-    color: var(--text-secondary); /* Match secondary text color */
+    list-style-type: disc; 
+    list-style-position: inside; 
+    padding-left: 0; 
+    color: var(--text-secondary); 
 }
 
 .scannability-tips ul li {
-    margin-bottom: 6px; /* Har tip ke beech mein thoda space */
+    margin-bottom: 6px; 
 }
 
-.scannability-tips ul li::marker { /* For modern browsers, to style the bullet color if needed */
-    color: var(--primary-brand-color); /* Optional: Bullets ko brand color de sakte hain */
+.scannability-tips ul li::marker { 
+    color: var(--primary-brand-color); 
+}
+
+
+/* --- Footer Styling --- */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: var(--background-secondary);
+    color: var(--text-secondary);
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem; 
+}
+
+/* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
+@media (min-width: 768px) { 
+    main { padding: 30px 0; }
+    .app-layout { flex-direction: row; gap: 30px; }
+    .controls-panel { flex: 1; max-width: 450px; }
+    .preview-panel { flex: 1.5; margin-top: 0; }
+    h2 { font-size: 1.4rem; }
+    button, .button-primary { width: auto; margin-bottom: 0; }
+    .actions button { margin: 10px 8px 0; }
+    #qrCanvasContainer { max-width: 300px; padding: 10px; }
 }
