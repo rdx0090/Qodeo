@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qodeo - Professional QR Code Studio</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="images/favicon.png" type="image/png">
+    <!-- Favicon Link -->
+    <link rel="icon" href="images/favicon.png" type="image/png"> 
+    <!-- (Agar aapki file favicon.ico hai toh type="image/x-icon" karein) -->
 </head>
 <body>
     <header>
@@ -20,19 +22,18 @@
                 <h2>Customize Your QR Code</h2>
 
                 <div class="control-group">
-                    <label for="qrData">Data:</label> <!-- Label thoda chhota kiya -->
-                    {/* CHANGE 1: Placeholder text update & example value */}
+                    <label for="qrData">Data:</label>
                     <input type="text" id="qrData" value="https://qodeo.pro" placeholder="Enter URL, text, email, phone, etc.">
                 </div>
 
                 <div class="control-group">
                     <label for="dotColor">Dot Color:</label>
-                    <input type="color" id="dotColor" value="#000000">
+                    <input type="color" id="dotColor" value="#ffffff"> <!-- Default white dots for dark theme -->
                 </div>
 
                 <div class="control-group">
                     <label for="backgroundColor">Background Color:</label>
-                    <input type="color" id="backgroundColor" value="#ffffff">
+                    <input type="color" id="backgroundColor" value="#0c111b"> <!-- Default dark bg for dark theme -->
                 </div>
 
                 <div class="control-group">
@@ -55,7 +56,6 @@
 
                 <button id="updateQrButton" class="button-primary">Generate / Update QR Code</button>
 
-                {/* CHANGE 2: Scannability Tips Section Added */}
                 <div class="scannability-tips">
                     <h4>Quick Tips for Scannability:</h4>
                     <ul>
