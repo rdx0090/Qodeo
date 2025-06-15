@@ -4,30 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qodeo - Professional QR Code Studio</title>
-    <!-- Link to your CSS file -->
     <link rel="stylesheet" href="style.css">
-    <!-- Favicon (Optional - Website ka chhota sa icon jo browser tab mein dikhta hai) -->
-   <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="icon" href="images/favicon.png" type="image/png">
 </head>
 <body>
-    <!-- Header Section: Website ka sabse upar wala hissa -->
     <header>
         <div class="container">
             <h1 id="logo">Qodeo</h1>
-            <!-- Aap yahan navigation links daal sakte hain agar future mein multiple pages hon -->
         </div>
     </header>
 
-    <!-- Main Content Area: Yahan aapka QR generator tool hoga -->
     <main>
         <div class="container app-layout">
-            <!-- Left Panel: User yahan se QR code ke liye input dega aur customize karega -->
             <aside class="controls-panel">
                 <h2>Customize Your QR Code</h2>
 
                 <div class="control-group">
-                    <label for="qrData">Data (URL, Text, etc.):</label>
-                    <input type="text" id="qrData" value="https://example.com" placeholder="Enter data for QR code">
+                    <label for="qrData">Data:</label> <!-- Label thoda chhota kiya -->
+                    {/* CHANGE 1: Placeholder text update & example value */}
+                    <input type="text" id="qrData" value="https://qodeo.pro" placeholder="Enter URL, text, email, phone, etc.">
                 </div>
 
                 <div class="control-group">
@@ -39,7 +34,7 @@
                     <label for="backgroundColor">Background Color:</label>
                     <input type="color" id="backgroundColor" value="#ffffff">
                 </div>
-                
+
                 <div class="control-group">
                     <label for="dotStyle">Dot Style:</label>
                     <select id="dotStyle">
@@ -49,7 +44,6 @@
                         <option value="classy">Classy</option>
                         <option value="classy-rounded">Classy Rounded</option>
                         <option value="extra-rounded">Extra Rounded</option>
-                        <!-- Add more supported styles from qr-code-styling library documentation -->
                     </select>
                 </div>
 
@@ -58,15 +52,25 @@
                     <input type="file" id="logoUpload" accept="image/png, image/jpeg, image/svg+xml">
                     <img id="logoPreview" src="#" alt="Logo Preview" style="max-width: 100px; max-height: 50px; margin-top: 10px; display: none;"/>
                 </div>
-                
+
                 <button id="updateQrButton" class="button-primary">Generate / Update QR Code</button>
+
+                {/* CHANGE 2: Scannability Tips Section Added */}
+                <div class="scannability-tips">
+                    <h4>Quick Tips for Scannability:</h4>
+                    <ul>
+                        <li>Ensure good contrast between dot and background colors.</li>
+                        <li>Avoid making logos too large; they can obstruct data.</li>
+                        <li>Test your QR code with multiple scanner apps before printing.</li>
+                    </ul>
+                </div>
+
             </aside>
 
-            <!-- Right Panel: Yahan QR code ka live preview dikhega aur download options honge -->
             <section class="preview-panel">
                 <h2>Preview</h2>
                 <div id="qrCanvasContainer">
-                    <!-- QR Code will be rendered here by the library -->
+                    {/* QR Code will be rendered here */}
                 </div>
                 <div class="actions">
                     <button id="downloadSvgButton">Download SVG</button>
@@ -76,15 +80,13 @@
         </div>
     </main>
 
-    <!-- Footer Section: Website ka sabse neeche wala hissa -->
     <footer>
         <div class="container">
             <p>© <span id="year"></span> Qodeo. Designed with AI assistance.</p>
         </div>
     </footer>
 
-    <!-- QR Code Styling Library (CDN se) -->
     <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
-    <!-- Link to your JavaScript file -->
     <script src="script.js"></script>
 </body>
+</html>
