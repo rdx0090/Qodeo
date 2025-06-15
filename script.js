@@ -29,14 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof QRCodeStyling === 'undefined') {
         console.error("QRCodeStyling library is not loaded.");
         qrCanvasContainer.innerHTML = "<p style='color:red;'>Error: QR Library not loaded. Check internet or script link.</p>";
-        updateQrButton.disabled = true; // Disable button if library not loaded
-        // Disable other controls too if needed
+        updateQrButton.disabled = true; 
         return;
     }
 
     const qrCodeInstance = new QRCodeStyling({
-        width: 280, // Initial width, can be adjusted based on qrCanvasContainer size
-        height: 280, // Initial height
+        width: 280, 
+        height: 280, 
         type: 'svg',
         data: qrDataInput.value || "https://qodeo.pro",
         image: '',
@@ -61,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     qrCodeInstance.append(qrCanvasContainer);
 
     async function updateQRCodeView() {
-        if (!updateQrButton) return; // Should not happen due to initial check, but good practice
+        if (!updateQrButton) return; 
 
         updateQrButton.disabled = true;
         updateQrButton.textContent = 'Generating...';
@@ -76,10 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 color: backgroundColorInput.value,
             },
             image: currentLogoBase64 || '',
-            qrOptions: { // Ensure these are always passed
+            qrOptions: { 
                 errorCorrectionLevel: 'H'
             },
-            imageOptions: { // Ensure these are always passed
+            imageOptions: { 
                 crossOrigin: 'anonymous',
                 margin: 10,
                 imageSize: 0.35,
@@ -88,12 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 50)); // Small delay for UX
+            await new Promise(resolve => setTimeout(resolve, 50)); 
             qrCodeInstance.update(options);
         } catch (error) {
             console.error("Error updating QR Code:", error);
             if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red;'>Error updating QR. Please try again.</p>";
-            // Consider a more user-friendly UI alert here
         } finally {
             updateQrButton.disabled = false;
             updateQrButton.textContent = 'Generate / Update QR Code';
@@ -111,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         logoPreview.src = e.target.result;
                         logoPreview.style.display = 'block';
                     }
-                    // Optional: updateQRCodeView(); // Auto-update on logo select
                 };
                 reader.onerror = function() {
                     console.error("Error reading file for logo.");
@@ -121,21 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 currentLogoBase64 = null;
                 if (logoPreview) {
-                    logoPreview.src = "#"; // Clear preview
+                    logoPreview.src = "#"; 
                     logoPreview.style.display = 'none';
                 }
-                // Optional: updateQRCodeView(); // Auto-update if logo is cleared
             }
         });
     }
 
     updateQrButton.addEventListener('click', updateQRCodeView);
-
-    // Add listeners for auto-update on input change if desired (can be resource intensive)
-    // qrDataInput.addEventListener('input', updateQRCodeView);
-    // dotColorInput.addEventListener('input', updateQRCodeView);
-    // backgroundColorInput.addEventListener('input', updateQRCodeView);
-    // dotStyleSelect.addEventListener('change', updateQRCodeView);
 
     if (downloadSvgButton) {
         downloadSvgButton.addEventListener('click', () => {
@@ -148,6 +138,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initial QR code generation
     updateQRCodeView();
 });
