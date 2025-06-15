@@ -1,0 +1,283 @@
+/* === Qodeo Dark Theme - Inspired by Hotstar === */
+
+/* --- Global Resets & Variables --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color Palette - Dark Theme */
+    --primary-brand-color: #1f80e0; /* Bright Blue for accents (Hotstar-like) */
+    --background-primary: #0c111b; /* Very Dark Blue/Black (Hotstar main background) */
+    --background-secondary: #192133; /* Slightly Lighter Dark Blue for cards/panels */
+    --background-tertiary: #2c3850; /* For hover states or less important elements */
+    --text-primary: #ffffff; /* White text */
+    --text-secondary: #a9b0bb; /* Lighter grey for secondary text */
+    --border-color: #313c57; /* Borders */
+    --input-background: #131a28; /* Dark input fields */
+    --success-color: #28a745; /* Green for success actions */
+    --success-hover: #1e7e34;
+    --font-primary: 'Inter', 'Segoe UI', Roboto, sans-serif; /* Modern, clean font */
+}
+
+body {
+    font-family: var(--font-primary);
+    line-height: 1.7;
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-size: 16px; /* Base font size */
+    -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+}
+
+.container {
+    width: 90%;
+    max-width: 1350px; /* Slightly wider for studio feel */
+    margin: 0 auto;
+}
+
+/* --- Header Styling --- */
+header {
+    background-color: var(--background-secondary);
+    padding: 1rem 0; /* Reduced padding slightly */
+    border-bottom: 1px solid var(--border-color);
+    /* position: sticky; /* Sticky might have issues on some mobile browsers without JS handling */
+    /* top: 0; */
+    z-index: 1000;
+}
+
+header #logo {
+    margin: 0;
+    font-size: 2rem; /* Slightly smaller for a sleeker look */
+    font-weight: 700;
+    color: var(--primary-brand-color);
+    letter-spacing: -0.5px; /* Slight tightening of letter spacing */
+}
+
+/* --- Main App Layout --- */
+main {
+    flex-grow: 1;
+    padding: 20px 0; /* Reduced padding for mobile first */
+}
+
+.app-layout {
+    display: flex;
+    flex-direction: column; /* Stack panels by default for mobile */
+    gap: 20px; /* Reduced gap for mobile */
+}
+
+.controls-panel, .preview-panel {
+    background-color: var(--background-secondary);
+    padding: 20px; /* Consistent padding */
+    border-radius: 10px; /* Slightly less rounded */
+    border: 1px solid var(--border-color);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25); /* Adjusted shadow */
+}
+
+.preview-panel {
+    margin-top: 20px; /* Space when stacked */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+h2 {
+    font-size: 1.3rem; /* Adjusted title size for mobile */
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600; /* Bolder headings */
+}
+
+/* --- Form Controls Styling --- */
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 8px; /* Space */
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 0.85rem; /* Smaller label text */
+}
+
+.control-group input[type="text"],
+.control-group input[type="file"],
+.control-group select {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--input-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    -webkit-appearance: none; /* Removes default iOS styling */
+    -moz-appearance: none;    /* Removes default Firefox styling */
+    appearance: none;         /* Removes default browser styling */
+}
+
+.control-group input[type="color"] { /* Specific styling for color inputs */
+    width: 100%;
+    height: 48px; /* Match other inputs */
+    padding: 5px; /* Padding for the color swatch area */
+    background-color: var(--input-background);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+}
+.control-group input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+.control-group input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 4px; /* Rounded swatch */
+}
+
+
+.control-group input[type="text"]:focus,
+.control-group input[type="file"]:focus,
+.control-group input[type="color"]:focus,
+.control-group select:focus {
+    border-color: var(--primary-brand-color);
+    box-shadow: 0 0 0 3px rgba(31, 128, 224, 0.3); /* Brighter focus glow */
+    outline: none;
+}
+
+#logoPreview {
+    border: 1px dashed var(--border-color);
+    padding: 5px;
+    border-radius: 4px;
+    background-color: var(--input-background); /* Match input fields */
+    display: block; /* Make sure it takes space */
+    margin-top: 10px;
+}
+/* Ensure logo preview image is responsive */
+#logoPreview img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* --- Buttons Styling --- */
+button, .button-primary { 
+    display: inline-block;
+    width: 100%; /* Make buttons full width on mobile for easier tapping */
+    background-color: var(--primary-brand-color);
+    color: var(--text-primary);
+    padding: 14px 20px; /* Larger padding for tap targets */
+    margin-bottom: 10px; /* Space between stacked buttons */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem; 
+    font-weight: 600; 
+    text-align: center;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    letter-spacing: 0.5px; 
+}
+.actions button:last-child {
+    margin-bottom: 0; /* Remove bottom margin from last button in a group */
+}
+
+
+button:hover, .button-primary:hover {
+    background-color: #1869c0; 
+    /* transform: translateY(-2px); /* Hover transform might be less useful on mobile */
+}
+
+button:active, .button-primary:active {
+    /* transform: translateY(0px); */
+    background-color: #165ca8; 
+}
+
+#updateQrButton {
+    background-color: var(--success-color); 
+    font-size: 1.05rem; 
+}
+#updateQrButton:hover {
+    background-color: var(--success-hover);
+}
+
+.actions button {
+    background-color: var(--background-tertiary); 
+}
+.actions button:hover {
+    background-color: #3b4a69; 
+}
+
+/* --- QR Code Canvas Styling --- */
+#qrCanvasContainer {
+    width: 100%; /* Take full width of its parent on mobile */
+    max-width: 280px; /* But don't get too large */
+    height: auto; /* Adjust height automatically */
+    aspect-ratio: 1 / 1; /* Maintain square shape */
+    margin-bottom: 20px;
+    border: 2px dashed var(--border-color); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px; /* Reduced padding */
+    background-color: var(--background-primary); 
+    border-radius: 8px;
+    transition: border-color 0.3s ease; 
+}
+
+#qrCanvasContainer > * { /* QR code itself */
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 4px; 
+}
+
+
+/* --- Footer Styling --- */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: var(--background-secondary);
+    color: var(--text-secondary);
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem; /* Smaller footer text */
+}
+
+/* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
+@media (min-width: 768px) { /* Tablet and above */
+    main {
+        padding: 30px 0;
+    }
+    .app-layout {
+        flex-direction: row; /* Side-by-side layout */
+        gap: 30px;
+    }
+    .controls-panel {
+        flex: 1; /* Takes 1 part */
+        max-width: 450px; /* Optional: limit width */
+    }
+    .preview-panel {
+        flex: 1.5; /* Takes 1.5 parts */
+        margin-top: 0; /* No margin when side-by-side */
+    }
+    h2 {
+        font-size: 1.4rem;
+    }
+    button, .button-primary {
+        width: auto; /* Auto width for buttons on larger screens */
+        margin-bottom: 0; /* Remove bottom margin if not needed */
+    }
+    .actions button {
+        margin: 10px 8px 0; /* Original spacing for action buttons */
+    }
+     #qrCanvasContainer {
+        max-width: 300px; 
+        padding: 10px;
+    }
+}
