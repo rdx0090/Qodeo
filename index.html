@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {/* Baaki Head content waisa hi */}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qodeo - Professional QR Code Studio</title>
@@ -11,7 +10,6 @@
 </head>
 <body>
     <header>
-        {/* Header content waisa hi */}
         <div class="container">
             <h1 id="logo">Qodeo</h1>
         </div>
@@ -29,17 +27,15 @@
                     <button class="tab-link" data-tab="textTab" data-icon="fas fa-font" title="Generate QR for Plain Text">
                         <i class="fas fa-font"></i> Text
                     </button>
-                    {/* NEW TABS ADDED */}
                     <button class="tab-link" data-tab="emailTab" data-icon="fas fa-envelope" title="Generate QR for an Email">
                         <i class="fas fa-envelope"></i> Email
                     </button>
                     <button class="tab-link" data-tab="phoneTab" data-icon="fas fa-phone" title="Generate QR for a Phone Number">
                         <i class="fas fa-phone"></i> Phone
                     </button>
-                    {/* Hum yahan aur tabs (SMS, Wi-Fi, etc.) baad mein add karenge */}
+                    <!-- More tabs will be added here later -->
                 </div>
 
-                {/* URL TAB CONTENT */}
                 <div id="urlTab" class="tab-content active">
                     <div class="control-group">
                         <label for="qrDataUrl">Website URL:</label>
@@ -47,7 +43,6 @@
                     </div>
                 </div>
 
-                {/* TEXT TAB CONTENT */}
                 <div id="textTab" class="tab-content">
                     <div class="control-group">
                         <label for="qrDataText">Your Text:</label>
@@ -55,7 +50,6 @@
                     </div>
                 </div>
 
-                {/* EMAIL TAB CONTENT - NEW */}
                 <div id="emailTab" class="tab-content">
                     <div class="control-group">
                         <label for="qrEmailTo">To Email Address:</label>
@@ -71,7 +65,6 @@
                     </div>
                 </div>
 
-                {/* PHONE TAB CONTENT - NEW */}
                 <div id="phoneTab" class="tab-content">
                     <div class="control-group">
                         <label for="qrPhoneNumber">Phone Number:</label>
@@ -79,10 +72,8 @@
                     </div>
                 </div>
                 
-                {/* COMMON CUSTOMIZATION OPTIONS */}
                 <h3 class="customization-heading">Appearance Options</h3>
-                {/* Dot Color, Background Color, Dot Style, Logo Upload waise hi rahenge */}
-                {/* ... (Rest of the controls-panel content) ... */}
+
                 <div class="control-group">
                     <label for="dotColor">
                         <i class="fas fa-palette icon-label"></i> Dot Color:
@@ -118,16 +109,21 @@
                 <button id="updateQrButton" class="button-primary">Generate / Update QR Code</button>
             </aside>
 
-            {/* Preview Panel waisa hi rahega */}
             <section class="preview-panel">
-               {/* ... (Preview panel content) ... */}
                 <h2>Preview</h2>
-                <div id="qrCanvasContainer"></div>
-                <div id="qrDataDisplay" class="qr-data-text"></div>
+                <div id="qrCanvasContainer">
+                    <!-- QR Code will be rendered here by the library -->
+                </div>
+                
+                <div id="qrDataDisplay" class="qr-data-text">
+                    <!-- This div is populated by JavaScript and should be empty in HTML -->
+                </div>
+
                 <div class="actions">
                     <button id="downloadSvgButton">Download SVG</button>
                     <button id="downloadPngButton">Download PNG</button>
                 </div>
+
                 <div class="scannability-tips">
                     <h4>Quick Tips for Scannability:</h4>
                     <ul>
@@ -141,7 +137,6 @@
     </main>
 
     <footer>
-        {/* Footer content waisa hi */}
         <div class="container">
             <p>© <span id="year"></span> Qodeo. Designed with AI assistance.</p>
         </div>
