@@ -1,4 +1,4 @@
-/* === Qodeo Dark Theme - Final for Current Features === */
+/* === Qodeo Dark Theme - Refined View === */
 
 /* --- Global Resets & Variables --- */
 * {
@@ -19,28 +19,28 @@
     --success-color: #28a745; 
     --success-hover: #1e7e34;
     --font-primary: 'Inter', 'Segoe UI', Roboto, sans-serif; 
-    --header-height: 60px;
+    --header-height: 56px; /* Slightly reduced header height */
 }
 
 body {
     font-family: var(--font-primary);
-    line-height: 1.7;
+    line-height: 1.6; /* Adjusted line height */
     background-color: var(--background-primary);
     color: var(--text-primary);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    font-size: 16px;
+    font-size: 14.5px; /* Reduced base font size */
     -webkit-tap-highlight-color: transparent;
 }
 
 .container {
     width: 90%;
-    max-width: 800px; 
+    max-width: 760px; /* Adjusted max-width for a more compact view */
     margin: 0 auto;
 }
 
-/* --- Header Styling (With Logo Icon and Text) --- */
+/* --- Header Styling --- */
 header {
     background-color: var(--background-secondary);
     padding: 0; 
@@ -53,51 +53,50 @@ header {
     z-index: 1000;
 }
 
-header .container { /* Ensure container inside header also uses flex if needed for alignment */
+header .container {
     display: flex;
     align-items: center;
-    /* justify-content: center; /* Uncomment to center logo in header */
 }
 
-#logoLink { /* Styling for the <a> tag wrapping logo and text */
+#logoLink {
     display: flex;
     align-items: center;
-    text-decoration: none; /* Remove underline from link */
+    text-decoration: none; 
 }
 
 #headerIcon {
-    height: 32px; /* Adjust size as needed */
+    height: 28px; /* Reduced icon size */
     width: auto;
-    margin-right: 10px; /* Space between icon and text */
+    margin-right: 8px; /* Reduced space */
 }
 
 #logoText {
-    font-size: 1.8rem; 
+    font-size: 1.7rem; /* Reduced text size */
     font-weight: 700;
     color: var(--primary-brand-color);
     letter-spacing: -0.5px;
-    line-height: 1; /* Helps in vertical alignment */
+    line-height: 1; 
 }
 
 
 /* --- Main App Layout --- */
 main {
     flex-grow: 1;
-    padding: 20px 0;
+    padding: 18px 0; /* Reduced padding */
 }
 
 .app-layout {
     display: flex;
     flex-direction: column; 
-    gap: 25px; 
+    gap: 20px; /* Reduced gap */
 }
 
 .controls-panel, .preview-panel {
     background-color: var(--background-secondary);
-    padding: 20px;
-    border-radius: 10px;
+    padding: 18px; /* Reduced padding */
+    border-radius: 8px; /* Slightly less rounded */
     border: 1px solid var(--border-color);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Adjusted shadow */
 }
 
 .preview-panel {
@@ -108,10 +107,10 @@ main {
 
 
 h2 { 
-    font-size: 1.3rem;
+    font-size: 1.15rem; /* Reduced heading size */
     color: var(--text-primary);
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+    margin-bottom: 18px; /* Reduced margin */
+    padding-bottom: 8px; /* Reduced padding */
     border-bottom: 1px solid var(--border-color);
     font-weight: 600;
 }
@@ -119,7 +118,7 @@ h2 {
 /* --- QR Type Tabs Styling --- */
 .qr-type-tabs {
     display: flex;
-    margin-bottom: 25px;
+    margin-bottom: 20px; /* Reduced margin */
     border-bottom: 1px solid var(--border-color);
     flex-wrap: wrap; 
 }
@@ -128,18 +127,18 @@ h2 {
     background-color: transparent;
     color: var(--text-secondary);
     border: none;
-    padding: 10px 15px; 
+    padding: 8px 12px; /* Reduced padding */
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.8rem; /* Reduced font size */
     font-weight: 500;
     transition: color 0.2s ease, border-bottom-color 0.2s ease; 
-    border-bottom: 3px solid transparent; 
-    margin-right: 5px; 
+    border-bottom: 2px solid transparent; /* Thinner active border */
+    margin-right: 4px; 
     margin-bottom: -1px; 
     display: flex; 
     align-items: center;
 }
-.tab-link i { margin-right: 6px; font-size: 0.9em; }
+.tab-link i { margin-right: 5px; font-size: 0.9em; }
 .tab-link:hover { color: var(--text-primary); }
 .tab-link.active {
     color: var(--primary-brand-color);
@@ -151,18 +150,22 @@ h2 {
 .tab-content.active { display: block; }
 
 .customization-heading {
-    font-size: 1.1rem; color: var(--text-primary); margin-top: 25px; 
-    margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);
+    font-size: 1rem; /* Reduced font size */
+    color: var(--text-primary); 
+    margin-top: 20px; 
+    margin-bottom: 12px; /* Reduced margin */
+    padding-bottom: 6px; /* Reduced padding */
+    border-bottom: 1px solid var(--border-color);
     font-weight: 500;
 }
 
 /* --- Form Controls Styling --- */
-.control-group { margin-bottom: 20px; }
+.control-group { margin-bottom: 18px; /* Reduced margin */ }
 .control-group label {
-    display: flex; align-items: center; margin-bottom: 8px;
-    font-weight: 500; color: var(--text-secondary); font-size: 0.85rem;
+    display: flex; align-items: center; margin-bottom: 6px; /* Reduced margin */
+    font-weight: 500; color: var(--text-secondary); font-size: 0.78rem; /* Reduced font size */
 }
-.icon-label { margin-right: 8px; font-size: 0.9em; color: var(--primary-brand-color); }
+.icon-label { margin-right: 6px; font-size: 0.9em; color: var(--primary-brand-color); }
 
 .control-group input[type="text"],
 .control-group input[type="url"], 
@@ -171,41 +174,48 @@ h2 {
 .control-group input[type="file"],
 .control-group textarea, 
 .control-group select {
-    width: 100%; padding: 12px 15px; background-color: var(--input-background);
+    width: 100%; padding: 10px 12px; /* Reduced padding */
+    background-color: var(--input-background);
     border: 1px solid var(--border-color); color: var(--text-primary);
-    border-radius: 6px; font-size: 0.95rem;
+    border-radius: 5px; /* Slightly less rounded */
+    font-size: 0.88rem; /* Reduced font size */
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
 }
-.control-group textarea { font-family: var(--font-primary); resize: vertical; min-height: 80px; }
+.control-group textarea { font-family: var(--font-primary); resize: vertical; min-height: 70px; /* Reduced min-height */ }
 
 .control-group input[type="color"] {
-    width: 100%; height: 48px; padding: 5px; background-color: var(--input-background);
-    border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;
+    width: 100%; height: 44px; /* Reduced height */
+    padding: 4px; /* Reduced padding */
+    background-color: var(--input-background);
+    border: 1px solid var(--border-color); border-radius: 5px; cursor: pointer;
 }
 .control-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-.control-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
+.control-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 3px; }
 
 .control-group input:focus, 
 .control-group textarea:focus,
 .control-group select:focus {
     border-color: var(--primary-brand-color);
-    box-shadow: 0 0 0 3px rgba(31, 128, 224, 0.3); outline: none;
+    box-shadow: 0 0 0 2px rgba(31, 128, 224, 0.25); /* Adjusted shadow */
+    outline: none;
 }
 
 #logoPreview {
-    border: 1px dashed var(--border-color); padding: 5px; border-radius: 4px;
-    background-color: var(--input-background); display: block; margin-top: 10px;
+    border: 1px dashed var(--border-color); padding: 4px; border-radius: 4px;
+    background-color: var(--input-background); display: block; margin-top: 8px;
 }
 #logoPreview img { max-width: 100%; height: auto; display: block; }
 
 /* --- Buttons Styling --- */
 button, .button-primary { 
     display: inline-block; width: 100%; background-color: var(--primary-brand-color);
-    color: var(--text-primary); padding: 14px 20px; margin-bottom: 10px; 
-    border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; 
-    font-weight: 600; text-align: center;
-    transition: background-color 0.2s ease, opacity 0.2s ease; letter-spacing: 0.5px; 
+    color: var(--text-primary); padding: 12px 18px; /* Reduced padding */
+    margin-bottom: 8px; /* Reduced margin */
+    border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem; /* Reduced font size */
+    font-weight: 500; /* Adjusted font weight */
+    text-align: center;
+    transition: background-color 0.2s ease, opacity 0.2s ease; letter-spacing: 0.3px; /* Adjusted letter spacing */
 }
 .actions button:last-child { margin-bottom: 0; }
 
@@ -213,73 +223,110 @@ button:hover, .button-primary:hover { background-color: #1869c0; }
 button:active, .button-primary:active { background-color: #165ca8; }
 button:disabled, .button-primary:disabled {
     background-color: var(--background-tertiary); color: var(--text-secondary);
-    cursor: not-allowed; opacity: 0.7; 
+    cursor: not-allowed; opacity: 0.6; /* Adjusted opacity */
 }
 
 #updateQrButton {
-    background-color: var(--success-color); font-size: 1.05rem; 
-    margin-top: 15px; 
+    background-color: var(--success-color); font-size: 1rem; /* Maintained size for prominence */
+    margin-top: 12px; /* Reduced margin */
 }
 #updateQrButton:hover:not(:disabled) { background-color: var(--success-hover); }
 
 .actions { 
-    display: flex; justify-content: center; width: 100%; gap: 10px; 
+    display: flex; justify-content: center; width: 100%; gap: 8px; /* Reduced gap */
 }
 .actions button {
-    background-color: var(--background-tertiary); flex-grow: 1; max-width: 180px; 
+    background-color: var(--background-tertiary); flex-grow: 1; max-width: 170px; /* Adjusted max-width */
 }
 .actions button:hover { background-color: #3b4a69; }
 
 /* --- QR Code Canvas Styling --- */
 #qrCanvasContainer {
-    width: 100%; max-width: 280px; height: auto; aspect-ratio: 1 / 1; 
-    margin-bottom: 10px; border: 2px dashed var(--border-color); 
+    width: 100%; max-width: 260px; /* Slightly reduced max-width */
+    height: auto; aspect-ratio: 1 / 1; 
+    margin-bottom: 8px; /* Reduced margin */
+    border: 1px dashed var(--border-color); /* Thinner border */
     display: flex; align-items: center; justify-content: center;
-    padding: 8px; background-color: var(--background-primary); 
-    border-radius: 8px; transition: border-color 0.3s ease; overflow: hidden; 
+    padding: 6px; /* Reduced padding */
+    background-color: var(--background-primary); 
+    border-radius: 6px; transition: border-color 0.3s ease; overflow: hidden; 
 }
 #qrCanvasContainer > canvas, 
 #qrCanvasContainer > img { 
     display: block; margin: auto; max-width: 100%;
-    max-height: 100%; border-radius: 4px; 
+    max-height: 100%; border-radius: 3px; 
 }
 
 .qr-data-text {
-    font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px; 
-    margin-bottom: 15px; word-break: break-all; text-align: center;
-    max-width: 90%; padding: 5px; 
+    font-size: 0.75rem; /* Reduced font size */
+    color: var(--text-secondary); margin-top: 4px; 
+    margin-bottom: 12px; /* Reduced margin */
+    word-break: break-all; text-align: center;
+    max-width: 90%; padding: 4px; 
 }
 
 /* --- Scannability Tips Styling --- */
 .scannability-tips {
-    margin-top: 20px; padding: 15px; background-color: var(--input-background); 
+    margin-top: 18px; /* Reduced margin */
+    padding: 12px; /* Reduced padding */
+    background-color: var(--input-background); 
     border: 1px solid var(--border-color); border-radius: 6px; 
-    font-size: 0.85rem; width: 100%; max-width: 400px; align-self: center; 
+    font-size: 0.78rem; /* Reduced font size */
+    width: 100%; max-width: 380px; align-self: center; 
 }
 .scannability-tips h4 {
-    color: var(--text-primary); margin-bottom: 10px; font-size: 0.9rem; 
-    font-weight: 600; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; 
+    color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; /* Reduced font size */
+    font-weight: 600; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; 
 }
 .scannability-tips ul {
     list-style-type: disc; list-style-position: inside; padding-left: 0; color: var(--text-secondary); 
 }
-.scannability-tips ul li { margin-bottom: 6px; }
+.scannability-tips ul li { margin-bottom: 5px; } /* Reduced margin */
 .scannability-tips ul li::marker { color: var(--primary-brand-color); }
 
 /* --- Footer Styling --- */
 footer {
-    text-align: center; padding: 20px 0; background-color: var(--background-secondary);
+    text-align: center; padding: 15px 0; /* Reduced padding */
+    background-color: var(--background-secondary);
     color: var(--text-secondary); margin-top: auto; border-top: 1px solid var(--border-color);
-    font-size: 0.8rem; 
+    font-size: 0.75rem; /* Reduced font size */
 }
 
 /* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
 @media (min-width: 768px) { 
-    .container { max-width: 700px; }
-    h2 { font-size: 1.4rem; }
-    .customization-heading { font-size: 1.2rem; }
+    body { font-size: 15px; } /* Slightly larger base for desktop */
+    .container { max-width: 720px; } /* Adjusted for better readability */
+    
+    header #logoText { font-size: 1.9rem; }
+    header #headerIcon { height: 30px; }
+
+    .controls-panel, .preview-panel { padding: 20px; } /* Restore some padding for desktop */
+    
+    h2 { font-size: 1.25rem; }
+    .customization-heading { font-size: 1.05rem; }
+    .tab-link { font-size: 0.85rem; padding: 10px 14px; }
+    .tab-link i { font-size: 0.9em; }
+
+    .control-group label { font-size: 0.82rem; }
+    .icon-label { font-size: 0.9em; }
+    .control-group input[type="text"],
+    .control-group input[type="url"], 
+    .control-group input[type="email"], 
+    .control-group input[type="tel"], 
+    .control-group input[type="file"],
+    .control-group textarea, 
+    .control-group select { font-size: 0.9rem; padding: 11px 13px; }
+
+    button, .button-primary { font-size: 0.92rem; padding: 13px 20px; }
+    #updateQrButton { font-size: 1rem; }
+    
     .actions button { width: auto; flex-grow: 0; }
-    #qrCanvasContainer { max-width: 300px; padding: 10px; }
+    
+    #qrCanvasContainer { max-width: 280px; padding: 8px; } /* Consistent preview size */
+    .qr-data-text { font-size: 0.78rem; }
+    .scannability-tips { font-size: 0.8rem; padding: 14px; }
+    .scannability-tips h4 { font-size: 0.88rem; }
+    footer { font-size: 0.78rem; }
 }
 
 @keyframes fadeIn {
