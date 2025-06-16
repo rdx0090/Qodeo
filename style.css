@@ -1,4 +1,4 @@
-/* === Qodeo Dark Theme - Refined View & Centered Preview === */
+/* === Qodeo Dark Theme - QR Fills Preview Container === */
 
 /* --- Global Resets & Variables --- */
 * {
@@ -240,14 +240,14 @@ button:disabled, .button-primary:disabled {
 }
 .actions button:hover { background-color: #3b4a69; }
 
-/* --- QR Code Canvas Styling (UPDATED FOR BETTER CENTERING) --- */
+/* --- QR Code Canvas Styling (UPDATED FOR FILLING CONTAINER) --- */
 #qrCanvasContainer {
     width: 100%; 
     max-width: 260px; 
     height: auto; 
     aspect-ratio: 1 / 1; 
-    margin-left: auto; /* Added for centering block if parent is not flex and this has max-width */
-    margin-right: auto; /* Added for centering block */
+    margin-left: auto; 
+    margin-right: auto; 
     margin-bottom: 8px; 
     border: 1px dashed var(--border-color); 
     display: flex;
@@ -263,10 +263,9 @@ button:disabled, .button-primary:disabled {
 #qrCanvasContainer > canvas, 
 #qrCanvasContainer > img { 
     display: block; 
-    /* margin: auto; /* Not strictly needed if parent is flex and centering items */
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Ensures the QR code scales down to fit without cropping, maintaining aspect ratio */
+    width: 100%;    /* Force child to take full width of parent */
+    height: 100%;   /* Force child to take full height of parent */
+    object-fit: contain; /* Maintain aspect ratio within 100% width/height */
     border-radius: 3px; 
 }
 
@@ -335,7 +334,7 @@ footer {
     
     .actions button { width: auto; flex-grow: 0; }
     
-    #qrCanvasContainer { max-width: 280px; padding: 8px; } /* Keep consistent preview size on desktop */
+    #qrCanvasContainer { max-width: 280px; padding: 8px; } 
     .qr-data-text { font-size: 0.78rem; }
     .scannability-tips { font-size: 0.8rem; padding: 14px; }
     .scannability-tips h4 { font-size: 0.88rem; }
