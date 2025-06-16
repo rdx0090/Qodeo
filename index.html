@@ -20,25 +20,53 @@
             <aside class="controls-panel">
                 <h2>Customize Your QR Code</h2>
 
-                <div class="control-group">
-                    <label for="qrData">
-                        <i class="fas fa-link icon-label"></i> Data:
-                    </label>
-                    <input type="text" id="qrData" value="https://qodeo.pro" placeholder="Enter URL, text, email, phone, etc.">
+                <!-- TABS NAVIGATION - NEW -->
+                <div class="qr-type-tabs">
+                    <button class="tab-link active" data-tab="urlTab" title="Generate QR for a Website URL">
+                        <i class="fas fa-link"></i> URL
+                    </button>
+                    <button class="tab-link" data-tab="textTab" title="Generate QR for Plain Text">
+                        <i class="fas fa-font"></i> Text
+                    </button>
+                    {/* More tabs will be added here later e.g., Email, Wi-Fi */}
                 </div>
 
+                {/* TAB CONTENT WRAPPERS */}
+                <div id="urlTab" class="tab-content active">
+                    <div class="control-group">
+                        <label for="qrDataUrl">Website URL:</label>
+                        <input type="url" id="qrDataUrl" value="https://qodeo.pro" placeholder="e.g., https://www.example.com">
+                    </div>
+                </div>
+
+                <div id="textTab" class="tab-content">
+                    <div class="control-group">
+                        <label for="qrDataText">Your Text:</label>
+                        <textarea id="qrDataText" placeholder="Enter any text you want in the QR code" rows="4"></textarea>
+                    </div>
+                </div>
+                
+                {/* COMMON CUSTOMIZATION OPTIONS (Below Tabs) */}
+                <h3 class="customization-heading">Appearance Options</h3> {/* Added a sub-heading */}
+
                 <div class="control-group">
-                    <label for="dotColor">Dot Color:</label>
+                    <label for="dotColor">
+                        <i class="fas fa-palette icon-label"></i> Dot Color:
+                    </label>
                     <input type="color" id="dotColor" value="#ffffff"> 
                 </div>
 
                 <div class="control-group">
-                    <label for="backgroundColor">Background Color:</label>
+                    <label for="backgroundColor">
+                        <i class="fas fa-fill-drip icon-label"></i> Background Color:
+                    </label>
                     <input type="color" id="backgroundColor" value="#0c111b"> 
                 </div>
 
                 <div class="control-group">
-                    <label for="dotStyle">Dot Style:</label>
+                    <label for="dotStyle">
+                        <i class="fas fa-shapes icon-label"></i> Dot Style:
+                    </label>
                     <select id="dotStyle">
                         <option value="square">Square</option>
                         <option value="rounded">Rounded</option>
@@ -50,7 +78,9 @@
                 </div>
 
                 <div class="control-group">
-                    <label for="logoUpload">Upload Logo (Optional):</label>
+                    <label for="logoUpload">
+                        <i class="fas fa-image icon-label"></i> Upload Logo (Optional):
+                    </label>
                     <input type="file" id="logoUpload" accept="image/png, image/jpeg, image/svg+xml">
                     <img id="logoPreview" src="#" alt="Logo Preview" style="max-width: 100px; max-height: 50px; margin-top: 10px; display: none;"/>
                 </div>
@@ -71,11 +101,11 @@
             <section class="preview-panel">
                 <h2>Preview</h2>
                 <div id="qrCanvasContainer">
-                    <!-- This comment is fine as it's a standard HTML comment -->
+                    {/* QR Code will be rendered here */}
                 </div>
                 
                 <div id="qrDataDisplay" class="qr-data-text">
-                    <!-- This div will be populated by JavaScript. It should be empty in HTML. -->
+                    {/* Generated data will appear here */}
                 </div>
 
                 <div class="actions">
