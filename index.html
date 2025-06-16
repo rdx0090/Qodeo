@@ -20,7 +20,6 @@
             <aside class="controls-panel">
                 <h2>Customize Your QR Code</h2>
 
-                <!-- TABS NAVIGATION - NEW -->
                 <div class="qr-type-tabs">
                     <button class="tab-link active" data-tab="urlTab" title="Generate QR for a Website URL">
                         <i class="fas fa-link"></i> URL
@@ -28,10 +27,9 @@
                     <button class="tab-link" data-tab="textTab" title="Generate QR for Plain Text">
                         <i class="fas fa-font"></i> Text
                     </button>
-                    {/* More tabs will be added here later e.g., Email, Wi-Fi */}
+                    <!-- More tabs will be added here later e.g., Email, Wi-Fi -->
                 </div>
 
-                {/* TAB CONTENT WRAPPERS */}
                 <div id="urlTab" class="tab-content active">
                     <div class="control-group">
                         <label for="qrDataUrl">Website URL:</label>
@@ -46,8 +44,7 @@
                     </div>
                 </div>
                 
-                {/* COMMON CUSTOMIZATION OPTIONS (Below Tabs) */}
-                <h3 class="customization-heading">Appearance Options</h3> {/* Added a sub-heading */}
+                <h3 class="customization-heading">Appearance Options</h3>
 
                 <div class="control-group">
                     <label for="dotColor">
@@ -101,11 +98,11 @@
             <section class="preview-panel">
                 <h2>Preview</h2>
                 <div id="qrCanvasContainer">
-                    {/* QR Code will be rendered here */}
+                    <!-- QR Code will be rendered here -->
                 </div>
                 
                 <div id="qrDataDisplay" class="qr-data-text">
-                    {/* Generated data will appear here */}
+                    <!-- This div will be populated by JavaScript. It should be empty in HTML. -->
                 </div>
 
                 <div class="actions">
