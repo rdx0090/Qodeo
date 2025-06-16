@@ -17,6 +17,35 @@
 
     <main>
         <div class="container app-layout">
+            
+            <!-- PREVIEW PANEL (NOW FIRST) -->
+            <section class="preview-panel">
+                <h2>Preview</h2>
+                <div id="qrCanvasContainer">
+                    <!-- QR Code will be rendered here -->
+                </div>
+                
+                <div id="qrDataDisplay" class="qr-data-text">
+                    <!-- Generated data will appear here -->
+                </div>
+
+                <div class="actions">
+                    <button id="downloadSvgButton">Download SVG</button>
+                    <button id="downloadPngButton">Download PNG</button>
+                </div>
+
+                <!-- QUICK TIPS MOVED HERE -->
+                <div class="scannability-tips">
+                    <h4>Quick Tips for Scannability:</h4>
+                    <ul>
+                        <li>Ensure good contrast between dot and background colors.</li>
+                        <li>Avoid making logos too large; they can obstruct data.</li>
+                        <li>Test your QR code with multiple scanner apps before printing.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- CONTROLS PANEL (NOW SECOND) -->
             <aside class="controls-panel">
                 <h2>Customize Your QR Code</h2>
 
@@ -27,7 +56,6 @@
                     <button class="tab-link" data-tab="textTab" title="Generate QR for Plain Text">
                         <i class="fas fa-font"></i> Text
                     </button>
-                    <!-- More tabs will be added here later e.g., Email, Wi-Fi -->
                 </div>
 
                 <div id="urlTab" class="tab-content active">
@@ -83,33 +111,10 @@
                 </div>
 
                 <button id="updateQrButton" class="button-primary">Generate / Update QR Code</button>
-
-                <div class="scannability-tips">
-                    <h4>Quick Tips for Scannability:</h4>
-                    <ul>
-                        <li>Ensure good contrast between dot and background colors.</li>
-                        <li>Avoid making logos too large; they can obstruct data.</li>
-                        <li>Test your QR code with multiple scanner apps before printing.</li>
-                    </ul>
-                </div>
+                
+                <!-- Scannability tips div is now moved to preview-panel -->
 
             </aside>
-
-            <section class="preview-panel">
-                <h2>Preview</h2>
-                <div id="qrCanvasContainer">
-                    <!-- QR Code will be rendered here -->
-                </div>
-                
-                <div id="qrDataDisplay" class="qr-data-text">
-                    <!-- This div will be populated by JavaScript. It should be empty in HTML. -->
-                </div>
-
-                <div class="actions">
-                    <button id="downloadSvgButton">Download SVG</button>
-                    <button id="downloadPngButton">Download PNG</button>
-                </div>
-            </section>
         </div>
     </main>
 
