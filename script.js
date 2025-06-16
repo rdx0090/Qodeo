@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
-    const qrDataInput = document.getElementById('qrData');
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
     const dotStyleSelect = document.getElementById('dotStyle');
@@ -12,12 +11,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrCanvasContainer = document.getElementById('qrCanvasContainer');
     const qrDataDisplay = document.getElementById('qrDataDisplay'); 
 
+    // Tab specific input fields
+    const qrDataUrlInput = document.getElementById('qrDataUrl');
+    const qrDataTextInput = document.getElementById('qrDataText');
+
+    // Tab Navigation Elements
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+
     // Check if essential elements are present
-    if (!qrDataInput || !dotColorInput || !backgroundColorInput || !dotStyleSelect || !updateQrButton || !qrCanvasContainer || !qrDataDisplay) {
+    if (!qrDataUrlInput || !qrDataTextInput ||!dotColorInput || !backgroundColorInput || !dotStyleSelect || !updateQrButton || !qrCanvasContainer || !qrDataDisplay || tabLinks.length === 0 || tabContents.length === 0) {
         console.error("One or more critical UI elements are missing. Qodeo cannot initialize properly.");
         if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red;'>Error: Critical UI elements missing. App cannot run.</p>";
         return; 
     }
+    
+    // Default active input field
+    let activeQrDataInput = qrDataUrlInput; // URL tab is active by default
 
     const yearSpan = document.getElementById('year');
     if (yearSpan) {
@@ -33,14 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const initialQrWidth = 280; // Define initial/preview width
-    const initialQrHeight = 280; // Define initial/preview height
+    const initialQrWidth = 280; 
+    const initialQrHeight = 280; 
 
     const qrCodeInstance = new QRCodeStyling({
         width: initialQrWidth, 
         height: initialQrHeight, 
-        type: 'svg', // Start with SVG for crisp preview
-        data: qrDataInput.value || "https://qodeo.pro",
+        type: 'svg', 
+        data: activeQrDataInput.value || "https://qodeo.pro", // Use active input's value
         image: '',
         dotsOptions: {
             color: dotColorInput.value,
@@ -62,13 +72,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     qrCodeInstance.append(qrCanvasContainer);
 
+    // --- Tab Switching Logic ---
+    tabLinks.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabLinks.forEach(item => item.classList.remove('active'));
+            tabContents.forEach(item => item.classList.remove('active'));
+
+            tab.classList.add('active');
+            const targetTabContentId = tab.dataset.tab; 
+            document.getElementById(targetTabContentId).classList.add('active');
+
+            // Update activeQrDataInput based on the active tab
+            if (targetTabContentId === 'urlTab') {
+                activeQrDataInput = qrDataUrlInput;
+            } else if (targetTabContentId === 'textTab') {
+                activeQrDataInput = qrDataTextInput;
+            }
+            // Add more else if for other tabs later (Email, Wi-Fi, etc.)
+
+            updateQRCodeView(); // Update QR when tab changes, using the new active input
+        });
+    });
+
+
+    // --- Update QR Code Function ---
     async function updateQRCodeView() {
-        if (!updateQrButton) return; 
+        if (!updateQrButton || !activeQrDataInput) { // Check activeQrDataInput
+            console.error("Update button or active data input not found.");
+            return;
+        }
 
         updateQrButton.disabled = true;
         updateQrButton.textContent = 'Generating...';
 
-        const currentData = qrDataInput.value || "https://qodeo.pro"; 
+        let currentData = activeQrDataInput.value;
+        if (!currentData) { // Set default data based on active tab if input is empty
+            if (activeQrDataInput.id === 'qrDataUrl') {
+                currentData = "https://qodeo.pro";
+            } else if (activeQrDataInput.id === 'qrDataText') {
+                currentData = "Your Qodeo Text";
+            } else {
+                currentData = "Qodeo Default"; // Generic default
+            }
+        }
 
         const options = {
             data: currentData, 
@@ -80,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 color: backgroundColorInput.value,
             },
             image: currentLogoBase64 || '',
-            // Ensure width and height are for preview if not specifically downloading
             width: initialQrWidth, 
             height: initialQrHeight,
             qrOptions: { 
@@ -99,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             qrCodeInstance.update(options);
 
             if (qrDataDisplay) {
-                qrDataDisplay.textContent = currentData === "https://qodeo.pro" && qrDataInput.value === "" ? "Default: https://qodeo.pro" : currentData;
+                qrDataDisplay.textContent = currentData; 
             }
 
         } catch (error) {
@@ -114,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Event Listeners for Controls ---
     if (logoUploadInput) {
         logoUploadInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -128,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 reader.onerror = function() {
                     console.error("Error reading file for logo.");
-                    alert("Could not load the logo file. Please try a different image or check file permissions.");
+                    alert("Could not load the logo file. Please try a different image.");
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -143,42 +189,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateQrButton.addEventListener('click', updateQRCodeView);
 
+    // --- Download Handlers ---
     if (downloadSvgButton) {
         downloadSvgButton.addEventListener('click', () => {
-            // For SVG, current instance settings (including preview size) are usually fine
-            // as SVG is scalable. If a specific size is needed for SVG's viewBox,
-            // similar logic to PNG download could be applied, but it's less common.
             qrCodeInstance.download({ name: 'qodeo-qr', extension: 'svg' });
         });
     }
-
-    // UPDATED PNG DOWNLOAD LISTENER
+    
     if (downloadPngButton) {
         downloadPngButton.addEventListener('click', async () => { 
             const highResWidth = 1024; 
             const highResHeight = 1024; 
 
-            console.log("Preparing HD PNG download...");
-            if (updateQrButton) { // Disable button if it exists
+            if (updateQrButton) { 
                 updateQrButton.disabled = true; 
                 updateQrButton.textContent = 'Preparing HD PNG...';
             }
             if (downloadSvgButton) downloadSvgButton.disabled = true;
             if (downloadPngButton) downloadPngButton.disabled = true;
 
-
             try {
-                // Get all current options to re-apply with new dimensions
-                const currentOptions = qrCodeInstance._options; // Access internal options (use with caution or check official API)
-                                                                // Or rebuild options object as in updateQRCodeView
-                
+                const currentOptions = qrCodeInstance._options;
+                let dataForDownload = activeQrDataInput.value;
+                 if (!dataForDownload) {
+                    if (activeQrDataInput.id === 'qrDataUrl') dataForDownload = "https://qodeo.pro";
+                    else if (activeQrDataInput.id === 'qrDataText') dataForDownload = "Your Qodeo Text";
+                    else dataForDownload = "Qodeo Default";
+                }
+
                 const highResOptions = {
-                    ...currentOptions, // Spread existing options
+                    ...currentOptions, 
                     width: highResWidth,
                     height: highResHeight,
-                    type: 'png', // Ensure type is png for this operation
-                    data: qrDataInput.value || "https://qodeo.pro", // Make sure data is current
-                    image: currentLogoBase64 || '', // Make sure image is current
+                    type: 'png', 
+                    data: dataForDownload, 
+                    image: currentLogoBase64 || '', 
                     dotsOptions: {
                         ...currentOptions.dotsOptions,
                         color: dotColorInput.value,
@@ -188,33 +233,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         ...currentOptions.backgroundOptions,
                         color: backgroundColorInput.value
                     },
-                    imageOptions: { // Make sure image options are current
+                    imageOptions: { 
                         ...currentOptions.imageOptions,
-                        hideBackgroundDots: true, // Ensure this is set
-                        margin: 10,
+                        hideBackgroundDots: true, 
+                        margin: 10, // Ensure these are consistent
                         imageSize: 0.35
                     }
                 };
                 
-                // Create a new temporary instance for HD download to avoid messing with preview instance directly before download
                 const tempQrInstance = new QRCodeStyling(highResOptions);
-                
-                // Small delay may not be needed if download is direct from new instance
-                // await new Promise(resolve => setTimeout(resolve, 100));
-
                 await tempQrInstance.download({ 
                     name: `qodeo-qr-${highResWidth}x${highResHeight}`, 
                     extension: 'png' 
                 });
-
-                console.log("HD PNG Download triggered.");
-
             } catch (error) {
                 console.error("Error during HD PNG download:", error);
                 alert("Could not generate HD PNG. Please try again.");
             } finally {
-                // No need to revert instance if we used a temporary one.
-                // Re-enable buttons
                 if (updateQrButton) {
                     updateQrButton.disabled = false;
                     updateQrButton.textContent = 'Generate / Update QR Code';
