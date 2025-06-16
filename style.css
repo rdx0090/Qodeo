@@ -1,4 +1,4 @@
-/* === Qodeo Dark Theme - Tabs Implemented === */
+/* === Qodeo Dark Theme - Final for Current Features === */
 
 /* --- Global Resets & Variables --- */
 * {
@@ -40,10 +40,10 @@ body {
     margin: 0 auto;
 }
 
-/* --- Header Styling --- */
+/* --- Header Styling (With Logo Icon and Text) --- */
 header {
     background-color: var(--background-secondary);
-    padding: 0.8rem 0; 
+    padding: 0; 
     height: var(--header-height);
     display: flex; 
     align-items: center;
@@ -53,13 +53,32 @@ header {
     z-index: 1000;
 }
 
-header #logo {
-    margin: 0;
+header .container { /* Ensure container inside header also uses flex if needed for alignment */
+    display: flex;
+    align-items: center;
+    /* justify-content: center; /* Uncomment to center logo in header */
+}
+
+#logoLink { /* Styling for the <a> tag wrapping logo and text */
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Remove underline from link */
+}
+
+#headerIcon {
+    height: 32px; /* Adjust size as needed */
+    width: auto;
+    margin-right: 10px; /* Space between icon and text */
+}
+
+#logoText {
     font-size: 1.8rem; 
     font-weight: 700;
     color: var(--primary-brand-color);
     letter-spacing: -0.5px;
+    line-height: 1; /* Helps in vertical alignment */
 }
+
 
 /* --- Main App Layout --- */
 main {
@@ -97,7 +116,7 @@ h2 {
     font-weight: 600;
 }
 
-/* --- QR Type Tabs Styling (COPIED FROM PREVIOUS CORRECTED VERSION) --- */
+/* --- QR Type Tabs Styling --- */
 .qr-type-tabs {
     display: flex;
     margin-bottom: 25px;
@@ -116,15 +135,11 @@ h2 {
     transition: color 0.2s ease, border-bottom-color 0.2s ease; 
     border-bottom: 3px solid transparent; 
     margin-right: 5px; 
-    margin-bottom: -1px; /* Aligns active tab border with the container's border */
+    margin-bottom: -1px; 
     display: flex; 
     align-items: center;
 }
-.tab-link i { 
-    margin-right: 6px; 
-    font-size: 0.9em; 
-}
-
+.tab-link i { margin-right: 6px; font-size: 0.9em; }
 .tab-link:hover { color: var(--text-primary); }
 .tab-link.active {
     color: var(--primary-brand-color);
@@ -132,26 +147,16 @@ h2 {
     border-bottom-color: var(--primary-brand-color);
 }
 
-/* --- Tab Content Styling (COPIED FROM PREVIOUS CORRECTED VERSION) --- */
-.tab-content { 
-    display: none; 
-    animation: fadeIn 0.3s ease-out; 
-}
+.tab-content { display: none; animation: fadeIn 0.3s ease-out; }
 .tab-content.active { display: block; }
 
-/* Sub-heading for customization options (COPIED FROM PREVIOUS CORRECTED VERSION) */
 .customization-heading {
-    font-size: 1.1rem; 
-    color: var(--text-primary); 
-    margin-top: 25px; 
-    margin-bottom: 15px; 
-    padding-bottom: 8px; 
-    border-bottom: 1px solid var(--border-color);
+    font-size: 1.1rem; color: var(--text-primary); margin-top: 25px; 
+    margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);
     font-weight: 500;
 }
 
-
-/* --- Form Controls Styling (Includes textarea) --- */
+/* --- Form Controls Styling --- */
 .control-group { margin-bottom: 20px; }
 .control-group label {
     display: flex; align-items: center; margin-bottom: 8px;
@@ -161,8 +166,8 @@ h2 {
 
 .control-group input[type="text"],
 .control-group input[type="url"], 
-.control-group input[type="email"], /* Added type="email" */
-.control-group input[type="tel"], /* Added type="tel" */
+.control-group input[type="email"], 
+.control-group input[type="tel"], 
 .control-group input[type="file"],
 .control-group textarea, 
 .control-group select {
@@ -172,11 +177,7 @@ h2 {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
 }
-.control-group textarea { 
-    font-family: var(--font-primary); 
-    resize: vertical; 
-    min-height: 80px; 
-}
+.control-group textarea { font-family: var(--font-primary); resize: vertical; min-height: 80px; }
 
 .control-group input[type="color"] {
     width: 100%; height: 48px; padding: 5px; background-color: var(--input-background);
@@ -185,7 +186,7 @@ h2 {
 .control-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 .control-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
 
-.control-group input:focus, /* Combined focus for all relevant input types */
+.control-group input:focus, 
 .control-group textarea:focus,
 .control-group select:focus {
     border-color: var(--primary-brand-color);
@@ -274,16 +275,10 @@ footer {
 
 /* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
 @media (min-width: 768px) { 
-    .container {
-        max-width: 700px; 
-    }
+    .container { max-width: 700px; }
     h2 { font-size: 1.4rem; }
     .customization-heading { font-size: 1.2rem; }
-    
-    .actions button {
-        width: auto;
-        flex-grow: 0; 
-    }
+    .actions button { width: auto; flex-grow: 0; }
     #qrCanvasContainer { max-width: 300px; padding: 10px; }
 }
 
