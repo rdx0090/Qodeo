@@ -1,4 +1,4 @@
-/* === Qodeo Dark Theme - Refined View === */
+/* === Qodeo Dark Theme - Refined View & Centered Preview === */
 
 /* --- Global Resets & Variables --- */
 * {
@@ -19,24 +19,24 @@
     --success-color: #28a745; 
     --success-hover: #1e7e34;
     --font-primary: 'Inter', 'Segoe UI', Roboto, sans-serif; 
-    --header-height: 56px; /* Slightly reduced header height */
+    --header-height: 56px;
 }
 
 body {
     font-family: var(--font-primary);
-    line-height: 1.6; /* Adjusted line height */
+    line-height: 1.6; 
     background-color: var(--background-primary);
     color: var(--text-primary);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    font-size: 14.5px; /* Reduced base font size */
+    font-size: 14.5px; 
     -webkit-tap-highlight-color: transparent;
 }
 
 .container {
     width: 90%;
-    max-width: 760px; /* Adjusted max-width for a more compact view */
+    max-width: 760px; 
     margin: 0 auto;
 }
 
@@ -65,13 +65,13 @@ header .container {
 }
 
 #headerIcon {
-    height: 28px; /* Reduced icon size */
+    height: 28px; 
     width: auto;
-    margin-right: 8px; /* Reduced space */
+    margin-right: 8px; 
 }
 
 #logoText {
-    font-size: 1.7rem; /* Reduced text size */
+    font-size: 1.7rem; 
     font-weight: 700;
     color: var(--primary-brand-color);
     letter-spacing: -0.5px;
@@ -82,21 +82,21 @@ header .container {
 /* --- Main App Layout --- */
 main {
     flex-grow: 1;
-    padding: 18px 0; /* Reduced padding */
+    padding: 18px 0; 
 }
 
 .app-layout {
     display: flex;
     flex-direction: column; 
-    gap: 20px; /* Reduced gap */
+    gap: 20px; 
 }
 
 .controls-panel, .preview-panel {
     background-color: var(--background-secondary);
-    padding: 18px; /* Reduced padding */
-    border-radius: 8px; /* Slightly less rounded */
+    padding: 18px; 
+    border-radius: 8px; 
     border: 1px solid var(--border-color);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Adjusted shadow */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
 }
 
 .preview-panel {
@@ -107,10 +107,10 @@ main {
 
 
 h2 { 
-    font-size: 1.15rem; /* Reduced heading size */
+    font-size: 1.15rem; 
     color: var(--text-primary);
-    margin-bottom: 18px; /* Reduced margin */
-    padding-bottom: 8px; /* Reduced padding */
+    margin-bottom: 18px; 
+    padding-bottom: 8px; 
     border-bottom: 1px solid var(--border-color);
     font-weight: 600;
 }
@@ -118,7 +118,7 @@ h2 {
 /* --- QR Type Tabs Styling --- */
 .qr-type-tabs {
     display: flex;
-    margin-bottom: 20px; /* Reduced margin */
+    margin-bottom: 20px; 
     border-bottom: 1px solid var(--border-color);
     flex-wrap: wrap; 
 }
@@ -127,12 +127,12 @@ h2 {
     background-color: transparent;
     color: var(--text-secondary);
     border: none;
-    padding: 8px 12px; /* Reduced padding */
+    padding: 8px 12px; 
     cursor: pointer;
-    font-size: 0.8rem; /* Reduced font size */
+    font-size: 0.8rem; 
     font-weight: 500;
     transition: color 0.2s ease, border-bottom-color 0.2s ease; 
-    border-bottom: 2px solid transparent; /* Thinner active border */
+    border-bottom: 2px solid transparent; 
     margin-right: 4px; 
     margin-bottom: -1px; 
     display: flex; 
@@ -150,20 +150,20 @@ h2 {
 .tab-content.active { display: block; }
 
 .customization-heading {
-    font-size: 1rem; /* Reduced font size */
+    font-size: 1rem; 
     color: var(--text-primary); 
     margin-top: 20px; 
-    margin-bottom: 12px; /* Reduced margin */
-    padding-bottom: 6px; /* Reduced padding */
+    margin-bottom: 12px; 
+    padding-bottom: 6px; 
     border-bottom: 1px solid var(--border-color);
     font-weight: 500;
 }
 
 /* --- Form Controls Styling --- */
-.control-group { margin-bottom: 18px; /* Reduced margin */ }
+.control-group { margin-bottom: 18px; }
 .control-group label {
-    display: flex; align-items: center; margin-bottom: 6px; /* Reduced margin */
-    font-weight: 500; color: var(--text-secondary); font-size: 0.78rem; /* Reduced font size */
+    display: flex; align-items: center; margin-bottom: 6px;
+    font-weight: 500; color: var(--text-secondary); font-size: 0.78rem; 
 }
 .icon-label { margin-right: 6px; font-size: 0.9em; color: var(--primary-brand-color); }
 
@@ -174,19 +174,19 @@ h2 {
 .control-group input[type="file"],
 .control-group textarea, 
 .control-group select {
-    width: 100%; padding: 10px 12px; /* Reduced padding */
+    width: 100%; padding: 10px 12px; 
     background-color: var(--input-background);
     border: 1px solid var(--border-color); color: var(--text-primary);
-    border-radius: 5px; /* Slightly less rounded */
-    font-size: 0.88rem; /* Reduced font size */
+    border-radius: 5px; 
+    font-size: 0.88rem; 
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
 }
-.control-group textarea { font-family: var(--font-primary); resize: vertical; min-height: 70px; /* Reduced min-height */ }
+.control-group textarea { font-family: var(--font-primary); resize: vertical; min-height: 70px; }
 
 .control-group input[type="color"] {
-    width: 100%; height: 44px; /* Reduced height */
-    padding: 4px; /* Reduced padding */
+    width: 100%; height: 44px; 
+    padding: 4px; 
     background-color: var(--input-background);
     border: 1px solid var(--border-color); border-radius: 5px; cursor: pointer;
 }
@@ -197,7 +197,7 @@ h2 {
 .control-group textarea:focus,
 .control-group select:focus {
     border-color: var(--primary-brand-color);
-    box-shadow: 0 0 0 2px rgba(31, 128, 224, 0.25); /* Adjusted shadow */
+    box-shadow: 0 0 0 2px rgba(31, 128, 224, 0.25); 
     outline: none;
 }
 
@@ -210,12 +210,12 @@ h2 {
 /* --- Buttons Styling --- */
 button, .button-primary { 
     display: inline-block; width: 100%; background-color: var(--primary-brand-color);
-    color: var(--text-primary); padding: 12px 18px; /* Reduced padding */
-    margin-bottom: 8px; /* Reduced margin */
-    border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem; /* Reduced font size */
-    font-weight: 500; /* Adjusted font weight */
+    color: var(--text-primary); padding: 12px 18px; 
+    margin-bottom: 8px; 
+    border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem; 
+    font-weight: 500; 
     text-align: center;
-    transition: background-color 0.2s ease, opacity 0.2s ease; letter-spacing: 0.3px; /* Adjusted letter spacing */
+    transition: background-color 0.2s ease, opacity 0.2s ease; letter-spacing: 0.3px; 
 }
 .actions button:last-child { margin-bottom: 0; }
 
@@ -223,84 +223,97 @@ button:hover, .button-primary:hover { background-color: #1869c0; }
 button:active, .button-primary:active { background-color: #165ca8; }
 button:disabled, .button-primary:disabled {
     background-color: var(--background-tertiary); color: var(--text-secondary);
-    cursor: not-allowed; opacity: 0.6; /* Adjusted opacity */
+    cursor: not-allowed; opacity: 0.6; 
 }
 
 #updateQrButton {
-    background-color: var(--success-color); font-size: 1rem; /* Maintained size for prominence */
-    margin-top: 12px; /* Reduced margin */
+    background-color: var(--success-color); font-size: 1rem; 
+    margin-top: 12px; 
 }
 #updateQrButton:hover:not(:disabled) { background-color: var(--success-hover); }
 
 .actions { 
-    display: flex; justify-content: center; width: 100%; gap: 8px; /* Reduced gap */
+    display: flex; justify-content: center; width: 100%; gap: 8px; 
 }
 .actions button {
-    background-color: var(--background-tertiary); flex-grow: 1; max-width: 170px; /* Adjusted max-width */
+    background-color: var(--background-tertiary); flex-grow: 1; max-width: 170px; 
 }
 .actions button:hover { background-color: #3b4a69; }
 
-/* --- QR Code Canvas Styling --- */
+/* --- QR Code Canvas Styling (UPDATED FOR BETTER CENTERING) --- */
 #qrCanvasContainer {
-    width: 100%; max-width: 260px; /* Slightly reduced max-width */
-    height: auto; aspect-ratio: 1 / 1; 
-    margin-bottom: 8px; /* Reduced margin */
-    border: 1px dashed var(--border-color); /* Thinner border */
-    display: flex; align-items: center; justify-content: center;
-    padding: 6px; /* Reduced padding */
+    width: 100%; 
+    max-width: 260px; 
+    height: auto; 
+    aspect-ratio: 1 / 1; 
+    margin-left: auto; /* Added for centering block if parent is not flex and this has max-width */
+    margin-right: auto; /* Added for centering block */
+    margin-bottom: 8px; 
+    border: 1px dashed var(--border-color); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px; 
     background-color: var(--background-primary); 
-    border-radius: 6px; transition: border-color 0.3s ease; overflow: hidden; 
+    border-radius: 6px; 
+    transition: border-color 0.3s ease; 
+    overflow: hidden; 
 }
+
 #qrCanvasContainer > canvas, 
 #qrCanvasContainer > img { 
-    display: block; margin: auto; max-width: 100%;
-    max-height: 100%; border-radius: 3px; 
+    display: block; 
+    /* margin: auto; /* Not strictly needed if parent is flex and centering items */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensures the QR code scales down to fit without cropping, maintaining aspect ratio */
+    border-radius: 3px; 
 }
 
 .qr-data-text {
-    font-size: 0.75rem; /* Reduced font size */
+    font-size: 0.75rem; 
     color: var(--text-secondary); margin-top: 4px; 
-    margin-bottom: 12px; /* Reduced margin */
+    margin-bottom: 12px; 
     word-break: break-all; text-align: center;
     max-width: 90%; padding: 4px; 
 }
 
 /* --- Scannability Tips Styling --- */
 .scannability-tips {
-    margin-top: 18px; /* Reduced margin */
-    padding: 12px; /* Reduced padding */
+    margin-top: 18px; 
+    padding: 12px; 
     background-color: var(--input-background); 
     border: 1px solid var(--border-color); border-radius: 6px; 
-    font-size: 0.78rem; /* Reduced font size */
+    font-size: 0.78rem; 
     width: 100%; max-width: 380px; align-self: center; 
 }
 .scannability-tips h4 {
-    color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; /* Reduced font size */
+    color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; 
     font-weight: 600; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; 
 }
 .scannability-tips ul {
     list-style-type: disc; list-style-position: inside; padding-left: 0; color: var(--text-secondary); 
 }
-.scannability-tips ul li { margin-bottom: 5px; } /* Reduced margin */
+.scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-brand-color); }
 
 /* --- Footer Styling --- */
 footer {
-    text-align: center; padding: 15px 0; /* Reduced padding */
+    text-align: center; padding: 15px 0; 
     background-color: var(--background-secondary);
     color: var(--text-secondary); margin-top: auto; border-top: 1px solid var(--border-color);
-    font-size: 0.75rem; /* Reduced font size */
+    font-size: 0.75rem; 
 }
 
 /* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
 @media (min-width: 768px) { 
-    body { font-size: 15px; } /* Slightly larger base for desktop */
-    .container { max-width: 720px; } /* Adjusted for better readability */
+    body { font-size: 15px; } 
+    .container { max-width: 720px; } 
     
     header #logoText { font-size: 1.9rem; }
     header #headerIcon { height: 30px; }
 
-    .controls-panel, .preview-panel { padding: 20px; } /* Restore some padding for desktop */
+    .controls-panel, .preview-panel { padding: 20px; } 
     
     h2 { font-size: 1.25rem; }
     .customization-heading { font-size: 1.05rem; }
@@ -322,7 +335,7 @@ footer {
     
     .actions button { width: auto; flex-grow: 0; }
     
-    #qrCanvasContainer { max-width: 280px; padding: 8px; } /* Consistent preview size */
+    #qrCanvasContainer { max-width: 280px; padding: 8px; } /* Keep consistent preview size on desktop */
     .qr-data-text { font-size: 0.78rem; }
     .scannability-tips { font-size: 0.8rem; padding: 14px; }
     .scannability-tips h4 { font-size: 0.88rem; }
