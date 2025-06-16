@@ -10,15 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadSvgButton = document.getElementById('downloadSvgButton');
     const downloadPngButton = document.getElementById('downloadPngButton');
     const qrCanvasContainer = document.getElementById('qrCanvasContainer');
+    const qrDataDisplay = document.getElementById('qrDataDisplay'); // Get the new display element
 
     // Check if essential elements are present
-    if (!qrDataInput || !dotColorInput || !backgroundColorInput || !dotStyleSelect || !updateQrButton || !qrCanvasContainer) {
+    if (!qrDataInput || !dotColorInput || !backgroundColorInput || !dotStyleSelect || !updateQrButton || !qrCanvasContainer || !qrDataDisplay) {
         console.error("One or more critical UI elements are missing. Qodeo cannot initialize properly.");
         if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red;'>Error: Critical UI elements missing. App cannot run.</p>";
-        return; // Stop execution
+        return; 
     }
 
-    // Set current year in footer
     const yearSpan = document.getElementById('year');
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
@@ -65,8 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateQrButton.disabled = true;
         updateQrButton.textContent = 'Generating...';
 
+        const currentData = qrDataInput.value || "https://qodeo.pro"; // Get current data
+
         const options = {
-            data: qrDataInput.value || "https://qodeo.pro",
+            data: currentData, // Use currentData
             dotsOptions: {
                 color: dotColorInput.value,
                 type: dotStyleSelect.value
@@ -89,9 +91,21 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             await new Promise(resolve => setTimeout(resolve, 50)); 
             qrCodeInstance.update(options);
+
+            // UPDATE QR DATA DISPLAY
+            if (qrDataDisplay) {
+                qrDataDisplay.textContent = currentData === "https://qodeo.pro" && qrDataInput.value === "" ? "Default: https://qodeo.pro" : currentData;
+                if (currentData.length > 50) { // Optional: truncate long data for display
+                    // qrDataDisplay.textContent = currentData.substring(0, 47) + "...";
+                }
+            }
+
         } catch (error) {
             console.error("Error updating QR Code:", error);
             if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red;'>Error updating QR. Please try again.</p>";
+            if (qrDataDisplay) {
+                qrDataDisplay.textContent = 'Error generating QR.'; // Display error
+            }
         } finally {
             updateQrButton.disabled = false;
             updateQrButton.textContent = 'Generate / Update QR Code';
@@ -138,5 +152,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    updateQRCodeView();
+    updateQRCodeView(); // Initial QR code generation
 });
