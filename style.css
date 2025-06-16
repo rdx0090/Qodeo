@@ -1,4 +1,4 @@
-/* === Qodeo Dark Theme - New Layout === */
+/* === Qodeo Dark Theme - Revised Layout (Controls First) === */
 
 /* --- Global Resets & Variables --- */
 * {
@@ -19,7 +19,7 @@
     --success-color: #28a745; 
     --success-hover: #1e7e34;
     --font-primary: 'Inter', 'Segoe UI', Roboto, sans-serif; 
-    --header-height: 60px; /* Approximate header height for sticky calculations */
+    --header-height: 60px;
 }
 
 body {
@@ -36,26 +36,26 @@ body {
 
 .container {
     width: 90%;
-    max-width: 1350px;
+    max-width: 800px; /* Max width for single column content for better readability */
     margin: 0 auto;
 }
 
 /* --- Header Styling --- */
 header {
     background-color: var(--background-secondary);
-    padding: 0.8rem 0; /* Adjusted padding slightly */
+    padding: 0.8rem 0; 
     height: var(--header-height);
-    display: flex; /* For vertical centering if needed */
+    display: flex; 
     align-items: center;
     border-bottom: 1px solid var(--border-color);
-    position: sticky; /* Make header sticky */
+    position: sticky; 
     top: 0;
     z-index: 1000;
 }
 
 header #logo {
     margin: 0;
-    font-size: 1.8rem; /* Adjusted logo size */
+    font-size: 1.8rem; 
     font-weight: 700;
     color: var(--primary-brand-color);
     letter-spacing: -0.5px;
@@ -69,33 +69,28 @@ main {
 
 .app-layout {
     display: flex;
-    flex-direction: column; /* Mobile: Preview on top, Controls below */
-    gap: 25px; /* Gap between preview and controls */
+    flex-direction: column; /* Vertical stacking for all screen sizes */
+    gap: 25px; 
+}
+
+/* Both panels will now stack naturally */
+.controls-panel, .preview-panel {
+    background-color: var(--background-secondary);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
 .preview-panel {
-    background-color: var(--background-secondary);
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    /* margin-top is handled by gap in app-layout */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* order: 1; Default order, but good for clarity */
-}
-
-.controls-panel {
-    background-color: var(--background-secondary);
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    /* order: 2; Default order */
 }
 
 
-h2 { /* Panel headings */
+h2 { 
     font-size: 1.3rem;
     color: var(--text-primary);
     margin-bottom: 20px;
@@ -127,11 +122,7 @@ h2 { /* Panel headings */
     display: flex; 
     align-items: center;
 }
-.tab-link i { 
-    margin-right: 6px; 
-    font-size: 0.9em; 
-}
-
+.tab-link i { margin-right: 6px; font-size: 0.9em; }
 .tab-link:hover { color: var(--text-primary); }
 .tab-link.active {
     color: var(--primary-brand-color);
@@ -139,194 +130,112 @@ h2 { /* Panel headings */
     border-bottom-color: var(--primary-brand-color);
 }
 
-.tab-content {
-    display: none; 
-    animation: fadeIn 0.3s ease-out; 
-}
+.tab-content { display: none; animation: fadeIn 0.3s ease-out; }
 .tab-content.active { display: block; }
 
 .customization-heading {
-    font-size: 1.1rem;
-    color: var(--text-primary);
-    margin-top: 25px; 
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border-color);
+    font-size: 1.1rem; color: var(--text-primary); margin-top: 25px; 
+    margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);
     font-weight: 500;
 }
 
 /* --- Form Controls Styling --- */
 .control-group { margin-bottom: 20px; }
 .control-group label {
-    display: flex; 
-    align-items: center; 
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
+    display: flex; align-items: center; margin-bottom: 8px;
+    font-weight: 500; color: var(--text-secondary); font-size: 0.85rem;
 }
-.icon-label {
-    margin-right: 8px; 
-    font-size: 0.9em; 
-    color: var(--primary-brand-color); 
-}
+.icon-label { margin-right: 8px; font-size: 0.9em; color: var(--primary-brand-color); }
 
 .control-group input[type="text"],
 .control-group input[type="url"], 
 .control-group input[type="file"],
 .control-group textarea, 
 .control-group select {
-    width: 100%;
-    padding: 12px 15px;
-    background-color: var(--input-background);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    border-radius: 6px;
-    font-size: 0.95rem;
+    width: 100%; padding: 12px 15px; background-color: var(--input-background);
+    border: 1px solid var(--border-color); color: var(--text-primary);
+    border-radius: 6px; font-size: 0.95rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
 }
-.control-group textarea { 
-    font-family: var(--font-primary);
-    resize: vertical; 
-    min-height: 80px; 
-}
+.control-group textarea { font-family: var(--font-primary); resize: vertical; min-height: 80px; }
 
 .control-group input[type="color"] {
-    width: 100%;
-    height: 48px;
-    padding: 5px;
-    background-color: var(--input-background);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    cursor: pointer;
+    width: 100%; height: 48px; padding: 5px; background-color: var(--input-background);
+    border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;
 }
 .control-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 .control-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
 
-.control-group input:focus, /* Combined focus styles */
+.control-group input:focus, 
 .control-group textarea:focus,
 .control-group select:focus {
     border-color: var(--primary-brand-color);
-    box-shadow: 0 0 0 3px rgba(31, 128, 224, 0.3);
-    outline: none;
+    box-shadow: 0 0 0 3px rgba(31, 128, 224, 0.3); outline: none;
 }
 
 #logoPreview {
-    border: 1px dashed var(--border-color);
-    padding: 5px;
-    border-radius: 4px;
-    background-color: var(--input-background);
-    display: block;
-    margin-top: 10px;
+    border: 1px dashed var(--border-color); padding: 5px; border-radius: 4px;
+    background-color: var(--input-background); display: block; margin-top: 10px;
 }
 #logoPreview img { max-width: 100%; height: auto; display: block; }
 
 /* --- Buttons Styling --- */
 button, .button-primary { 
-    display: inline-block;
-    width: 100%; 
-    background-color: var(--primary-brand-color);
-    color: var(--text-primary);
-    padding: 14px 20px; 
-    margin-bottom: 10px; 
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem; 
-    font-weight: 600; 
-    text-align: center;
-    transition: background-color 0.2s ease, opacity 0.2s ease; 
-    letter-spacing: 0.5px; 
+    display: inline-block; width: 100%; background-color: var(--primary-brand-color);
+    color: var(--text-primary); padding: 14px 20px; margin-bottom: 10px; 
+    border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; 
+    font-weight: 600; text-align: center;
+    transition: background-color 0.2s ease, opacity 0.2s ease; letter-spacing: 0.5px; 
 }
-.actions button { /* Specifically target download buttons if needed */
-    margin-bottom: 0; /* Remove bottom margin for grouped action buttons */
-}
-.actions button:not(:last-child) {
-     margin-right: 10px; /* Space between download buttons if they become side-by-side */
-}
-
+.actions button:last-child { margin-bottom: 0; }
 
 button:hover, .button-primary:hover { background-color: #1869c0; }
 button:active, .button-primary:active { background-color: #165ca8; }
 button:disabled, .button-primary:disabled {
-    background-color: var(--background-tertiary); 
-    color: var(--text-secondary);
-    cursor: not-allowed;
-    opacity: 0.7; 
+    background-color: var(--background-tertiary); color: var(--text-secondary);
+    cursor: not-allowed; opacity: 0.7; 
 }
 
 #updateQrButton {
-    background-color: var(--success-color); 
-    font-size: 1.05rem; 
-    margin-top: 15px; /* Add space above main action button */
+    background-color: var(--success-color); font-size: 1.05rem; 
+    margin-top: 15px; 
 }
 #updateQrButton:hover:not(:disabled) { background-color: var(--success-hover); }
 
-.actions { /* Container for download buttons */
-    display: flex; /* To put buttons side-by-side */
-    justify-content: center; /* Center the buttons */
-    width: 100%;
-    gap: 10px; /* Space between buttons */
+.actions { 
+    display: flex; justify-content: center; width: 100%; gap: 10px; 
 }
 .actions button {
-    background-color: var(--background-tertiary); 
-    flex-grow: 1; /* Make buttons take equal space */
-    max-width: 180px; /* Limit max width of download buttons */
+    background-color: var(--background-tertiary); flex-grow: 1; max-width: 180px; 
 }
 .actions button:hover { background-color: #3b4a69; }
 
 /* --- QR Code Canvas Styling --- */
 #qrCanvasContainer {
-    width: 100%; 
-    max-width: 280px; 
-    height: auto; 
-    aspect-ratio: 1 / 1; 
-    margin-bottom: 10px; 
-    border: 2px dashed var(--border-color); 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px; 
-    background-color: var(--background-primary); 
-    border-radius: 8px;
-    transition: border-color 0.3s ease; 
-    overflow: hidden; 
+    width: 100%; max-width: 280px; height: auto; aspect-ratio: 1 / 1; 
+    margin-bottom: 10px; border: 2px dashed var(--border-color); 
+    display: flex; align-items: center; justify-content: center;
+    padding: 8px; background-color: var(--background-primary); 
+    border-radius: 8px; transition: border-color 0.3s ease; overflow: hidden; 
 }
-
 #qrCanvasContainer > canvas, 
 #qrCanvasContainer > img { 
-    display: block; 
-    margin: auto; 
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 4px; 
+    display: block; margin: auto; max-width: 100%;
+    max-height: 100%; border-radius: 4px; 
 }
 
 .qr-data-text {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-top: 5px; 
-    margin-bottom: 15px; 
-    word-break: break-all; 
-    text-align: center;
-    max-width: 90%; 
-    padding: 5px; 
+    font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px; 
+    margin-bottom: 15px; word-break: break-all; text-align: center;
+    max-width: 90%; padding: 5px; 
 }
 
-/* --- Scannability Tips Styling (Now in Preview Panel) --- */
+/* --- Scannability Tips Styling --- */
 .scannability-tips {
-    margin-top: 20px; 
-    padding: 15px;
-    background-color: var(--input-background); 
-    border: 1px solid var(--border-color);
-    border-radius: 6px; 
-    font-size: 0.85rem; 
-    width: 100%; /* Take full width of its container */
-    max-width: 400px; /* Optional max-width */
-    align-self: center; /* Center it within the preview panel if max-width is set */
+    margin-top: 20px; padding: 15px; background-color: var(--input-background); 
+    border: 1px solid var(--border-color); border-radius: 6px; 
+    font-size: 0.85rem; width: 100%; max-width: 400px; align-self: center; 
 }
 .scannability-tips h4 {
     color: var(--text-primary); margin-bottom: 10px; font-size: 0.9rem; 
@@ -346,48 +255,29 @@ footer {
 }
 
 /* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
-@media (min-width: 992px) { 
-    main { padding: 30px 0; }
-    .app-layout {
-        flex-direction: row; 
-        gap: 30px;
-        align-items: flex-start; 
+/* REMOVED a lot of desktop-specific 2-column layout rules to keep it single column */
+@media (min-width: 768px) { /* Basic adjustments for slightly wider screens */
+    .container {
+        max-width: 700px; /* Adjusted max-width for better readability on desktop */
     }
-    .preview-panel {
-        flex: 0 0 340px; /* Fixed width for preview panel on desktop */
-        order: 1; /* Ensure it's on the left */
-        position: sticky; 
-        top: calc(var(--header-height) + 20px); /* Sticky below header with some padding */
-        align-self: flex-start; 
-        max-height: calc(100vh - var(--header-height) - 40px); /* Limit height if sticky */
-        overflow-y: auto; /* Scroll if content is too long */
-        margin-top: 0; /* Remove mobile margin */
-    }
-    .controls-panel {
-        flex: 1; /* Takes remaining space */
-        order: 2; /* Ensure it's on the right */
-        margin-top: 0;
-    }
+    h2 { font-size: 1.4rem; }
+    .customization-heading { font-size: 1.2rem; }
     
-    .actions { /* On desktop, allow buttons to be auto width */
-        flex-wrap: nowrap; 
-    }
+    /* Make buttons on desktop not full width within their context if not main action */
     .actions button {
         width: auto;
-        flex-grow: 0; /* Don't grow, take content width */
+        flex-grow: 0; 
     }
-
-    button, .button-primary { /* General buttons on desktop */
-        width: auto; 
-        margin-bottom: 0; 
+    /* Update button can remain full width if desired or set to auto */
+     #updateQrButton {
+        /* width: auto; */ /* Uncomment if you want it not full width */
+        /* display: table; */ /* Hack to make auto width button center */
+        /* margin-left: auto; */
+        /* margin-right: auto; */
     }
-    #updateQrButton { /* Main action button full width in its context */
-        width: 100%;
-    }
-     #qrCanvasContainer { max-width: 100%; } /* Allow QR to fill its container (300px approx) */
+    #qrCanvasContainer { max-width: 300px; padding: 10px; }
 }
 
-/* Fade-in Animation for Tab Content */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
