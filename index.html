@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {/* Baaki Head content waisa hi */}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qodeo - Professional QR Code Studio</title>
@@ -10,6 +11,7 @@
 </head>
 <body>
     <header>
+        {/* Header content waisa hi */}
         <div class="container">
             <h1 id="logo">Qodeo</h1>
         </div>
@@ -17,20 +19,27 @@
 
     <main>
         <div class="container app-layout">
-            
             <aside class="controls-panel">
                 <h2>Customize Your QR Code</h2>
 
                 <div class="qr-type-tabs">
-                    <button class="tab-link active" data-tab="urlTab" title="Generate QR for a Website URL">
+                    <button class="tab-link active" data-tab="urlTab" data-icon="fas fa-link" title="Generate QR for a Website URL">
                         <i class="fas fa-link"></i> URL
                     </button>
-                    <button class="tab-link" data-tab="textTab" title="Generate QR for Plain Text">
+                    <button class="tab-link" data-tab="textTab" data-icon="fas fa-font" title="Generate QR for Plain Text">
                         <i class="fas fa-font"></i> Text
                     </button>
-                    <!-- More tabs will be added here later -->
+                    {/* NEW TABS ADDED */}
+                    <button class="tab-link" data-tab="emailTab" data-icon="fas fa-envelope" title="Generate QR for an Email">
+                        <i class="fas fa-envelope"></i> Email
+                    </button>
+                    <button class="tab-link" data-tab="phoneTab" data-icon="fas fa-phone" title="Generate QR for a Phone Number">
+                        <i class="fas fa-phone"></i> Phone
+                    </button>
+                    {/* Hum yahan aur tabs (SMS, Wi-Fi, etc.) baad mein add karenge */}
                 </div>
 
+                {/* URL TAB CONTENT */}
                 <div id="urlTab" class="tab-content active">
                     <div class="control-group">
                         <label for="qrDataUrl">Website URL:</label>
@@ -38,29 +47,54 @@
                     </div>
                 </div>
 
+                {/* TEXT TAB CONTENT */}
                 <div id="textTab" class="tab-content">
                     <div class="control-group">
                         <label for="qrDataText">Your Text:</label>
                         <textarea id="qrDataText" placeholder="Enter any text you want in the QR code" rows="4"></textarea>
                     </div>
                 </div>
-                
-                <h3 class="customization-heading">Appearance Options</h3>
 
+                {/* EMAIL TAB CONTENT - NEW */}
+                <div id="emailTab" class="tab-content">
+                    <div class="control-group">
+                        <label for="qrEmailTo">To Email Address:</label>
+                        <input type="email" id="qrEmailTo" placeholder="recipient@example.com">
+                    </div>
+                    <div class="control-group">
+                        <label for="qrEmailSubject">Subject (Optional):</label>
+                        <input type="text" id="qrEmailSubject" placeholder="Email Subject">
+                    </div>
+                    <div class="control-group">
+                        <label for="qrEmailBody">Message (Optional):</label>
+                        <textarea id="qrEmailBody" placeholder="Your email message" rows="3"></textarea>
+                    </div>
+                </div>
+
+                {/* PHONE TAB CONTENT - NEW */}
+                <div id="phoneTab" class="tab-content">
+                    <div class="control-group">
+                        <label for="qrPhoneNumber">Phone Number:</label>
+                        <input type="tel" id="qrPhoneNumber" placeholder="e.g., +1234567890">
+                    </div>
+                </div>
+                
+                {/* COMMON CUSTOMIZATION OPTIONS */}
+                <h3 class="customization-heading">Appearance Options</h3>
+                {/* Dot Color, Background Color, Dot Style, Logo Upload waise hi rahenge */}
+                {/* ... (Rest of the controls-panel content) ... */}
                 <div class="control-group">
                     <label for="dotColor">
                         <i class="fas fa-palette icon-label"></i> Dot Color:
                     </label>
                     <input type="color" id="dotColor" value="#ffffff"> 
                 </div>
-
                 <div class="control-group">
                     <label for="backgroundColor">
                         <i class="fas fa-fill-drip icon-label"></i> Background Color:
                     </label>
                     <input type="color" id="backgroundColor" value="#0c111b"> 
                 </div>
-
                 <div class="control-group">
                     <label for="dotStyle">
                         <i class="fas fa-shapes icon-label"></i> Dot Style:
@@ -74,7 +108,6 @@
                         <option value="extra-rounded">Extra Rounded</option>
                     </select>
                 </div>
-
                 <div class="control-group">
                     <label for="logoUpload">
                         <i class="fas fa-image icon-label"></i> Upload Logo (Optional):
@@ -82,26 +115,19 @@
                     <input type="file" id="logoUpload" accept="image/png, image/jpeg, image/svg+xml">
                     <img id="logoPreview" src="#" alt="Logo Preview" style="max-width: 100px; max-height: 50px; margin-top: 10px; display: none;"/>
                 </div>
-
                 <button id="updateQrButton" class="button-primary">Generate / Update QR Code</button>
-                
             </aside>
 
+            {/* Preview Panel waisa hi rahega */}
             <section class="preview-panel">
+               {/* ... (Preview panel content) ... */}
                 <h2>Preview</h2>
-                <div id="qrCanvasContainer">
-                    <!-- QR Code will be rendered here -->
-                </div>
-                
-                <div id="qrDataDisplay" class="qr-data-text">
-                    <!-- This div will be populated by JavaScript. It should be empty in HTML. -->
-                </div>
-
+                <div id="qrCanvasContainer"></div>
+                <div id="qrDataDisplay" class="qr-data-text"></div>
                 <div class="actions">
                     <button id="downloadSvgButton">Download SVG</button>
                     <button id="downloadPngButton">Download PNG</button>
                 </div>
-
                 <div class="scannability-tips">
                     <h4>Quick Tips for Scannability:</h4>
                     <ul>
@@ -111,11 +137,11 @@
                     </ul>
                 </div>
             </section>
-
         </div>
     </main>
 
     <footer>
+        {/* Footer content waisa hi */}
         <div class="container">
             <p>© <span id="year"></span> Qodeo. Designed with AI assistance.</p>
         </div>
