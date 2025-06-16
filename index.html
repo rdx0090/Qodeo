@@ -16,9 +16,8 @@
     </header>
 
     <main>
-        <div class="container app-layout"> {/* app-layout will now primarily manage vertical stacking */}
+        <div class="container app-layout">
             
-            {/* CONTROLS PANEL (NOW FIRST AGAIN) */}
             <aside class="controls-panel">
                 <h2>Customize Your QR Code</h2>
 
@@ -29,6 +28,7 @@
                     <button class="tab-link" data-tab="textTab" title="Generate QR for Plain Text">
                         <i class="fas fa-font"></i> Text
                     </button>
+                    <!-- More tabs will be added here later -->
                 </div>
 
                 <div id="urlTab" class="tab-content active">
@@ -87,15 +87,14 @@
                 
             </aside>
 
-            {/* PREVIEW PANEL (NOW SECOND, AFTER CONTROLS) */}
             <section class="preview-panel">
                 <h2>Preview</h2>
                 <div id="qrCanvasContainer">
-                    {/* QR Code will be rendered here */}
+                    <!-- QR Code will be rendered here -->
                 </div>
                 
                 <div id="qrDataDisplay" class="qr-data-text">
-                    {/* Generated data will appear here */}
+                    <!-- This div will be populated by JavaScript. It should be empty in HTML. -->
                 </div>
 
                 <div class="actions">
@@ -103,7 +102,6 @@
                     <button id="downloadPngButton">Download PNG</button>
                 </div>
 
-                {/* QUICK TIPS REMAINS INSIDE PREVIEW PANEL, AFTER ACTIONS */}
                 <div class="scannability-tips">
                     <h4>Quick Tips for Scannability:</h4>
                     <ul>
