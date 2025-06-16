@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qodeo - Professional QR Code Studio</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome CDN Link (for icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="images/favicon.png" type="image/png"> 
 </head>
@@ -21,9 +20,9 @@
             <aside class="controls-panel">
                 <h2>Customize Your QR Code</h2>
 
-                                <div class="control-group">
+                <div class="control-group">
                     <label for="qrData">
-                        <i class="fas fa-link icon-label"></i> Data: 
+                        <i class="fas fa-link icon-label"></i> Data:
                     </label>
                     <input type="text" id="qrData" value="https://qodeo.pro" placeholder="Enter URL, text, email, phone, etc.">
                 </div>
@@ -74,6 +73,12 @@
                 <div id="qrCanvasContainer">
                     {/* QR Code will be rendered here */}
                 </div>
+                
+                {/* DIV FOR DISPLAYING GENERATED QR DATA */}
+                <div id="qrDataDisplay" class="qr-data-text">
+                    {/* Generated data will appear here */}
+                </div>
+
                 <div class="actions">
                     <button id="downloadSvgButton">Download SVG</button>
                     <button id="downloadPngButton">Download PNG</button>
