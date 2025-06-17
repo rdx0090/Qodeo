@@ -21,55 +21,122 @@
                 <span id="tagline" class="header-tagline">- Modern QR Code Studio</span>
             </a>
             <nav class="site-nav">
-                <!-- Navigation links -->
+                <!-- Navigation links can be added here later if needed -->
             </nav>
         </div>
     </header>
 
     <main class="site-main">
-        {/* Baaki saara main content waisa hi rahega jaisa pichle full code mein tha */}
-        {/* ... (qr-generator-section, preview-and-options-section) ... */}
         <section class="qr-generator-section">
             <div class="container">
                 <div class="qr-type-selector-grid">
-                    <button class="qr-type-button active" data-type="url" title="Website URL"><i class="fas fa-link"></i><span>URL</span></button>
-                    <button class="qr-type-button" data-type="text" title="Plain Text"><i class="fas fa-font"></i><span>Text</span></button>
-                    <button class="qr-type-button" data-type="email" title="Email Address"><i class="fas fa-envelope"></i><span>Email</span></button>
-                    <button class="qr-type-button" data-type="phone" title="Phone Number"><i class="fas fa-phone"></i><span>Phone</span></button>
-                    <button class="qr-type-button" data-type="sms" title="SMS Message"><i class="fas fa-comment-sms"></i><span>SMS</span></button>
-                    <button class="qr-type-button" data-type="wifi" title="Wi-Fi Network"><i class="fas fa-wifi"></i><span>Wi-Fi</span></button>
-                    <button class="qr-type-button" data-type="vcard" title="Contact Card (vCard)"><i class="fas fa-address-card"></i><span>vCard</span></button>
-                    <button class="qr-type-button" data-type="location" title="Geolocation"><i class="fas fa-map-marker-alt"></i><span>Location</span></button>
+                    <button class="qr-type-button active" data-type="url" title="Website URL">
+                        <i class="fas fa-link"></i><span>URL</span>
+                    </button>
+                    <button class="qr-type-button" data-type="text" title="Plain Text">
+                        <i class="fas fa-font"></i><span>Text</span>
+                    </button>
+                    <button class="qr-type-button" data-type="email" title="Email Address">
+                        <i class="fas fa-envelope"></i><span>Email</span>
+                    </button>
+                    <button class="qr-type-button" data-type="phone" title="Phone Number">
+                        <i class="fas fa-phone"></i><span>Phone</span>
+                    </button>
+                    <button class="qr-type-button" data-type="sms" title="SMS Message">
+                        <i class="fas fa-comment-sms"></i><span>SMS</span>
+                    </button>
+                    <button class="qr-type-button" data-type="wifi" title="Wi-Fi Network">
+                        <i class="fas fa-wifi"></i><span>Wi-Fi</span>
+                    </button>
+                    <button class="qr-type-button" data-type="vcard" title="Contact Card (vCard)">
+                        <i class="fas fa-address-card"></i><span>vCard</span>
+                    </button>
+                    <button class="qr-type-button" data-type="location" title="Geolocation">
+                        <i class="fas fa-map-marker-alt"></i><span>Location</span>
+                    </button>
                 </div>
+
                 <div class="input-area-wrapper">
                     <h2 id="inputAreaTitle">Enter your Website URL</h2>
-                    <div id="urlInputs" class="qr-input-group active"><input type="url" id="qrDataUrl" placeholder="https://www.example.com"></div>
-                    <div id="textInputs" class="qr-input-group"><textarea id="qrDataText" placeholder="Enter your text here..." rows="5"></textarea></div>
-                    <div id="emailInputs" class="qr-input-group"><input type="email" id="qrEmailTo" placeholder="To: recipient@example.com"><input type="text" id="qrEmailSubject" placeholder="Subject (Optional)"><textarea id="qrEmailBody" placeholder="Message (Optional)" rows="3"></textarea></div>
-                    <div id="phoneInputs" class="qr-input-group"><input type="tel" id="qrPhoneNumber" placeholder="Phone Number (e.g., +1234567890)"></div>
-                    <div id="smsInputs" class="qr-input-group"><input type="tel" id="qrSmsNumber" placeholder="Phone Number"><textarea id="qrSmsMessage" placeholder="SMS Message" rows="3"></textarea></div>
-                    <div id="wifiInputs" class="qr-input-group"><input type="text" id="qrWifiSsid" placeholder="Network Name (SSID)"><input type="password" id="qrWifiPassword" placeholder="Password (Optional)"><select id="qrWifiEncryption"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">No Encryption</option></select></div>
+                    
+                    <div id="urlInputs" class="qr-input-group active">
+                        <input type="url" id="qrDataUrl" placeholder="https://www.example.com">
+                    </div>
+                    <div id="textInputs" class="qr-input-group">
+                        <textarea id="qrDataText" placeholder="Enter your text here..." rows="5"></textarea>
+                    </div>
+                    <div id="emailInputs" class="qr-input-group">
+                        <input type="email" id="qrEmailTo" placeholder="To: recipient@example.com">
+                        <input type="text" id="qrEmailSubject" placeholder="Subject (Optional)">
+                        <textarea id="qrEmailBody" placeholder="Message (Optional)" rows="3"></textarea>
+                    </div>
+                    <div id="phoneInputs" class="qr-input-group">
+                        <input type="tel" id="qrPhoneNumber" placeholder="Phone Number (e.g., +1234567890)">
+                    </div>
+                    <div id="smsInputs" class="qr-input-group">
+                         <input type="tel" id="qrSmsNumber" placeholder="Phone Number">
+                         <textarea id="qrSmsMessage" placeholder="SMS Message" rows="3"></textarea>
+                    </div>
+                     <div id="wifiInputs" class="qr-input-group">
+                        <input type="text" id="qrWifiSsid" placeholder="Network Name (SSID)">
+                        <input type="password" id="qrWifiPassword" placeholder="Password (Optional)">
+                        <select id="qrWifiEncryption">
+                            <option value="WPA">WPA/WPA2</option>
+                            <option value="WEP">WEP</option>
+                            <option value="nopass">No Encryption</option>
+                        </select>
+                    </div>
                     <div id="vcardInputs" class="qr-input-group"><p>vCard inputs coming soon...</p></div>
                     <div id="locationInputs" class="qr-input-group"><p>Location inputs coming soon...</p></div>
                 </div>
-                <button id="generateQrMainButton" class="button-generate"><i class="fas fa-qrcode"></i> Generate QR Code</button>
+
+                <button id="generateQrMainButton" class="button-generate">
+                    <i class="fas fa-qrcode"></i> Generate QR Code
+                </button>
             </div>
         </section>
+
         <section class="preview-and-options-section">
             <div class="container">
                 <div class="preview-column">
                     <h3>Your QR Code</h3>
-                    <div id="qrCanvasContainer"></div>
-                    <div id="qrDataDisplay" class="qr-data-text"></div>
-                    <div class="actions"><button id="downloadSvgButton">Download SVG</button><button id="downloadPngButton">Download PNG</button></div>
+                    <div id="qrCanvasContainer"><!-- QR will be rendered here --></div>
+                    <div id="qrDataDisplay" class="qr-data-text"><!-- Data will be shown here --></div>
+                    <div class="actions">
+                        <button id="downloadSvgButton">Download SVG</button>
+                        <button id="downloadPngButton">Download PNG</button>
+                    </div>
                 </div>
                 <div class="options-column">
                     <h3>Customize Design</h3>
-                    <div class="control-group"><label for="dotColor"><i class="fas fa-palette icon-label"></i> Dot Color:</label><input type="color" id="dotColor" value="#000000"></div>
-                    <div class="control-group"><label for="backgroundColor"><i class="fas fa-fill-drip icon-label"></i> Background Color:</label><input type="color" id="backgroundColor" value="#ffffff"></div>
-                    <div class="control-group"><label for="dotStyle"><i class="fas fa-shapes icon-label"></i> Dot Style:</label><select id="dotStyle"><option value="square">Square</option><option value="rounded">Rounded</option><option value="dots">Dots</option><option value="classy">Classy</option><option value="classy-rounded">Classy Rounded</option><option value="extra-rounded">Extra Rounded</option></select></div>
-                    <div class="control-group"><label for="logoUpload"><i class="fas fa-image icon-label"></i> Upload Logo:</label><input type="file" id="logoUpload" accept="image/*"><img id="logoPreview" src="#" alt="Logo Preview" style="max-width: 80px; max-height: 40px; margin-top: 8px; display: none;"/></div>
-                    <div class="scannability-tips"><h4>Quick Tips:</h4><ul><li>High contrast is key!</li><li>Test with a scanner.</li></ul></div>
+                     <div class="control-group">
+                        <label for="dotColor"><i class="fas fa-palette icon-label"></i> Dot Color:</label>
+                        <input type="color" id="dotColor" value="#000000">
+                    </div>
+                    <div class="control-group">
+                        <label for="backgroundColor"><i class="fas fa-fill-drip icon-label"></i> Background Color:</label>
+                        <input type="color" id="backgroundColor" value="#ffffff">
+                    </div>
+                    <div class="control-group">
+                        <label for="dotStyle"><i class="fas fa-shapes icon-label"></i> Dot Style:</label>
+                        <select id="dotStyle">
+                            <option value="square">Square</option><option value="rounded">Rounded</option>
+                            <option value="dots">Dots</option><option value="classy">Classy</option>
+                            <option value="classy-rounded">Classy Rounded</option><option value="extra-rounded">Extra Rounded</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="logoUpload"><i class="fas fa-image icon-label"></i> Upload Logo:</label>
+                        <input type="file" id="logoUpload" accept="image/*">
+                        <img id="logoPreview" src="#" alt="Logo Preview" style="max-width: 80px; max-height: 40px; margin-top: 8px; display: none;"/>
+                    </div>
+                    <div class="scannability-tips">
+                        <h4>Quick Tips:</h4>
+                        <ul>
+                            <li>High contrast is key!</li>
+                            <li>Test with a scanner.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
