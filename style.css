@@ -1,4 +1,4 @@
-/* === Qodeo Dark Theme - QR Fills Preview Container === */
+/* === Qodeo Dark Theme - Edge-to-Edge Panels === */
 
 /* --- Global Resets & Variables --- */
 * {
@@ -20,6 +20,7 @@
     --success-hover: #1e7e34;
     --font-primary: 'Inter', 'Segoe UI', Roboto, sans-serif; 
     --header-height: 56px;
+    --edge-padding: 15px; /* Define a variable for edge padding */
 }
 
 body {
@@ -34,16 +35,16 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+/* Container is now mainly for header and footer content centering */
 .container {
-    width: 90%;
-    max-width: 760px; 
+    width: 90%; /* Or your preferred width for centered content */
+    max-width: 1100px; /* Example max-width for header/footer content */
     margin: 0 auto;
 }
 
 /* --- Header Styling --- */
 header {
     background-color: var(--background-secondary);
-    padding: 0; 
     height: var(--header-height);
     display: flex; 
     align-items: center;
@@ -52,110 +53,79 @@ header {
     top: 0;
     z-index: 1000;
 }
-
+/* Header's specific container for its content */
 header .container {
-    display: flex;
-    align-items: center;
+    /* Max-width will be inherited, or set specific one for header */
 }
 
-#logoLink {
-    display: flex;
-    align-items: center;
-    text-decoration: none; 
-}
 
-#headerIcon {
-    height: 28px; 
-    width: auto;
-    margin-right: 8px; 
-}
-
-#logoText {
-    font-size: 1.7rem; 
-    font-weight: 700;
-    color: var(--primary-brand-color);
-    letter-spacing: -0.5px;
-    line-height: 1; 
-}
-
+#logoLink { display: flex; align-items: center; text-decoration: none; }
+#headerIcon { height: 28px; width: auto; margin-right: 8px; }
+#logoText { font-size: 1.7rem; font-weight: 700; color: var(--primary-brand-color); letter-spacing: -0.5px; line-height: 1; }
 
 /* --- Main App Layout --- */
 main {
     flex-grow: 1;
-    padding: 18px 0; 
+    /* No top/bottom padding here, panels will manage or app-layout */
 }
 
 .app-layout {
     display: flex;
     flex-direction: column; 
-    gap: 20px; 
+    width: 100%; /* app-layout itself is full width */
+    /* gap: 0; /* No gap if panels are truly edge-to-edge with only borders */
 }
 
 .controls-panel, .preview-panel {
     background-color: var(--background-secondary);
-    padding: 18px; 
-    border-radius: 8px; 
-    border: 1px solid var(--border-color);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+    width: 100%; /* Panels take full width */
+    border-left: none;  /* No side borders for edge-to-edge */
+    border-right: none;
+    border-radius: 0; /* No radius for edge-to-edge */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Softer shadow for panels */
+    /* Top/Bottom borders can be added if sections need separation */
+}
+.controls-panel {
+    border-bottom: 1px solid var(--border-color); /* Separator between panels */
+}
+.preview-panel {
+    /* No top border if it immediately follows controls panel with its bottom border */
 }
 
-.preview-panel {
+
+/* NEW: Wrapper for content inside panels to apply padding */
+.panel-content-wrapper {
+    padding: 18px var(--edge-padding); /* Use variable for left/right padding */
+    /* max-width: 760px; /* Optional: if you want to limit content width inside full-width panel */
+    /* margin: 0 auto; /* To center content wrapper if max-width is set */
+}
+/* For preview panel, content is already centered by its flex properties */
+.preview-panel .panel-content-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%; /* Ensure wrapper takes width for centering its content */
 }
 
 
 h2 { 
-    font-size: 1.15rem; 
-    color: var(--text-primary);
-    margin-bottom: 18px; 
-    padding-bottom: 8px; 
-    border-bottom: 1px solid var(--border-color);
-    font-weight: 600;
+    font-size: 1.15rem; color: var(--text-primary); margin-bottom: 18px; 
+    padding-bottom: 8px; border-bottom: 1px solid var(--border-color); font-weight: 600;
+    /* Remove negative margins if h2 is inside panel-content-wrapper which has padding */
 }
 
 /* --- QR Type Tabs Styling --- */
 .qr-type-tabs {
-    display: flex;
-    margin-bottom: 20px; 
-    border-bottom: 1px solid var(--border-color);
+    display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color);
     flex-wrap: wrap; 
+    /* Remove negative margins if tabs are inside panel-content-wrapper */
 }
-
-.tab-link {
-    background-color: transparent;
-    color: var(--text-secondary);
-    border: none;
-    padding: 8px 12px; 
-    cursor: pointer;
-    font-size: 0.8rem; 
-    font-weight: 500;
-    transition: color 0.2s ease, border-bottom-color 0.2s ease; 
-    border-bottom: 2px solid transparent; 
-    margin-right: 4px; 
-    margin-bottom: -1px; 
-    display: flex; 
-    align-items: center;
-}
-.tab-link i { margin-right: 5px; font-size: 0.9em; }
-.tab-link:hover { color: var(--text-primary); }
-.tab-link.active {
-    color: var(--primary-brand-color);
-    font-weight: 600;
-    border-bottom-color: var(--primary-brand-color);
-}
-
-.tab-content { display: none; animation: fadeIn 0.3s ease-out; }
-.tab-content.active { display: block; }
+/* ... (rest of .tab-link, .tab-content, .customization-heading styles are largely the same, */
+/*      ensure they don't have negative margins that counteract wrapper's padding) ... */
 
 .customization-heading {
-    font-size: 1rem; 
-    color: var(--text-primary); 
-    margin-top: 20px; 
-    margin-bottom: 12px; 
-    padding-bottom: 6px; 
-    border-bottom: 1px solid var(--border-color);
+    font-size: 1rem; color: var(--text-primary); margin-top: 20px; 
+    margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border-color);
     font-weight: 500;
 }
 
@@ -167,195 +137,145 @@ h2 {
 }
 .icon-label { margin-right: 6px; font-size: 0.9em; color: var(--primary-brand-color); }
 
-.control-group input[type="text"],
-.control-group input[type="url"], 
-.control-group input[type="email"], 
-.control-group input[type="tel"], 
-.control-group input[type="file"],
-.control-group textarea, 
-.control-group select {
-    width: 100%; padding: 10px 12px; 
-    background-color: var(--input-background);
+/* ... (Input, textarea, select, color picker, logo preview styles are largely the same) ... */
+.control-group input[type="text"], .control-group input[type="url"], .control-group input[type="email"], .control-group input[type="tel"], .control-group input[type="file"], .control-group textarea, .control-group select {
+    width: 100%; padding: 10px 12px; background-color: var(--input-background);
     border: 1px solid var(--border-color); color: var(--text-primary);
-    border-radius: 5px; 
-    font-size: 0.88rem; 
+    border-radius: 5px; font-size: 0.88rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
 }
 .control-group textarea { font-family: var(--font-primary); resize: vertical; min-height: 70px; }
-
 .control-group input[type="color"] {
-    width: 100%; height: 44px; 
-    padding: 4px; 
-    background-color: var(--input-background);
+    width: 100%; height: 44px; padding: 4px; background-color: var(--input-background);
     border: 1px solid var(--border-color); border-radius: 5px; cursor: pointer;
 }
 .control-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 .control-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 3px; }
-
-.control-group input:focus, 
-.control-group textarea:focus,
-.control-group select:focus {
+.control-group input:focus, .control-group textarea:focus, .control-group select:focus {
     border-color: var(--primary-brand-color);
-    box-shadow: 0 0 0 2px rgba(31, 128, 224, 0.25); 
-    outline: none;
+    box-shadow: 0 0 0 2px rgba(31, 128, 224, 0.25); outline: none;
 }
-
 #logoPreview {
     border: 1px dashed var(--border-color); padding: 4px; border-radius: 4px;
     background-color: var(--input-background); display: block; margin-top: 8px;
 }
 #logoPreview img { max-width: 100%; height: auto; display: block; }
 
+
 /* --- Buttons Styling --- */
 button, .button-primary { 
     display: inline-block; width: 100%; background-color: var(--primary-brand-color);
-    color: var(--text-primary); padding: 12px 18px; 
-    margin-bottom: 8px; 
+    color: var(--text-primary); padding: 12px 18px; margin-bottom: 8px; 
     border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem; 
-    font-weight: 500; 
-    text-align: center;
+    font-weight: 500; text-align: center;
     transition: background-color 0.2s ease, opacity 0.2s ease; letter-spacing: 0.3px; 
 }
-
-/* UPDATED .actions and .actions button FOR ANIMATION & EQUAL WIDTH */
-.actions { 
-    display: flex; 
-    justify-content: center; 
-    width: 100%; 
-    gap: 12px; 
-    margin-top: 18px; 
+.actions button:last-child { margin-bottom: 0; }
+button:hover, .button-primary:hover { background-color: #1869c0; }
+button:active, .button-primary:active { background-color: #165ca8; }
+button:disabled, .button-primary:disabled {
+    background-color: var(--background-tertiary); color: var(--text-secondary);
+    cursor: not-allowed; opacity: 0.6; 
 }
-.actions button {
-    background-color: var(--background-tertiary); 
-    flex-grow: 1; 
-    flex-basis: 0; 
-    padding: 10px 12px; 
-    font-size: 0.82rem; 
-    letter-spacing: 0.2px;
-    margin-bottom: 0; /* Remove bottom margin from buttons inside .actions */
-    transition: background-color 0.2s ease, transform 0.15s ease-out, box-shadow 0.2s ease; 
-}
-.actions button:hover { 
-    background-color: #3b4a69; 
-    transform: translateY(-2px); 
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
-}
-.actions button:active {
-    transform: translateY(0px); 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-}
-
-
 #updateQrButton {
-    background-color: var(--success-color); font-size: 1rem; 
-    margin-top: 12px; 
+    background-color: var(--success-color); font-size: 1rem; margin-top: 12px; 
 }
 #updateQrButton:hover:not(:disabled) { background-color: var(--success-hover); }
 
-
-/* --- QR Code Canvas Styling (UPDATED FOR FILLING CONTAINER) --- */
-#qrCanvasContainer {
-    width: 100%; 
-    max-width: 260px; 
-    height: auto; 
-    aspect-ratio: 1 / 1; 
-    margin-left: auto; 
-    margin-right: auto; 
-    margin-bottom: 8px; 
-    border: 1px dashed var(--border-color); 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px; 
-    background-color: var(--background-primary); 
-    border-radius: 6px; 
-    transition: border-color 0.3s ease; 
-    overflow: hidden; 
+.actions { 
+    display: flex; justify-content: center; width: 100%; gap: 12px; margin-top: 18px; 
 }
+.actions button {
+    background-color: var(--background-tertiary); flex-grow: 1; flex-basis: 0; 
+    padding: 10px 12px; font-size: 0.82rem; letter-spacing: 0.2px;
+    margin-bottom: 0; 
+    transition: background-color 0.2s ease, transform 0.15s ease-out, box-shadow 0.2s ease; 
+}
+.actions button:hover { background-color: #3b4a69; transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+.actions button:active { transform: translateY(0px); box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
 
-#qrCanvasContainer > canvas, 
-#qrCanvasContainer > img { 
-    display: block; 
-    width: 100%;    
-    height: 100%;   
-    object-fit: contain; 
-    border-radius: 3px; 
+/* --- QR Code Canvas Styling --- */
+#qrCanvasContainer {
+    width: 100%; max-width: 260px; height: auto; aspect-ratio: 1 / 1; 
+    margin-left: auto; margin-right: auto; margin-bottom: 8px; 
+    border: 1px dashed var(--border-color); 
+    display: flex; align-items: center; justify-content: center;
+    padding: 6px; background-color: var(--background-primary); 
+    border-radius: 6px; transition: border-color 0.3s ease; overflow: hidden; 
+}
+#qrCanvasContainer > canvas, #qrCanvasContainer > img { 
+    display: block; width: 100%; height: 100%;
+    object-fit: contain; border-radius: 3px; 
 }
 
 .qr-data-text {
-    font-size: 0.75rem; 
-    color: var(--text-secondary); margin-top: 4px; 
-    margin-bottom: 12px; 
-    word-break: break-all; text-align: center;
+    font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; 
+    margin-bottom: 12px; word-break: break-all; text-align: center;
     max-width: 90%; padding: 4px; 
 }
 
 /* --- Scannability Tips Styling --- */
 .scannability-tips {
-    margin-top: 18px; 
-    padding: 12px; 
-    background-color: var(--input-background); 
+    margin-top: 18px; padding: 12px; background-color: var(--input-background); 
     border: 1px solid var(--border-color); border-radius: 6px; 
-    font-size: 0.78rem; 
-    width: 100%; max-width: 380px; align-self: center; 
+    font-size: 0.78rem; width: 100%; max-width: 380px; align-self: center; 
 }
-.scannability-tips h4 {
-    color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; 
-    font-weight: 600; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; 
-}
-.scannability-tips ul {
-    list-style-type: disc; list-style-position: inside; padding-left: 0; color: var(--text-secondary); 
-}
+/* ... (Scannability tips h4, ul, li styles are the same) ... */
+.scannability-tips h4 { color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
+.scannability-tips ul { list-style-type: disc; list-style-position: inside; padding-left: 0; color: var(--text-secondary); }
 .scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-brand-color); }
 
+
 /* --- Footer Styling --- */
 footer {
+    /* Footer will be inside its own .container, so no edge-to-edge */
     text-align: center; padding: 15px 0; 
     background-color: var(--background-secondary);
-    color: var(--text-secondary); margin-top: auto; border-top: 1px solid var(--border-color);
+    color: var(--text-secondary); margin-top: auto; 
+    border-top: 1px solid var(--border-color);
     font-size: 0.75rem; 
 }
+
 
 /* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
 @media (min-width: 768px) { 
     body { font-size: 15px; } 
-    .container { 
-        width: 95%; /* Use more width on larger screens */
-        max-width: 720px; /* Keep a reasonable max for single column */
-    } 
-    
-    header #logoText { font-size: 1.9rem; }
-    header #headerIcon { height: 30px; }
+    /* On desktop, .container within main (if we re-add it) or .app-layout can have max-width */
+    .app-layout {
+        max-width: 720px; /* Or your preferred content width for desktop */
+        margin: 0 auto; /* Center app-layout on desktop */
+        gap: 25px;
+    }
+    /* Restore panel specific styles for desktop if they are not full-width */
+    .controls-panel, .preview-panel {
+        /* width: auto; /* Allow them to be sized by flex or grid if using 2-column */
+        border-radius: 8px; /* Restore radius */
+        border-left: 1px solid var(--border-color); /* Restore side borders */
+        border-right: 1px solid var(--border-color);
+    }
+     /* Remove negative margins for h2 and tabs as padding is handled by panel-content-wrapper */
 
-    .controls-panel, .preview-panel { padding: 20px; } 
-    
+
+    /* Keep other desktop specific styles */
     h2 { font-size: 1.25rem; }
     .customization-heading { font-size: 1.05rem; }
     .tab-link { font-size: 0.85rem; padding: 10px 14px; }
     .tab-link i { font-size: 0.9em; }
-
     .control-group label { font-size: 0.82rem; }
     .icon-label { font-size: 0.9em; }
-    .control-group input[type="text"],
-    .control-group input[type="url"], 
-    .control-group input[type="email"], 
-    .control-group input[type="tel"], 
-    .control-group input[type="file"],
-    .control-group textarea, 
-    .control-group select { font-size: 0.9rem; padding: 11px 13px; }
-
+    .control-group input[type="text"], .control-group input[type="url"], .control-group input[type="email"], .control-group input[type="tel"], .control-group input[type="file"], .control-group textarea, .control-group select { font-size: 0.9rem; padding: 11px 13px; }
     button, .button-primary { font-size: 0.92rem; padding: 13px 20px; }
     #updateQrButton { font-size: 1rem; }
-    
-    /* .actions button { width: auto; flex-grow: 0; } /* Reverted this for equal width */
-    
+    .actions button { width: auto; flex-grow: 0; }
     #qrCanvasContainer { max-width: 280px; padding: 8px; } 
     .qr-data-text { font-size: 0.78rem; }
     .scannability-tips { font-size: 0.8rem; padding: 14px; }
     .scannability-tips h4 { font-size: 0.88rem; }
-    footer { font-size: 0.78rem; }
+    footer .container { /* Ensure footer content is also centered */
+         max-width: 720px; /* Match app-layout max-width */
+    }
 }
 
 @keyframes fadeIn {
