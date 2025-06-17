@@ -1,4 +1,4 @@
-/* === Qodeo New Light Theme - Simple Tagline Color & Zoom === */
+/* === Qodeo New Light Theme - Super Simple Tagline === */
 
 /* --- Global Resets & Font Import --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -6,7 +6,7 @@
 
 :root {
     --primary-color: #007bff; 
-    --secondary-color: #00b894; /* Green color - used for tagline and generate button */
+    --secondary-color: #00b894; 
     --background-light: #ffffff; 
     --background-grey: #f8f9fa; 
     --text-dark: #212529; 
@@ -40,14 +40,13 @@ body {
     display: flex; 
     align-items: baseline; 
     text-decoration: none; 
-    cursor: pointer; /* Make the whole logo area feel interactive */
+    cursor: pointer; 
 }
 #headerIcon { 
     height: 28px; 
     width: auto; 
     margin-right: 8px; 
     align-self: center; 
-    transition: transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Icon zoom */
 }
 
 #logoText { 
@@ -57,36 +56,29 @@ body {
     letter-spacing: -0.5px;
     margin-right: 8px; 
     line-height: 1; 
-    transition: transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Qodeo text zoom */
 }
-/* Tagline Styling (SIMPLE SOLID COLOR & ZOOM EFFECT) */
+/* Tagline Styling (SUPER SIMPLE SOLID COLOR) */
 .header-tagline {
     display: inline-block; 
-    font-size: 0.8rem;  
-    font-weight: 500;
-    color: var(--secondary-color); /* Using secondary (green) color */
+    font-size: 0.75rem;  
+    font-weight: 400;    
+    color: var(--text-muted); /* Muted grey color */
     white-space: nowrap; 
     line-height: 1; 
     vertical-align: baseline; 
-    transition: transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Tagline zoom */
 }
 
-/* Zoom effect on hovering the entire logo link */
-#logoLink:hover #headerIcon,
-#logoLink:hover #logoText,
-#logoLink:hover .header-tagline {
-    transform: scale(1.03); /* Slight zoom on all parts */
-}
-#logoLink:active #headerIcon,
-#logoLink:active #logoText,
-#logoLink:active .header-tagline {
-    transform: scale(0.99); /* Slight shrink on all parts */
+/* Responsive hide for tagline */
+@media (max-width: 420px) { 
+    .header-tagline {
+        display: none; 
+    }
+    #logoText {
+        margin-right: 0; 
+    }
 }
 
-
-/* --- Main Content --- */
-/* ... (Baaki saari CSS styling (.site-main se lekar @keyframes fadeIn tak) bilkul waise hi rahegi jaisi pichle "Button Animations & Wider Container" wale full code mein thi) ... */
-/* Main Content (No changes from previous full CSS for this section) */
+/* --- Main Content (Remains the same as previous full CSS) --- */
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
 .qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
