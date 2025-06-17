@@ -50,7 +50,8 @@ body {
     border-radius: var(--border-radius-sm); padding: 12px 10px; font-size: 0.85rem;
     font-weight: 500; color: var(--text-muted); cursor: pointer; display: flex;
     flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    text-align: center; 
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     min-height: 70px; 
 }
 .qr-type-button i { font-size: 1.6rem; margin-bottom: 8px; color: var(--text-muted); transition: color 0.2s ease; }
@@ -62,7 +63,7 @@ body {
     color: white; box-shadow: 0 2px 5px rgba(0,123,255,0.3); transform: scale(1.05);
 }
 .qr-type-button.active i { color: white; }
-.qr-type-button:active { transform: scale(1); } /* Reset scale on active for immediate feedback */
+.qr-type-button:active { transform: scale(1); }
 
 
 /* Input Area Wrapper */
@@ -112,46 +113,56 @@ body {
 #qrCanvasContainer > canvas, #qrCanvasContainer > img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .qr-data-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; margin-bottom: 15px; word-break: break-all; text-align: center; max-width: 100%; }
 
-/* UPDATED .actions button FOR ANIMATIONS */
-.actions { display: flex; justify-content: center; width: 100%; gap: 10px; }
+/* --- Download Buttons Styling (.actions button) --- */
+.actions { 
+    display: flex; 
+    justify-content: center; 
+    width: 100%; 
+    gap: 10px; /* Space between SVG and PNG buttons */
+}
 .actions button {
-    background-color: var(--background-grey); color: var(--text-dark);
-    border: 1px solid var(--border-darker);
-    flex-grow: 1; flex-basis: 0; padding: 10px 12px; font-size: 0.85rem; 
+    background-color: var(--background-grey); 
+    color: var(--text-dark); 
+    border: 1px solid var(--border-darker); 
+    flex-grow: 1; 
+    flex-basis: 0; 
+    padding: 10px 12px; 
+    font-size: 0.85rem; 
     border-radius: var(--border-radius-sm);
-    transition: background-color 0.2s ease, 
+    font-weight: 500; 
+    letter-spacing: 0.2px;
+    cursor: pointer; 
+    /* Transitions for ALL animated properties */
+    transition: background-color 0.2s ease-in-out, 
+                color 0.2s ease-in-out,
+                border-color 0.2s ease-in-out,
                 transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55), /* Bouncy zoom */
-                box-shadow 0.2s ease,
-                border-color 0.2s ease, /* For hover border pulse */
-                color 0.2s ease; /* For hover text color change */
-    cursor: pointer;
-    /* animation: none; /* Ensure no continuous animation by default */
+                box-shadow 0.2s ease-in-out; 
+    animation: none; /* Ensure no continuous animation by default */
 }
 .actions button:hover { 
-    background-color: #eef5ff; /* Lighter background on hover */
-    border-color: var(--primary-color); /* Primary color border on hover */
-    color: var(--primary-color); /* Primary color text on hover */
-    transform: scale(1.05); /* Zoom in effect */
-    box-shadow: var(--shadow-md); /* Add shadow on hover */
+    background-color: #eef5ff; 
+    color: var(--primary-color); 
+    border-color: var(--primary-color); 
+    transform: scale(1.05); /* Zoom IN effect */
+    box-shadow: var(--shadow-md); 
     /* animation: pulseBorder 2s infinite ease-in-out; /* Uncomment to enable border pulse on hover */
 }
 .actions button:active {
-    transform: scale(0.98); /* Zoom out slightly on click */
-    box-shadow: var(--shadow-sm);
+    transform: scale(0.98); /* Zoom OUT slightly on click/tap */
+    box-shadow: var(--shadow-sm); 
+    background-color: #dbe9ff; 
 }
-/* Optional: Keyframes for pulsating border (uncomment animation in .actions button:hover to use) */
-/*
+/* Optional: Keyframes for pulsating border */
 @keyframes pulseBorder {
-    0% { border-color: var(--primary-color); box-shadow: 0 0 2px var(--primary-color); }
-    50% { border-color: var(--secondary-color); box-shadow: 0 0 6px var(--secondary-color); }
-    100% { border-color: var(--primary-color); box-shadow: 0 0 2px var(--primary-color); }
+    0% { border-color: var(--primary-color); box-shadow: 0 0 2px rgba(0,123,255,0.5); }
+    50% { border-color: var(--secondary-color); box-shadow: 0 0 6px rgba(0,184,148,0.5); }
+    100% { border-color: var(--primary-color); box-shadow: 0 0 2px rgba(0,123,255,0.5); }
 }
-*/
-
 
 /* Customization options (inside .options-column) */
 .options-column .control-group label { font-size: 0.9rem; color: var(--text-dark); }
-.options-column .icon-label { color: var(--primary-color); }
+.options-column .icon-label { color: var(--primary-color); } /* Ensure icon-label has color */
 .options-column .control-group input[type="color"] { height: 40px; }
 .options-column #logoPreview { border-color: var(--border-darker); background-color: var(--background-light); }
 .scannability-tips { margin-top: 20px; padding: 15px; background-color: var(--background-grey); border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); font-size: 0.85rem; width: 100%; }
@@ -174,13 +185,9 @@ body {
     .preview-column h3, .options-column h3 { font-size: 1.1rem; }
     #qrCanvasContainer { max-width: 220px; }
 }
-@media (min-width: 768px) and (max-width: 991px) { /* Tablet specific adjustments for 2-column */
-    .preview-and-options-section .container {
-        flex-direction: column; /* Stack on tablet if space is an issue */
-    }
-     .preview-column, .options-column {
-        flex-basis: auto; /* Reset basis */
-    }
+@media (min-width: 768px) and (max-width: 991px) { 
+    .preview-and-options-section .container { flex-direction: column; }
+     .preview-column, .options-column { flex-basis: auto; }
 }
 
 /* Fade-in Animation */
