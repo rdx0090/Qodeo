@@ -1,376 +1,187 @@
-/* === Qodeo New Light Theme === */
+/* === Qodeo New Light Theme - Button Animations === */
 
 /* --- Global Resets & Font Import --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+* { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    /* Light Theme Color Palette */
-    --primary-color: #007bff; /* Primary Blue (can be changed) */
-    --secondary-color: #00b894; /* Accent Green for Generate button */
-    --background-light: #ffffff; /* Main background */
-    --background-grey: #f8f9fa; /* Slightly off-white for cards/sections */
-    --text-dark: #212529; /* Main text color */
-    --text-muted: #6c757d; /* Secondary/muted text */
-    --border-light: #dee2e6; /* Light borders */
-    --border-darker: #ced4da; /* Slightly darker border for inputs */
-    
+    --primary-color: #007bff; --secondary-color: #00b894; 
+    --background-light: #ffffff; --background-grey: #f8f9fa; 
+    --text-dark: #212529; --text-muted: #6c757d; 
+    --border-light: #dee2e6; --border-darker: #ced4da;
     --font-main: 'Inter', sans-serif;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-    --border-radius-md: 8px;
-    --border-radius-sm: 6px;
-
-    --header-height: 65px;
-    --container-padding: 15px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --border-radius-md: 8px; --border-radius-sm: 6px;
+    --header-height: 65px; --container-padding: 15px;
 }
-
 body {
-    font-family: var(--font-main);
-    line-height: 1.65;
-    background-color: var(--background-light);
-    color: var(--text-dark);
-    font-size: 15px;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-main); line-height: 1.65; background-color: var(--background-light);
+    color: var(--text-dark); font-size: 15px; display: flex; flex-direction: column;
+    min-height: 100vh; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
-
-.container {
-    width: 100%;
-    max-width: 1140px; /* Max width for content */
-    margin: 0 auto;
-    padding-left: var(--container-padding);
-    padding-right: var(--container-padding);
-}
+.container { width: 100%; max-width: 1140px; margin: 0 auto; padding-left: var(--container-padding); padding-right: var(--container-padding); }
 
 /* --- Header Styling --- */
 .site-header {
-    background-color: var(--background-light);
-    height: var(--header-height);
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid var(--border-light);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    background-color: var(--background-light); height: var(--header-height); display: flex;
+    align-items: center; border-bottom: 1px solid var(--border-light);
+    position: sticky; top: 0; z-index: 1000;
 }
-
-.header-container { /* Specific styling for header's container */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
+.header-container { display: flex; justify-content: space-between; align-items: center; }
 #logoLink { display: flex; align-items: center; text-decoration: none; }
 #headerIcon { height: 30px; width: auto; margin-right: 10px; }
 #logoText { font-size: 1.75rem; font-weight: 700; color: var(--primary-color); }
 
-.button-signup { /* Example if you add a sign up button */
-    background-color: var(--primary-color);
-    color: white;
-    padding: 8px 18px;
-    border-radius: var(--border-radius-sm);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-.button-signup:hover { background-color: #0056b3; }
-
 /* --- Main Content --- */
-.site-main {
-    flex-grow: 1;
-    padding-top: 30px;
-    padding-bottom: 40px;
-}
-
-/* QR Generator Section */
+.site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
 .qr-generator-section {
-    background-color: var(--background-grey);
-    padding-top: 30px;
-    padding-bottom: 30px;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-md);
-    margin-bottom: 30px;
+    background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px;
+    border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px;
 }
-.qr-generator-section .container {
-    max-width: 800px; /* Limit width of this specific section's content */
-}
-
+.qr-generator-section .container { max-width: 800px; }
 
 /* QR Type Selector Grid */
 .qr-type-selector-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Responsive grid */
-    gap: 15px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid var(--border-light);
-    padding-bottom: 20px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px; margin-bottom: 30px; border-bottom: 1px solid var(--border-light); padding-bottom: 20px;
 }
-
 .qr-type-button {
-    background-color: var(--background-light);
-    border: 1px solid var(--border-light);
-    border-radius: var(--border-radius-sm);
-    padding: 12px 10px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column; /* Icon above text */
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    min-height: 70px; /* Ensure consistent height */
+    background-color: var(--background-light); border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-sm); padding: 12px 10px; font-size: 0.85rem;
+    font-weight: 500; color: var(--text-muted); cursor: pointer; display: flex;
+    flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    min-height: 70px; 
 }
-.qr-type-button i {
-    font-size: 1.6rem; /* Larger icon */
-    margin-bottom: 8px;
-    color: var(--text-muted); /* Icon color */
-    transition: color 0.2s ease;
-}
-.qr-type-button span {
-    display: block;
-}
-
-.qr-type-button:hover {
-    background-color: #eef5ff; /* Light blueish hover */
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-}
-.qr-type-button:hover i {
-    color: var(--primary-color);
-}
-
+.qr-type-button i { font-size: 1.6rem; margin-bottom: 8px; color: var(--text-muted); transition: color 0.2s ease; }
+.qr-type-button span { display: block; }
+.qr-type-button:hover { background-color: #eef5ff; border-color: var(--primary-color); color: var(--primary-color); transform: scale(1.03); }
+.qr-type-button:hover i { color: var(--primary-color); }
 .qr-type-button.active {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: white;
-    box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+    background-color: var(--primary-color); border-color: var(--primary-color);
+    color: white; box-shadow: 0 2px 5px rgba(0,123,255,0.3); transform: scale(1.05);
 }
-.qr-type-button.active i {
-    color: white;
-}
+.qr-type-button.active i { color: white; }
+.qr-type-button:active { transform: scale(1); } /* Reset scale on active for immediate feedback */
+
 
 /* Input Area Wrapper */
-.input-area-wrapper {
-    margin-bottom: 25px;
+.input-area-wrapper { margin-bottom: 25px; }
+.input-area-wrapper #inputAreaTitle { font-size: 1.5rem; font-weight: 600; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
+.qr-input-group { display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.3s ease-out; }
+.qr-input-group.active { display: flex; }
+.qr-input-group input[type="url"], .qr-input-group input[type="text"], .qr-input-group input[type="email"], .qr-input-group input[type="tel"], .qr-input-group input[type="password"], .qr-input-group textarea, .qr-input-group select {
+    width: 100%; padding: 12px 15px; font-size: 1rem; border: 1px solid var(--border-darker);
+    border-radius: var(--border-radius-sm); background-color: var(--background-light);
+    color: var(--text-dark); transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.input-area-wrapper #inputAreaTitle {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.qr-input-group {
-    display: none; /* Hidden by default */
-    flex-direction: column;
-    gap: 15px; /* Space between multiple inputs in a group */
-    animation: fadeIn 0.3s ease-out;
-}
-.qr-input-group.active {
-    display: flex; /* Show active group */
-}
-
-/* Styling for inputs and textarea inside .qr-input-group */
-.qr-input-group input[type="url"],
-.qr-input-group input[type="text"],
-.qr-input-group input[type="email"],
-.qr-input-group input[type="tel"],
-.qr-input-group input[type="password"],
-.qr-input-group textarea,
+.qr-input-group textarea { resize: vertical; min-height: 100px; font-family: var(--font-main); }
 .qr-input-group select {
-    width: 100%;
-    padding: 12px 15px;
-    font-size: 1rem;
-    border: 1px solid var(--border-darker);
-    border-radius: var(--border-radius-sm);
-    background-color: var(--background-light);
-    color: var(--text-dark);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%236c757d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 15px center; background-size: 12px; padding-right: 40px;
 }
-.qr-input-group textarea {
-    resize: vertical;
-    min-height: 100px;
-    font-family: var(--font-main);
-}
-.qr-input-group select {
-    appearance: none; /* Remove default select arrow */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%236c757d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E"); /* Custom arrow */
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 12px;
-    padding-right: 40px; /* Space for custom arrow */
-}
-
-.qr-input-group input:focus,
-.qr-input-group textarea:focus,
-.qr-input-group select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.2);
-    outline: none;
-}
+.qr-input-group input:focus, .qr-input-group textarea:focus, .qr-input-group select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0,123,255,0.2); outline: none; }
 
 /* Generate Button */
 .button-generate {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 300px; /* Max width for the button */
-    margin: 25px auto 0; /* Center the button */
-    padding: 14px 25px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: white;
-    background-color: var(--secondary-color); /* Green accent */
-    border: none;
-    border-radius: 50px; /* Pill shape */
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex; align-items: center; justify-content: center; width: 100%;
+    max-width: 300px; margin: 25px auto 0; padding: 14px 25px; font-size: 1.1rem;
+    font-weight: 600; color: white; background-color: var(--secondary-color);
+    border: none; border-radius: 50px; cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55), box-shadow 0.2s ease; 
     box-shadow: var(--shadow-sm);
 }
-.button-generate i {
-    margin-right: 10px;
-    font-size: 1.1em;
-}
-.button-generate:hover {
-    background-color: #00a082; /* Darker green */
-    transform: translateY(-1px);
-}
-.button-generate:active {
-    transform: translateY(0);
-}
-.button-generate:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
+.button-generate i { margin-right: 10px; font-size: 1.1em; }
+.button-generate:hover { background-color: #00a082; transform: scale(1.03); box-shadow: var(--shadow-md); }
+.button-generate:active { transform: scale(1); }
+.button-generate:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
 
 /* Preview and Options Section */
-.preview-and-options-section .container {
-    display: flex;
-    flex-wrap: wrap; /* Stack on mobile */
-    gap: 30px;
-}
+.preview-and-options-section .container { display: flex; flex-wrap: wrap; gap: 30px; }
 .preview-column, .options-column {
-    background-color: var(--background-light); /* White background for these cards */
-    padding: 25px;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-md);
+    background-color: var(--background-light); padding: 25px;
+    border-radius: var(--border-radius-md); box-shadow: var(--shadow-md);
     border: 1px solid var(--border-light);
 }
-.preview-column {
-    flex: 1 1 300px; /* Grow and shrink, base width 300px */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.options-column {
-    flex: 1 1 400px; /* Grow and shrink, base width 400px */
-}
+.preview-column { flex: 1 1 300px; display: flex; flex-direction: column; align-items: center; }
+.options-column { flex: 1 1 400px; }
+.preview-column h3, .options-column h3 { font-size: 1.25rem; color: var(--text-dark); margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; }
 
-.preview-column h3, .options-column h3 {
-    font-size: 1.25rem;
-    color: var(--text-dark);
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-light);
-    padding-bottom: 10px;
-}
+#qrCanvasContainer { width: 100%; max-width: 250px; height: auto; aspect-ratio: 1 / 1; margin-bottom: 10px; border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; padding: 8px; background-color: var(--background-light); border-radius: var(--border-radius-sm); overflow: hidden; }
+#qrCanvasContainer > canvas, #qrCanvasContainer > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.qr-data-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; margin-bottom: 15px; word-break: break-all; text-align: center; max-width: 100%; }
 
-#qrCanvasContainer {
-    width: 100%; max-width: 250px; /* Adjusted size for preview */
-    height: auto; aspect-ratio: 1 / 1; margin-bottom: 10px; 
-    border: 1px solid var(--border-light); 
-    display: flex; align-items: center; justify-content: center;
-    padding: 8px; background-color: var(--background-light); 
-    border-radius: var(--border-radius-sm); overflow: hidden; 
-}
-#qrCanvasContainer > canvas, #qrCanvasContainer > img { 
-    display: block; width: 100%; height: 100%; object-fit: contain; 
-}
-.qr-data-text {
-    font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; 
-    margin-bottom: 15px; word-break: break-all; text-align: center;
-    max-width: 100%;
-}
-.actions { 
-    display: flex; justify-content: center; width: 100%; gap: 10px; 
-}
+/* UPDATED .actions button FOR ANIMATIONS */
+.actions { display: flex; justify-content: center; width: 100%; gap: 10px; }
 .actions button {
     background-color: var(--background-grey); color: var(--text-dark);
     border: 1px solid var(--border-darker);
     flex-grow: 1; flex-basis: 0; padding: 10px 12px; font-size: 0.85rem; 
     border-radius: var(--border-radius-sm);
-    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    transition: background-color 0.2s ease, 
+                transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55), /* Bouncy zoom */
+                box-shadow 0.2s ease,
+                border-color 0.2s ease, /* For hover border pulse */
+                color 0.2s ease; /* For hover text color change */
+    cursor: pointer;
+    /* animation: none; /* Ensure no continuous animation by default */
 }
-.actions button:hover { background-color: #e9ecef; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-.actions button:active { transform: translateY(0); }
+.actions button:hover { 
+    background-color: #eef5ff; /* Lighter background on hover */
+    border-color: var(--primary-color); /* Primary color border on hover */
+    color: var(--primary-color); /* Primary color text on hover */
+    transform: scale(1.05); /* Zoom in effect */
+    box-shadow: var(--shadow-md); /* Add shadow on hover */
+    /* animation: pulseBorder 2s infinite ease-in-out; /* Uncomment to enable border pulse on hover */
+}
+.actions button:active {
+    transform: scale(0.98); /* Zoom out slightly on click */
+    box-shadow: var(--shadow-sm);
+}
+/* Optional: Keyframes for pulsating border (uncomment animation in .actions button:hover to use) */
+/*
+@keyframes pulseBorder {
+    0% { border-color: var(--primary-color); box-shadow: 0 0 2px var(--primary-color); }
+    50% { border-color: var(--secondary-color); box-shadow: 0 0 6px var(--secondary-color); }
+    100% { border-color: var(--primary-color); box-shadow: 0 0 2px var(--primary-color); }
+}
+*/
 
 
 /* Customization options (inside .options-column) */
-.options-column .control-group label {
-    font-size: 0.9rem;
-    color: var(--text-dark);
-}
-.options-column .icon-label {
-    color: var(--primary-color);
-}
-.options-column .control-group input[type="color"] {
-    height: 40px;
-}
-.options-column #logoPreview {
-    border-color: var(--border-darker);
-    background-color: var(--background-light);
-}
-.scannability-tips {
-    margin-top: 20px; padding: 15px; background-color: var(--background-grey); 
-    border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); 
-    font-size: 0.85rem; width: 100%; 
-}
+.options-column .control-group label { font-size: 0.9rem; color: var(--text-dark); }
+.options-column .icon-label { color: var(--primary-color); }
+.options-column .control-group input[type="color"] { height: 40px; }
+.options-column #logoPreview { border-color: var(--border-darker); background-color: var(--background-light); }
+.scannability-tips { margin-top: 20px; padding: 15px; background-color: var(--background-grey); border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); font-size: 0.85rem; width: 100%; }
 .scannability-tips h4 { color: var(--text-dark); margin-bottom: 8px; font-size: 0.9rem; border-bottom: none; padding-bottom: 0; }
 .scannability-tips ul { list-style-type: disc; list-style-position: inside; padding-left: 5px; color: var(--text-muted); }
 .scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-color); }
 
-
 /* --- Footer Styling --- */
-.site-footer {
-    text-align: center; padding: 25px 0; background-color: var(--background-grey);
-    color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light);
-    font-size: 0.85rem; 
-}
+.site-footer { text-align: center; padding: 25px 0; background-color: var(--background-grey); color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light); font-size: 0.85rem; }
 
 /* --- Responsive Adjustments --- */
-@media (max-width: 767px) { /* Mobile specific adjustments */
-    .qr-type-selector-grid {
-        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); /* Smaller buttons on mobile */
-        gap: 10px;
-    }
+@media (max-width: 767px) { 
+    .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; }
     .qr-type-button { padding: 10px 8px; font-size: 0.75rem; min-height: 60px; }
     .qr-type-button i { font-size: 1.4rem; margin-bottom: 5px; }
-
     .input-area-wrapper #inputAreaTitle { font-size: 1.3rem; margin-bottom: 15px;}
     .button-generate { padding: 12px 20px; font-size: 1rem; }
-    
     .preview-column, .options-column { padding: 20px; }
     .preview-column h3, .options-column h3 { font-size: 1.1rem; }
     #qrCanvasContainer { max-width: 220px; }
 }
+@media (min-width: 768px) and (max-width: 991px) { /* Tablet specific adjustments for 2-column */
+    .preview-and-options-section .container {
+        flex-direction: column; /* Stack on tablet if space is an issue */
+    }
+     .preview-column, .options-column {
+        flex-basis: auto; /* Reset basis */
+    }
+}
 
-/* Fade-in Animation (re-used) */
+/* Fade-in Animation */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
