@@ -1,21 +1,28 @@
-/* === Qodeo New Light Theme - Header with Colorful Tagline === */
+/* === Qodeo New Light Theme - Header with Inline Colorful Tagline === */
 
 /* --- Global Resets & Font Import --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #007bff; --secondary-color: #00b894; /* Green for generate button */
-    --tagline-gradient-start: #00b894; /* Green */
-    --tagline-gradient-mid: #1f80e0;   /* Blue */
-    --tagline-gradient-end: #8a2be2;    /* Purple */
-    --background-light: #ffffff; --background-grey: #f8f9fa; 
-    --text-dark: #212529; --text-muted: #6c757d; 
-    --border-light: #dee2e6; --border-darker: #ced4da;
+    --primary-color: #007bff; 
+    --secondary-color: #00b894; 
+    --tagline-gradient-start: #00b894; /* Green for tagline gradient */
+    --tagline-gradient-mid: #1e90ff;   /* Dodger Blue for tagline gradient */
+    --tagline-gradient-end: #8a2be2;    /* Blue Violet for tagline gradient */
+    --background-light: #ffffff; 
+    --background-grey: #f8f9fa; 
+    --text-dark: #212529; 
+    --text-muted: #6c757d; 
+    --border-light: #dee2e6; 
+    --border-darker: #ced4da;
     --font-main: 'Inter', sans-serif;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-    --border-radius-md: 8px; --border-radius-sm: 6px;
-    --header-height: 65px; --container-padding: 15px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05); 
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --border-radius-md: 8px; 
+    --border-radius-sm: 6px;
+    --header-height: 65px; 
+    --container-padding: 15px;
 }
 body {
     font-family: var(--font-main); line-height: 1.65; background-color: var(--background-light);
@@ -34,14 +41,14 @@ body {
 
 #logoLink { 
     display: flex; 
-    align-items: baseline; /* Align to baseline for better text appearance */
+    align-items: baseline; /* Align items to their baseline */
     text-decoration: none; 
 }
 #headerIcon { 
     height: 28px; 
     width: auto; 
-    margin-right: 10px; /* Increased space slightly */
-    align-self: center; /* Center icon with the "Qodeo" text line */
+    margin-right: 8px; 
+    /* Removed align-self: center, baseline handles it with text */
 }
 
 #logoText { 
@@ -49,29 +56,31 @@ body {
     font-weight: 700; 
     color: var(--primary-color); 
     letter-spacing: -0.5px;
-    margin-right: 8px; /* Space between "Qodeo" and tagline */
-    line-height: 1; /* Ensure it aligns well with tagline */
+    margin-right: 6px; /* Space between Qodeo and tagline */
+    line-height: 1; /* To align better with single-line tagline */
 }
 /* Colorful Tagline Styling */
 .header-tagline {
-    font-size: 0.8rem; /* Adjusted size */
+    font-size: 0.75rem; /* Slightly smaller for better balance */
     font-weight: 500;
-    background: linear-gradient(90deg, var(--tagline-gradient-start), var(--tagline-gradient-mid), var(--tagline-gradient-end));
+    /* Gradient Text */
+    background: linear-gradient(45deg, var(--tagline-gradient-start), var(--tagline-gradient-mid), var(--tagline-gradient-end));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    /* text-fill-color: transparent; /* Standard, may not be needed with -webkit */
-    white-space: nowrap; /* Try to keep it on one line */
-    /* padding-bottom: 1px; /* Fine-tune baseline alignment if needed */
+    /* text-fill-color: transparent; /* Not always needed */
+    
+    white-space: nowrap; /* Keep on one line */
+    padding-left: 2px; /* Small gap from "-" if it's part of the text */
+    /* The dash "-" should ideally be part of the span's text content for correct styling */
+    /* If dash is outside, this padding is not needed or should be on #logoText margin-right */
 }
 
 
-/* --- Main Content --- */
+/* --- Main Content (No changes from previous full CSS for this section) --- */
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
 .qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
-
-/* QR Type Selector Grid */
 .qr-type-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 30px; border-bottom: 1px solid var(--border-light); padding-bottom: 20px; }
 .qr-type-button { background-color: var(--background-light); border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); padding: 12px 10px; font-size: 0.85rem; font-weight: 500; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); min-height: 70px; }
 .qr-type-button i { font-size: 1.6rem; margin-bottom: 8px; color: var(--text-muted); transition: color 0.2s ease; }
@@ -81,8 +90,6 @@ body {
 .qr-type-button.active { background-color: var(--primary-color); border-color: var(--primary-color); color: white; box-shadow: 0 2px 5px rgba(0,123,255,0.3); transform: scale(1.05); }
 .qr-type-button.active i { color: white; }
 .qr-type-button:active { transform: scale(1); }
-
-/* Input Area Wrapper */
 .input-area-wrapper { margin-bottom: 25px; }
 .input-area-wrapper #inputAreaTitle { font-size: 1.5rem; font-weight: 600; color: var(--text-dark); margin-bottom: 20px; text-align: center; }
 .qr-input-group { display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.3s ease-out; }
@@ -91,15 +98,11 @@ body {
 .qr-input-group textarea { resize: vertical; min-height: 100px; font-family: var(--font-main); }
 .qr-input-group select { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%236c757d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 12px; padding-right: 40px; }
 .qr-input-group input:focus, .qr-input-group textarea:focus, .qr-input-group select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0,123,255,0.2); outline: none; }
-
-/* Generate Button */
 .button-generate { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 300px; margin: 25px auto 0; padding: 14px 25px; font-size: 1.1rem; font-weight: 600; color: white; background-color: var(--secondary-color); border: none; border-radius: 50px; cursor: pointer; transition: background-color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55), box-shadow 0.2s ease; box-shadow: var(--shadow-sm); }
 .button-generate i { margin-right: 10px; font-size: 1.1em; }
 .button-generate:hover { background-color: #00a082; transform: scale(1.03); box-shadow: var(--shadow-md); }
 .button-generate:active { transform: scale(1); }
 .button-generate:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
-
-/* Preview and Options Section */
 .preview-and-options-section .container { display: flex; flex-wrap: wrap; gap: 30px; }
 .preview-column, .options-column { background-color: var(--background-light); padding: 25px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); border: 1px solid var(--border-light); }
 .preview-column { flex: 1 1 300px; display: flex; flex-direction: column; align-items: center; }
@@ -108,14 +111,10 @@ body {
 #qrCanvasContainer { width: 100%; max-width: 250px; height: auto; aspect-ratio: 1 / 1; margin-bottom: 10px; border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; padding: 8px; background-color: var(--background-light); border-radius: var(--border-radius-sm); overflow: hidden; }
 #qrCanvasContainer > canvas, #qrCanvasContainer > img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .qr-data-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; margin-bottom: 15px; word-break: break-all; text-align: center; max-width: 100%; }
-
-/* Download Buttons Styling */
 .actions { display: flex; justify-content: center; width: 100%; gap: 10px; }
 .actions button { background-color: var(--background-grey); color: var(--text-dark); border: 1px solid var(--border-darker); flex-grow: 1; flex-basis: 0; padding: 10px 12px; font-size: 0.85rem; border-radius: var(--border-radius-sm); font-weight: 500; letter-spacing: 0.2px; cursor: pointer; transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55), box-shadow 0.2s ease-in-out; animation: none; }
 .actions button:hover { background-color: #eef5ff; color: var(--primary-color); border-color: var(--primary-color); transform: scale(1.05); box-shadow: var(--shadow-md); }
 .actions button:active { transform: scale(0.98); box-shadow: var(--shadow-sm); background-color: #dbe9ff; }
-
-/* Customization options (inside .options-column) */
 .options-column .control-group label { font-size: 0.9rem; color: var(--text-dark); }
 .options-column .icon-label { color: var(--primary-color); }
 .options-column .control-group input[type="color"] { height: 40px; }
@@ -125,29 +124,22 @@ body {
 .scannability-tips ul { list-style-type: disc; list-style-position: inside; padding-left: 5px; color: var(--text-muted); }
 .scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-color); }
-
-/* --- Footer Styling --- */
 .site-footer { text-align: center; padding: 25px 0; background-color: var(--background-grey); color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light); font-size: 0.85rem; }
-
-/* --- Responsive Adjustments --- */
 @media (max-width: 767px) { 
-    .header-tagline { display: none; } /* Hide tagline on very small screens if it causes layout issues */
-    #logoText { font-size: 1.5rem; } /* Adjust main logo text size on mobile */
+    .header-tagline { display: none; } 
+    #logoText { font-size: 1.5rem; margin-right: 0;} 
     #headerIcon { height: 26px; margin-right: 6px;}
-
-    .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; } /* Further adjust for mobile */
+    .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; } 
     .qr-type-button { padding: 8px 6px; font-size: 0.7rem; min-height: 55px; }
     .qr-type-button i { font-size: 1.3rem; margin-bottom: 4px; }
     .input-area-wrapper #inputAreaTitle { font-size: 1.2rem; margin-bottom: 12px;}
     .button-generate { padding: 10px 18px; font-size: 0.95rem; }
-    .preview-column, .options-column { padding: 15px; } /* Less padding on mobile */
+    .preview-column, .options-column { padding: 15px; } 
     .preview-column h3, .options-column h3 { font-size: 1.05rem; }
-    #qrCanvasContainer { max-width: 200px; } /* Smaller QR on mobile */
+    #qrCanvasContainer { max-width: 200px; } 
 }
 @media (min-width: 768px) and (max-width: 991px) { 
     .preview-and-options-section .container { flex-direction: column; }
      .preview-column, .options-column { flex-basis: auto; }
 }
-
-/* Fade-in Animation */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
