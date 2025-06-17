@@ -1,108 +1,46 @@
-/* === Qodeo Dark Theme - Final for Current Features === */
+/* === Qodeo Dark Theme - Tab Content as Boxes === */
 
 /* --- Global Resets & Variables --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+* { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-    --primary-brand-color: #1f80e0; 
-    --background-primary: #0c111b; 
-    --background-secondary: #192133; 
-    --background-tertiary: #2c3850; 
-    --text-primary: #ffffff; 
-    --text-secondary: #a9b0bb; 
-    --border-color: #313c57; 
-    --input-background: #131a28; 
-    --success-color: #28a745; 
-    --success-hover: #1e7e34;
+    --primary-brand-color: #1f80e0; --background-primary: #0c111b; 
+    --background-secondary: #192133; --background-tertiary: #2c3850; 
+    --text-primary: #ffffff; --text-secondary: #a9b0bb; 
+    --border-color: #313c57; --input-background: #131a28; 
+    --success-color: #28a745; --success-hover: #1e7e34;
     --font-primary: 'Inter', 'Segoe UI', Roboto, sans-serif; 
-    --header-height: 56px;
-    --edge-padding: 15px; 
+    --header-height: 56px; --edge-padding: 15px; 
 }
-
 body {
-    font-family: var(--font-primary);
-    line-height: 1.6; 
-    background-color: var(--background-primary);
-    color: var(--text-primary);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-size: 14.5px; 
-    -webkit-tap-highlight-color: transparent;
+    font-family: var(--font-primary); line-height: 1.6; 
+    background-color: var(--background-primary); color: var(--text-primary);
+    display: flex; flex-direction: column; min-height: 100vh;
+    font-size: 14.5px; -webkit-tap-highlight-color: transparent;
 }
-
-.container { /* Used by Header and Footer */
-    width: 90%; 
-    max-width: 1100px; 
-    margin: 0 auto;
-}
+.container { width: 90%; max-width: 1100px; margin: 0 auto; }
 
 /* --- Header Styling --- */
 header {
-    background-color: var(--background-secondary);
-    height: var(--header-height);
-    display: flex; 
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    position: sticky; 
-    top: 0;
-    z-index: 1000;
+    background-color: var(--background-secondary); height: var(--header-height);
+    display: flex; align-items: center; border-bottom: 1px solid var(--border-color);
+    position: sticky; top: 0; z-index: 1000;
 }
-header .container { /* Header uses its own container instance */
-     padding-left: var(--edge-padding); /* Align header content with panel content */
-     padding-right: var(--edge-padding);
-     max-width: none; /* Allow header content to also go edge-to-edge if needed */
-     width: 100%;
-}
-
-
+header .container { padding-left: var(--edge-padding); padding-right: var(--edge-padding); max-width: none; width: 100%; display: flex; align-items: center;}
 #logoLink { display: flex; align-items: center; text-decoration: none; }
 #headerIcon { height: 28px; width: auto; margin-right: 8px; }
 #logoText { font-size: 1.7rem; font-weight: 700; color: var(--primary-brand-color); letter-spacing: -0.5px; line-height: 1; }
 
 /* --- Main App Layout --- */
-main {
-    flex-grow: 1;
-}
-
-.app-layout { /* This is now direct child of main, takes full width */
-    display: flex;
-    flex-direction: column; 
-    width: 100%; 
-}
-
+main { flex-grow: 1; }
+.app-layout { display: flex; flex-direction: column; width: 100%; }
 .controls-panel, .preview-panel {
-    background-color: var(--background-secondary);
-    width: 100%; 
-    border-left: none;  
-    border-right: none;
-    border-radius: 0; 
+    background-color: var(--background-secondary); width: 100%; 
+    border-left: none; border-right: none; border-radius: 0; 
     box-shadow: 0 2px 8px rgba(0,0,0,0.15); 
 }
-.controls-panel {
-    border-bottom: 1px solid var(--border-color); 
-}
-.preview-panel {
-     /* border-top: 1px solid var(--border-color); /* Can be added if more separation needed */
-}
-
-.panel-content-wrapper {
-    padding: 18px var(--edge-padding); 
-    max-width: 760px; /* Max width for content inside panels */
-    margin: 0 auto; /* Center the content wrapper */
-}
-.preview-panel .panel-content-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%; 
-}
-
-
+.controls-panel { border-bottom: 1px solid var(--border-color); }
+.panel-content-wrapper { padding: 18px var(--edge-padding); max-width: 760px; margin: 0 auto; }
+.preview-panel .panel-content-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; }
 h2 { 
     font-size: 1.15rem; color: var(--text-primary); margin-bottom: 18px; 
     padding-bottom: 8px; border-bottom: 1px solid var(--border-color); font-weight: 600;
@@ -110,8 +48,8 @@ h2 {
 
 /* --- QR Type Tabs Styling --- */
 .qr-type-tabs {
-    display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color);
-    flex-wrap: wrap; 
+    display: flex; margin-bottom: 10px; /* Reduced margin as tab content will have its own margin */
+    border-bottom: 1px solid var(--border-color); flex-wrap: wrap; 
 }
 .tab-link {
     background-color: transparent; color: var(--text-secondary); border: none;
@@ -122,28 +60,34 @@ h2 {
 }
 .tab-link i { margin-right: 5px; font-size: 0.9em; }
 .tab-link:hover { color: var(--text-primary); }
-.tab-link.active {
-    color: var(--primary-brand-color); font-weight: 600;
-    border-bottom-color: var(--primary-brand-color);
+.tab-link.active { color: var(--primary-brand-color); font-weight: 600; border-bottom-color: var(--primary-brand-color); }
+
+/* --- Tab Content Styling (AS BOXES/CARDS) --- */
+.tab-content { 
+    display: none; 
+    animation: fadeIn 0.3s ease-out; 
+    background-color: var(--input-background); /* Slightly different background for the box */
+    padding: 15px; 
+    border-radius: 6px; 
+    border: 1px solid var(--border-color); 
+    margin-top: 15px; /* Space below tabs */
+    /* margin-bottom: 20px; /* Space before common options, if common options are outside this box */
 }
-
-.tab-content { display: none; animation: fadeIn 0.3s ease-out; }
 .tab-content.active { display: block; }
+.tab-content > .control-group:first-child { margin-top: 0; } /* Remove top margin from first control group inside tab box */
+.tab-content > .control-group:last-child { margin-bottom: 0; } /* Remove bottom margin from last control group inside tab box */
 
-.customization-heading {
-    font-size: 1rem; color: var(--text-primary); margin-top: 20px; 
+
+.customization-heading { /* This heading is now AFTER tab content boxes */
+    font-size: 1rem; color: var(--text-primary); margin-top: 25px; /* Increased margin from tab content boxes */
     margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border-color);
     font-weight: 500;
 }
 
 /* --- Form Controls Styling --- */
 .control-group { margin-bottom: 18px; }
-.control-group label {
-    display: flex; align-items: center; margin-bottom: 6px;
-    font-weight: 500; color: var(--text-secondary); font-size: 0.78rem; 
-}
+.control-group label { display: flex; align-items: center; margin-bottom: 6px; font-weight: 500; color: var(--text-secondary); font-size: 0.78rem; }
 .icon-label { margin-right: 6px; font-size: 0.9em; color: var(--primary-brand-color); }
-
 .control-group input[type="text"], .control-group input[type="url"], .control-group input[type="email"], .control-group input[type="tel"], .control-group input[type="file"], .control-group textarea, .control-group select {
     width: 100%; padding: 10px 12px; background-color: var(--input-background);
     border: 1px solid var(--border-color); color: var(--text-primary);
@@ -152,20 +96,11 @@ h2 {
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
 }
 .control-group textarea { font-family: var(--font-primary); resize: vertical; min-height: 70px; }
-.control-group input[type="color"] {
-    width: 100%; height: 44px; padding: 4px; background-color: var(--input-background);
-    border: 1px solid var(--border-color); border-radius: 5px; cursor: pointer;
-}
+.control-group input[type="color"] { width: 100%; height: 44px; padding: 4px; background-color: var(--input-background); border: 1px solid var(--border-color); border-radius: 5px; cursor: pointer; }
 .control-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 .control-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 3px; }
-.control-group input:focus, .control-group textarea:focus, .control-group select:focus {
-    border-color: var(--primary-brand-color);
-    box-shadow: 0 0 0 2px rgba(31, 128, 224, 0.25); outline: none;
-}
-#logoPreview {
-    border: 1px dashed var(--border-color); padding: 4px; border-radius: 4px;
-    background-color: var(--input-background); display: block; margin-top: 8px;
-}
+.control-group input:focus, .control-group textarea:focus, .control-group select:focus { border-color: var(--primary-brand-color); box-shadow: 0 0 0 2px rgba(31, 128, 224, 0.25); outline: none; }
+#logoPreview { border: 1px dashed var(--border-color); padding: 4px; border-radius: 4px; background-color: var(--input-background); display: block; margin-top: 8px; }
 #logoPreview img { max-width: 100%; height: auto; display: block; }
 
 /* --- Buttons Styling --- */
@@ -178,101 +113,37 @@ button, .button-primary {
     letter-spacing: 0.3px; 
 }
 .actions button:last-child { margin-bottom: 0; }
-button:hover:not(:disabled), .button-primary:hover:not(:disabled) { 
-    background-color: #1869c0; 
-    transform: translateY(-2px); 
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-}
-button:active:not(:disabled), .button-primary:active:not(:disabled) { 
-    background-color: #165ca8; 
-    transform: translateY(0px); 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-}
-button:disabled, .button-primary:disabled {
-    background-color: var(--background-tertiary); color: var(--text-secondary);
-    cursor: not-allowed; opacity: 0.6; 
-}
-#updateQrButton {
-    background-color: var(--success-color); font-size: 1rem; margin-top: 12px; 
-}
+button:hover:not(:disabled), .button-primary:hover:not(:disabled) { background-color: #1869c0; transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.2); }
+button:active:not(:disabled), .button-primary:active:not(:disabled) { background-color: #165ca8; transform: translateY(0px); box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+button:disabled, .button-primary:disabled { background-color: var(--background-tertiary); color: var(--text-secondary); cursor: not-allowed; opacity: 0.6; }
+#updateQrButton { background-color: var(--success-color); font-size: 1rem; margin-top: 12px; }
 #updateQrButton:hover:not(:disabled) { background-color: var(--success-hover); }
-
-.actions { 
-    display: flex; justify-content: center; width: 100%; gap: 12px; margin-top: 18px; 
-}
-.actions button {
-    background-color: var(--background-tertiary); flex-grow: 1; flex-basis: 0; 
-    padding: 10px 12px; font-size: 0.82rem; letter-spacing: 0.2px;
-    margin-bottom: 0; 
-}
-/* Hover/active for action buttons is inherited from general button now */
+.actions { display: flex; justify-content: center; width: 100%; gap: 12px; margin-top: 18px; }
+.actions button { background-color: var(--background-tertiary); flex-grow: 1; flex-basis: 0; padding: 10px 12px; font-size: 0.82rem; letter-spacing: 0.2px; margin-bottom: 0; }
 
 /* --- QR Code Canvas Styling --- */
-#qrCanvasContainer {
-    width: 100%; max-width: 260px; height: auto; aspect-ratio: 1 / 1; 
-    margin-left: auto; margin-right: auto; margin-bottom: 8px; 
-    border: 1px dashed var(--border-color); 
-    display: flex; align-items: center; justify-content: center;
-    padding: 6px; background-color: var(--background-primary); 
-    border-radius: 6px; transition: border-color 0.3s ease; overflow: hidden; 
-}
-#qrCanvasContainer > canvas, #qrCanvasContainer > img { 
-    display: block; width: 100%; height: 100%;
-    object-fit: contain; border-radius: 3px; 
-}
-
-.qr-data-text {
-    font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; 
-    margin-bottom: 12px; word-break: break-all; text-align: center;
-    max-width: 90%; padding: 4px; 
-}
+#qrCanvasContainer { width: 100%; max-width: 260px; height: auto; aspect-ratio: 1 / 1; margin-left: auto; margin-right: auto; margin-bottom: 8px; border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: center; padding: 6px; background-color: var(--background-primary); border-radius: 6px; transition: border-color 0.3s ease; overflow: hidden; }
+#qrCanvasContainer > canvas, #qrCanvasContainer > img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 3px; }
+.qr-data-text { font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; margin-bottom: 12px; word-break: break-all; text-align: center; max-width: 90%; padding: 4px; }
 
 /* --- Scannability Tips Styling --- */
-.scannability-tips {
-    margin-top: 18px; padding: 12px; background-color: var(--input-background); 
-    border: 1px solid var(--border-color); border-radius: 6px; 
-    font-size: 0.78rem; width: 100%; max-width: 380px; align-self: center; 
-}
+.scannability-tips { margin-top: 18px; padding: 12px; background-color: var(--input-background); border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.78rem; width: 100%; max-width: 380px; align-self: center; }
 .scannability-tips h4 { color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
 .scannability-tips ul { list-style-type: disc; list-style-position: inside; padding-left: 0; color: var(--text-secondary); }
 .scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-brand-color); }
 
 /* --- Footer Styling --- */
-footer {
-    text-align: center; padding: 15px 0; background-color: var(--background-secondary);
-    color: var(--text-secondary); margin-top: auto; border-top: 1px solid var(--border-color);
-    font-size: 0.75rem; 
-}
-/* Footer's container for centering its content */
-footer .container {
-    /* Max-width and margin auto are inherited */
-}
-
+footer { text-align: center; padding: 15px 0; background-color: var(--background-secondary); color: var(--text-secondary); margin-top: auto; border-top: 1px solid var(--border-color); font-size: 0.75rem; }
+footer .container {} /* Footer uses .container for centering */
 
 /* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
 @media (min-width: 768px) { 
     body { font-size: 15px; } 
-    main .app-layout { /* On desktop, app-layout gets a max-width and centered */
-        max-width: 720px; 
-        margin: 0 auto; 
-        gap: 25px;
-    }
-    .panel-content-wrapper {
-        /* Padding might be slightly larger on desktop */
-        padding: 20px;
-    }
-    
-    /* Restore panel borders for desktop if they are not edge-to-edge */
-    .controls-panel, .preview-panel {
-        border-radius: 8px; 
-        border-left: 1px solid var(--border-color); 
-        border-right: 1px solid var(--border-color);
-    }
-    .controls-panel { /* Ensure bottom border for controls panel on desktop too */
-        border-bottom: 1px solid var(--border-color);
-    }
-
+    main .app-layout { max-width: 720px; margin: 0 auto; gap: 25px; }
+    .panel-content-wrapper { padding: 20px; }
+    .controls-panel, .preview-panel { border-radius: 8px; border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); }
+    .controls-panel { border-bottom: 1px solid var(--border-color); } /* Ensure it has bottom border */
     h2 { font-size: 1.25rem; }
     .customization-heading { font-size: 1.05rem; }
     .tab-link { font-size: 0.85rem; padding: 10px 14px; }
@@ -281,10 +152,8 @@ footer .container {
     .icon-label { font-size: 0.9em; }
     .control-group input[type="text"], .control-group input[type="url"], .control-group input[type="email"], .control-group input[type="tel"], .control-group input[type="file"], .control-group textarea, .control-group select { font-size: 0.9rem; padding: 11px 13px; }
     button, .button-primary { font-size: 0.92rem; padding: 13px 20px; }
-    #updateQrButton { font-size: 1rem; width: 100%; /* Keep main button full width */ }
-    
-    .actions button { width: auto; flex-grow: 0; } /* Download buttons auto width on desktop */
-    
+    #updateQrButton { font-size: 1rem; width: 100%; }
+    .actions button { width: auto; flex-grow: 0; } 
     #qrCanvasContainer { max-width: 280px; padding: 8px; } 
     .qr-data-text { font-size: 0.78rem; }
     .scannability-tips { font-size: 0.8rem; padding: 14px; }
@@ -292,7 +161,4 @@ footer .container {
     footer { font-size: 0.78rem; }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
