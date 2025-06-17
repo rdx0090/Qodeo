@@ -14,7 +14,7 @@
 </head>
 <body>
     <header>
-        <div class="container"> <!-- Container for header content -->
+        <div class="container">
             <a href="index.html" id="logoLink">
                 <img src="images/qodeo-header-icon.jpg" alt="Qodeo Icon" id="headerIcon"> 
                 <span id="logoText">Qodeo</span>
@@ -23,11 +23,10 @@
     </header>
 
     <main>
-        <!-- Container div removed from here to allow panels to go edge-to-edge -->
         <div class="app-layout"> 
             
             <aside class="controls-panel">
-                <div class="panel-content-wrapper"> <!-- Added wrapper for padding -->
+                <div class="panel-content-wrapper">
                     <h2>Customize Your QR Code</h2>
 
                     <div class="qr-type-tabs">
@@ -109,10 +108,14 @@
             </aside>
 
             <section class="preview-panel">
-                <div class="panel-content-wrapper"> <!-- Added wrapper for padding -->
+                <div class="panel-content-wrapper">
                     <h2>Preview</h2>
-                    <div id="qrCanvasContainer"></div>
-                    <div id="qrDataDisplay" class="qr-data-text"></div>
+                    <div id="qrCanvasContainer">
+                        <!-- QR Code will be rendered here -->
+                    </div>
+                    <div id="qrDataDisplay" class="qr-data-text">
+                        <!-- This div is populated by JavaScript -->
+                    </div>
                     <div class="actions">
                         <button id="downloadSvgButton">Download SVG</button>
                         <button id="downloadPngButton">Download PNG</button>
@@ -131,7 +134,7 @@
     </main>
 
     <footer>
-        <div class="container"> <!-- Container for footer content -->
+        <div class="container"> 
             <p>© <span id="year"></span> Qodeo. Designed with AI assistance.</p>
         </div>
     </footer>
