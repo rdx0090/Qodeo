@@ -17,7 +17,10 @@
         <div class="container header-container">
             <a href="index.html" id="logoLink">
                 <img src="images/qodeo-header-icon.jpg" alt="Qodeo Icon" id="headerIcon"> 
-                <span id="logoText">Qodeo</span>
+                <div class="logo-and-tagline">
+                    <span id="logoText">Qodeo</span>
+                    <span id="tagline">- Modern QR Code Studio</span>
+                </div>
             </a>
             <nav class="site-nav">
                 <!-- Navigation links can be added here later if needed -->
@@ -85,7 +88,6 @@
                             <option value="nopass">No Encryption</option>
                         </select>
                     </div>
-                    <!-- Placeholder for vCard and Location inputs, to be implemented -->
                     <div id="vcardInputs" class="qr-input-group"><p>vCard inputs coming soon...</p></div>
                     <div id="locationInputs" class="qr-input-group"><p>Location inputs coming soon...</p></div>
                 </div>
@@ -100,8 +102,8 @@
             <div class="container">
                 <div class="preview-column">
                     <h3>Your QR Code</h3>
-                    <div id="qrCanvasContainer"><!-- QR will be rendered here --></div>
-                    <div id="qrDataDisplay" class="qr-data-text"><!-- Data will be shown here --></div>
+                    <div id="qrCanvasContainer"></div>
+                    <div id="qrDataDisplay" class="qr-data-text"></div>
                     <div class="actions">
                         <button id="downloadSvgButton">Download SVG</button>
                         <button id="downloadPngButton">Download PNG</button>
