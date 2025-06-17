@@ -6,18 +6,15 @@
     <title>Qodeo - Professional QR Code Studio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <!-- Favicon Links (files in ROOT directory) -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
     <link rel="shortcut icon" href="favicon.ico"> 
-
 </head>
 <body>
     <header>
-        <div class="container">
+        <div class="container"> <!-- Container for header content -->
             <a href="index.html" id="logoLink">
                 <img src="images/qodeo-header-icon.jpg" alt="Qodeo Icon" id="headerIcon"> 
                 <span id="logoText">Qodeo</span>
@@ -26,128 +23,116 @@
     </header>
 
     <main>
-        <div class="container app-layout">
+        <!-- Container div removed from here to allow panels to go edge-to-edge -->
+        <div class="app-layout"> 
+            
             <aside class="controls-panel">
-                <h2>Customize Your QR Code</h2>
+                <div class="panel-content-wrapper"> <!-- Added wrapper for padding -->
+                    <h2>Customize Your QR Code</h2>
 
-                <div class="qr-type-tabs">
-                    <button class="tab-link active" data-tab="urlTab" data-icon="fas fa-link" title="Generate QR for a Website URL">
-                        <i class="fas fa-link"></i> URL
-                    </button>
-                    <button class="tab-link" data-tab="textTab" data-icon="fas fa-font" title="Generate QR for Plain Text">
-                        <i class="fas fa-font"></i> Text
-                    </button>
-                    <button class="tab-link" data-tab="emailTab" data-icon="fas fa-envelope" title="Generate QR for an Email">
-                        <i class="fas fa-envelope"></i> Email
-                    </button>
-                    <button class="tab-link" data-tab="phoneTab" data-icon="fas fa-phone" title="Generate QR for a Phone Number">
-                        <i class="fas fa-phone"></i> Phone
-                    </button>
-                </div>
+                    <div class="qr-type-tabs">
+                        <button class="tab-link active" data-tab="urlTab" data-icon="fas fa-link" title="Generate QR for a Website URL">
+                            <i class="fas fa-link"></i> URL
+                        </button>
+                        <button class="tab-link" data-tab="textTab" data-icon="fas fa-font" title="Generate QR for Plain Text">
+                            <i class="fas fa-font"></i> Text
+                        </button>
+                        <button class="tab-link" data-tab="emailTab" data-icon="fas fa-envelope" title="Generate QR for an Email">
+                            <i class="fas fa-envelope"></i> Email
+                        </button>
+                        <button class="tab-link" data-tab="phoneTab" data-icon="fas fa-phone" title="Generate QR for a Phone Number">
+                            <i class="fas fa-phone"></i> Phone
+                        </button>
+                    </div>
 
-                <div id="urlTab" class="tab-content active">
-                    <div class="control-group">
-                        <label for="qrDataUrl">Website URL:</label>
-                        <input type="url" id="qrDataUrl" value="https://qodeo.pro" placeholder="e.g., https://www.example.com">
+                    <div id="urlTab" class="tab-content active">
+                        <div class="control-group">
+                            <label for="qrDataUrl">Website URL:</label>
+                            <input type="url" id="qrDataUrl" value="https://qodeo.pro" placeholder="e.g., https://www.example.com">
+                        </div>
                     </div>
-                </div>
 
-                <div id="textTab" class="tab-content">
-                    <div class="control-group">
-                        <label for="qrDataText">Your Text:</label>
-                        <textarea id="qrDataText" placeholder="Enter any text you want in the QR code" rows="4"></textarea>
+                    <div id="textTab" class="tab-content">
+                        <div class="control-group">
+                            <label for="qrDataText">Your Text:</label>
+                            <textarea id="qrDataText" placeholder="Enter any text you want in the QR code" rows="4"></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <div id="emailTab" class="tab-content">
-                    <div class="control-group">
-                        <label for="qrEmailTo">To Email Address:</label>
-                        <input type="email" id="qrEmailTo" placeholder="recipient@example.com">
+                    <div id="emailTab" class="tab-content">
+                        <div class="control-group">
+                            <label for="qrEmailTo">To Email Address:</label>
+                            <input type="email" id="qrEmailTo" placeholder="recipient@example.com">
+                        </div>
+                        <div class="control-group">
+                            <label for="qrEmailSubject">Subject (Optional):</label>
+                            <input type="text" id="qrEmailSubject" placeholder="Email Subject">
+                        </div>
+                        <div class="control-group">
+                            <label for="qrEmailBody">Message (Optional):</label>
+                            <textarea id="qrEmailBody" placeholder="Your email message" rows="3"></textarea>
+                        </div>
                     </div>
-                    <div class="control-group">
-                        <label for="qrEmailSubject">Subject (Optional):</label>
-                        <input type="text" id="qrEmailSubject" placeholder="Email Subject">
-                    </div>
-                    <div class="control-group">
-                        <label for="qrEmailBody">Message (Optional):</label>
-                        <textarea id="qrEmailBody" placeholder="Your email message" rows="3"></textarea>
-                    </div>
-                </div>
 
-                <div id="phoneTab" class="tab-content">
-                    <div class="control-group">
-                        <label for="qrPhoneNumber">Phone Number:</label>
-                        <input type="tel" id="qrPhoneNumber" placeholder="e.g., +1234567890">
+                    <div id="phoneTab" class="tab-content">
+                        <div class="control-group">
+                            <label for="qrPhoneNumber">Phone Number:</label>
+                            <input type="tel" id="qrPhoneNumber" placeholder="e.g., +1234567890">
+                        </div>
                     </div>
-                </div>
-                
-                <h3 class="customization-heading">Appearance Options</h3>
+                    
+                    <h3 class="customization-heading">Appearance Options</h3>
 
-                <div class="control-group">
-                    <label for="dotColor">
-                        <i class="fas fa-palette icon-label"></i> Dot Color:
-                    </label>
-                    <input type="color" id="dotColor" value="#ffffff"> 
+                    <div class="control-group">
+                        <label for="dotColor"><i class="fas fa-palette icon-label"></i> Dot Color:</label>
+                        <input type="color" id="dotColor" value="#ffffff"> 
+                    </div>
+                    <div class="control-group">
+                        <label for="backgroundColor"><i class="fas fa-fill-drip icon-label"></i> Background Color:</label>
+                        <input type="color" id="backgroundColor" value="#0c111b"> 
+                    </div>
+                    <div class="control-group">
+                        <label for="dotStyle"><i class="fas fa-shapes icon-label"></i> Dot Style:</label>
+                        <select id="dotStyle">
+                            <option value="square">Square</option><option value="rounded">Rounded</option>
+                            <option value="dots">Dots (Small)</option><option value="classy">Classy</option>
+                            <option value="classy-rounded">Classy Rounded</option><option value="extra-rounded">Extra Rounded</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="logoUpload"><i class="fas fa-image icon-label"></i> Upload Logo (Optional):</label>
+                        <input type="file" id="logoUpload" accept="image/png, image/jpeg, image/svg+xml">
+                        <img id="logoPreview" src="#" alt="Logo Preview" style="max-width: 100px; max-height: 50px; margin-top: 10px; display: none;"/>
+                    </div>
+                    <button id="updateQrButton" class="button-primary">Generate / Update QR Code</button>
                 </div>
-                <div class="control-group">
-                    <label for="backgroundColor">
-                        <i class="fas fa-fill-drip icon-label"></i> Background Color:
-                    </label>
-                    <input type="color" id="backgroundColor" value="#0c111b"> 
-                </div>
-                <div class="control-group">
-                    <label for="dotStyle">
-                        <i class="fas fa-shapes icon-label"></i> Dot Style:
-                    </label>
-                    <select id="dotStyle">
-                        <option value="square">Square</option>
-                        <option value="rounded">Rounded</option>
-                        <option value="dots">Dots (Small)</option>
-                        <option value="classy">Classy</option>
-                        <option value="classy-rounded">Classy Rounded</option>
-                        <option value="extra-rounded">Extra Rounded</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="logoUpload">
-                        <i class="fas fa-image icon-label"></i> Upload Logo (Optional):
-                    </label>
-                    <input type="file" id="logoUpload" accept="image/png, image/jpeg, image/svg+xml">
-                    <img id="logoPreview" src="#" alt="Logo Preview" style="max-width: 100px; max-height: 50px; margin-top: 10px; display: none;"/>
-                </div>
-                <button id="updateQrButton" class="button-primary">Generate / Update QR Code</button>
             </aside>
 
             <section class="preview-panel">
-                <h2>Preview</h2>
-                <div id="qrCanvasContainer">
-                    <!-- QR Code will be rendered here -->
-                </div>
-                
-                <div id="qrDataDisplay" class="qr-data-text">
-                    <!-- This div is populated by JavaScript -->
-                </div>
-
-                <div class="actions">
-                    <button id="downloadSvgButton">Download SVG</button>
-                    <button id="downloadPngButton">Download PNG</button>
-                </div>
-
-                <div class="scannability-tips">
-                    <h4>Quick Tips for Scannability:</h4>
-                    <ul>
-                        <li>Ensure good contrast between dot and background colors.</li>
-                        <li>Avoid making logos too large; they can obstruct data.</li>
-                        <li>Test your QR code with multiple scanner apps before printing.</li>
-                    </ul>
+                <div class="panel-content-wrapper"> <!-- Added wrapper for padding -->
+                    <h2>Preview</h2>
+                    <div id="qrCanvasContainer"></div>
+                    <div id="qrDataDisplay" class="qr-data-text"></div>
+                    <div class="actions">
+                        <button id="downloadSvgButton">Download SVG</button>
+                        <button id="downloadPngButton">Download PNG</button>
+                    </div>
+                    <div class="scannability-tips">
+                        <h4>Quick Tips for Scannability:</h4>
+                        <ul>
+                            <li>Ensure good contrast between dot and background colors.</li>
+                            <li>Avoid making logos too large; they can obstruct data.</li>
+                            <li>Test your QR code with multiple scanner apps before printing.</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
         </div>
     </main>
 
     <footer>
-        <div class="container">
-            <p>© <span id="year"></span> Qodeo. All Rights Reserved.</p>
+        <div class="container"> <!-- Container for footer content -->
+            <p>© <span id="year"></span> Qodeo. Designed with AI assistance.</p>
         </div>
     </footer>
 
