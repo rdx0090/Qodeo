@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrDataDisplay = document.getElementById('qrDataDisplay'); 
     const yearSpan = document.getElementById('year');
 
-    // Tab specific input fields
     const qrDataUrlInput = document.getElementById('qrDataUrl');
     const qrDataTextInput = document.getElementById('qrDataText');
     const qrEmailToInput = document.getElementById('qrEmailTo');
@@ -20,21 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrEmailBodyInput = document.getElementById('qrEmailBody');
     const qrPhoneNumberInput = document.getElementById('qrPhoneNumber');
 
-    // Tab Navigation Elements
     const tabLinks = document.querySelectorAll('.tab-link');
     const tabContents = document.querySelectorAll('.tab-content');
     
-    // --- Initial Checks & Setup ---
-    if (!qrDataUrlInput || !qrDataTextInput || !qrEmailToInput || !qrPhoneNumberInput || !updateQrButton || tabLinks.length === 0 || tabContents.length === 0) {
-        console.error("Critical UI elements for tabs or QR data are missing.");
+    if (!qrDataUrlInput || !qrDataTextInput || !qrEmailToInput || !qrPhoneNumberInput || !updateQrButton || tabLinks.length === 0 || tabContents.length === 0 || !qrCanvasContainer) {
+        console.error("Critical UI elements missing.");
         if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red;'>Error: UI elements missing.</p>";
         return; 
     }
     
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let currentLogoBase64 = null;
-    let activeQrDataInput = qrDataUrlInput; // Default active input is URL
-    let currentActiveTabId = 'urlTab'; // Default active tab ID
+    let activeQrDataInput = qrDataUrlInput; 
+    let currentActiveTabId = 'urlTab'; 
 
     if (typeof QRCodeStyling === 'undefined') {
         console.error("QRCodeStyling library not loaded.");
@@ -46,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialQrWidth = 280; 
     const initialQrHeight = 280; 
 
-    const qrCodeInstance = new QRCodeStyling({ /* ... (QR Instance options are same) ... */
+    const qrCodeInstance = new QRCodeStyling({
         width: initialQrWidth, height: initialQrHeight, type: 'svg',
         data: activeQrDataInput.value || "https://qodeo.pro",
         image: '',
@@ -57,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     qrCodeInstance.append(qrCanvasContainer);
 
-    // --- Function to switch tabs ---
     function switchTab(targetTabId) {
         tabLinks.forEach(item => item.classList.remove('active'));
         tabContents.forEach(item => item.classList.remove('active'));
@@ -67,32 +63,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (activeTabButton) activeTabButton.classList.add('active');
         if (activeTabContent) activeTabContent.classList.add('active');
+        currentActiveTabId = targetTabId; 
 
-        currentActiveTabId = targetTabId; // Update the global tracker
-
-        // Update activeQrDataInput based on the new active tab
         switch (currentActiveTabId) {
             case 'urlTab':    activeQrDataInput = qrDataUrlInput; break;
             case 'textTab':   activeQrDataInput = qrDataTextInput; break;
             case 'emailTab':  activeQrDataInput = qrEmailToInput; break; 
             case 'phoneTab':  activeQrDataInput = qrPhoneNumberInput; break;
-            default: activeQrDataInput = qrDataUrlInput; // Fallback
+            default: activeQrDataInput = qrDataUrlInput;
         }
-        updateQRCodeView(); // Update QR when tab changes
+        updateQRCodeView(); 
     }
 
-    // --- Event Listeners for Tab Links ---
     tabLinks.forEach(tab => {
         tab.addEventListener('click', () => {
             switchTab(tab.dataset.tab);
         });
     });
     
-    // --- Function to prepare data string based on active tab ---
     function getQrDataString() {
-        // ... (getQrDataString function remains the same as previous version) ...
         let dataString = "";
-        switch (currentActiveTabId) { // Use currentActiveTabId
+        switch (currentActiveTabId) { 
             case 'urlTab':
                 dataString = qrDataUrlInput.value || "https://qodeo.pro";
                 break;
@@ -104,25 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const subject = qrEmailSubjectInput.value;
                 const body = qrEmailBodyInput.value;
                 if (to) { 
-                    dataString = `mailto:${to}`;
+                    dataString = `mailto:${encodeURIComponent(to)}`; // Encode 'to' as well
                     if (subject) dataString += `?subject=${encodeURIComponent(subject)}`;
                     if (body) dataString += (subject ? '&' : '?') + `body=${encodeURIComponent(body)}`;
-                } else {
-                    dataString = "recipient@example.com"; 
-                }
+                } else { dataString = "recipient@example.com"; }
                 break;
             case 'phoneTab':
                 dataString = `tel:${qrPhoneNumberInput.value || "+1234567890"}`;
                 break;
-            default:
-                dataString = qrDataUrlInput.value || "https://qodeo.pro";
+            default: dataString = qrDataUrlInput.value || "https://qodeo.pro";
         }
         return dataString;
     }
 
-    // --- Update QR Code Function ---
     async function updateQRCodeView() {
-        // ... (updateQRCodeView function remains the same as previous version, uses getQrDataString) ...
         if (!updateQrButton || !activeQrDataInput) return; 
         updateQrButton.disabled = true;
         updateQrButton.textContent = 'Generating...';
@@ -150,8 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Event Listeners for Controls (Logo Upload) ---
-    if (logoUploadInput) { /* ... (logo upload logic is same) ... */ 
+    if (logoUploadInput) { 
         logoUploadInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
@@ -170,20 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateQrButton.addEventListener('click', updateQRCodeView);
 
-    // --- Download Handlers ---
-    if (downloadSvgButton) { /* ... (SVG download logic is same, but uses getQrDataString) ... */ 
+    if (downloadSvgButton) { 
         downloadSvgButton.addEventListener('click', () => {
-            const dataForDownload = getQrDataString(); // Use current formatted data
-            // It's good practice to ensure the instance reflects the latest data before download
-            // though qrCodeInstance.download() itself might not use the instance's data directly
-            // if it allows passing data in its options (check library docs).
-            // For now, let's assume the main instance data is what we want to download.
-            // If not, we might need to update the instance or create a temp one like for PNG.
-            // qrCodeInstance.update({ data: dataForDownload }); // Optional: update instance data
+            const dataForDownload = getQrDataString();
+            qrCodeInstance.update({data: dataForDownload}); 
             qrCodeInstance.download({ name: 'qodeo-qr', extension: 'svg' });
         });
     }
-    if (downloadPngButton) { /* ... (PNG download logic is same, but uses getQrDataString) ... */ 
+    if (downloadPngButton) { 
         downloadPngButton.addEventListener('click', async () => { 
             const highResWidth = 1024; const highResHeight = 1024; 
             if (updateQrButton) { updateQrButton.disabled = true; updateQrButton.textContent = 'Preparing HD PNG...';}
@@ -211,7 +190,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Initialize View ---
-    switchTab(currentActiveTabId); // Set initial active tab and QR code
-    // updateQRCodeView(); // Called by switchTab, so not needed here again
+    switchTab(currentActiveTabId); 
 });
