@@ -1,4 +1,4 @@
-/* === Qodeo New Light Theme - Tagline Always Visible (for now) === */
+/* === Qodeo New Light Theme - EXTREME TAGLINE VISIBILITY TEST === */
 
 /* --- Global Resets & Font Import --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -7,6 +7,9 @@
 :root {
     --primary-color: #007bff; 
     --secondary-color: #00b894; 
+    --tagline-gradient-start: #00b894; 
+    --tagline-gradient-mid: #1e90ff;   
+    --tagline-gradient-end: #8a2be2;    
     --background-light: #ffffff; 
     --background-grey: #f8f9fa; 
     --text-dark: #212529; 
@@ -57,22 +60,39 @@ body {
     margin-right: 8px; 
     line-height: 1; 
 }
-/* Tagline Styling (SIMPLE SOLID COLOR) */
+
+/* EXTREME TEST FOR TAGLINE VISIBILITY */
 .header-tagline {
-    display: inline-block; 
-    font-size: 0.75rem;  
-    font-weight: 400;    
-    color: var(--text-muted); 
-    white-space: nowrap; 
-    line-height: 1; 
-    vertical-align: baseline; 
+    position: fixed !important; 
+    top: 70px !important;       
+    left: 15px !important;      
+    font-size: 16px !important; 
+    font-weight: bold !important;
+    color: lime !important;     
+    background-color: black !important; 
+    padding: 10px !important;
+    z-index: 9999 !important;   
+    border: 2px solid red !important; 
+    display: block !important; 
+    opacity: 1 !important;
+    visibility: visible !important;
+    white-space: normal !important; /* Allow wrapping for this test */
+    /* Remove any previous transitions or gradient properties for this test */
+    transition: none !important;
+    background: black !important; /* Ensure no gradient is applied */
+    -webkit-background-clip: unset !important;
+    -moz-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: lime !important; 
+    -moz-text-fill-color: lime !important;
 }
 
-/* Responsive hide for tagline IS NOW COMMENTED OUT */
+
+/* Responsive hide for tagline IS COMMENTED OUT FOR THIS TEST */
 /*
 @media (max-width: 420px) { 
     .header-tagline {
-        display: none; 
+        display: none !important; 
     }
     #logoText {
         margin-right: 0; 
@@ -80,9 +100,8 @@ body {
 }
 */
 
-/* --- Main Content (Remains the same as previous full CSS) --- */
-/* ... (Copy all styles from .site-main down to @keyframes fadeIn from the previous full CSS you provided) ... */
-/* Main Content (No changes from previous full CSS for this section) */
+/* --- Main Content (All other CSS rules remain the same as the last full CSS provided) --- */
+/* ... (Copy all styles from .site-main down to @keyframes fadeIn from the previous full CSS for "Button Animations & Wider Container") ... */
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
 .qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
@@ -131,6 +150,19 @@ body {
 .scannability-tips ul li::marker { color: var(--primary-color); }
 .site-footer { text-align: center; padding: 25px 0; background-color: var(--background-grey); color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light); font-size: 0.85rem; }
 
+@media (max-width: 767px) { 
+    /* .header-tagline { display: none; } /* COMMENTED OUT FOR TESTING */
+    #logoText { font-size: 1.5rem; /* margin-right: 0; /* Keep margin-right if tagline is shown */ } 
+    #headerIcon { height: 26px; margin-right: 6px;}
+    .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; } 
+    .qr-type-button { padding: 8px 6px; font-size: 0.7rem; min-height: 55px; }
+    .qr-type-button i { font-size: 1.3rem; margin-bottom: 4px; }
+    .input-area-wrapper #inputAreaTitle { font-size: 1.2rem; margin-bottom: 12px;}
+    .button-generate { padding: 10px 18px; font-size: 0.95rem; }
+    .preview-column, .options-column { padding: 15px; } 
+    .preview-column h3, .options-column h3 { font-size: 1.05rem; }
+    #qrCanvasContainer { max-width: 200px; } 
+}
 @media (min-width: 768px) and (max-width: 991px) { 
     .preview-and-options-section .container { flex-direction: column; }
      .preview-column, .options-column { flex-basis: auto; }
