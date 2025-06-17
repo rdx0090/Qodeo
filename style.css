@@ -52,7 +52,7 @@ body {
 }
 
 #logoText { 
-    font-size: 1.7rem; 
+    font-size: 1.85rem; 
     font-weight: 700; 
     color: var(--primary-color); 
     letter-spacing: -0.5px;
@@ -62,7 +62,7 @@ body {
 /* Colorful Tagline Styling (ORIGINAL GRADIENT & ADJUSTED FONT SIZE) */
 .header-tagline {
     display: inline-block; 
-    font-size: 0.85rem;  /* ADJUSTED FONT SIZE */
+    font-size: 0.95rem;  /* ADJUSTED FONT SIZE */
     font-weight: 500;
     background: linear-gradient(45deg, var(--tagline-gradient-start), var(--tagline-gradient-mid), var(--tagline-gradient-end));
     -webkit-background-clip: text;
