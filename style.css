@@ -1,4 +1,4 @@
-/* === Qodeo New Light Theme - Header with Inline Colorful Tagline === */
+/* === Qodeo New Light Theme - Tagline Font Size & Gradient Fix === */
 
 /* --- Global Resets & Font Import --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -7,9 +7,9 @@
 :root {
     --primary-color: #007bff; 
     --secondary-color: #00b894; 
-    --tagline-gradient-start: #00b894; /* Green for tagline gradient */
-    --tagline-gradient-mid: #1e90ff;   /* Dodger Blue for tagline gradient */
-    --tagline-gradient-end: #8a2be2;    /* Blue Violet for tagline gradient */
+    --tagline-gradient-start: #00b894; 
+    --tagline-gradient-mid: #1e90ff;   
+    --tagline-gradient-end: #8a2be2;    
     --background-light: #ffffff; 
     --background-grey: #f8f9fa; 
     --text-dark: #212529; 
@@ -41,43 +41,44 @@ body {
 
 #logoLink { 
     display: flex; 
-    align-items: baseline; /* Align items to their baseline */
+    align-items: baseline; 
     text-decoration: none; 
 }
 #headerIcon { 
     height: 28px; 
     width: auto; 
     margin-right: 8px; 
-    /* Removed align-self: center, baseline handles it with text */
+    align-self: center; 
 }
 
 #logoText { 
-    font-size: 1.75rem; 
+    font-size: 1.7rem; /* Adjusted for balance with tagline */
     font-weight: 700; 
     color: var(--primary-color); 
     letter-spacing: -0.5px;
-    margin-right: 6px; /* Space between Qodeo and tagline */
-    line-height: 1; /* To align better with single-line tagline */
+    margin-right: 8px; 
+    line-height: 1; 
 }
-/* Colorful Tagline Styling */
+/* Colorful Tagline Styling (ADJUSTED) */
 .header-tagline {
-    font-size: 0.75rem; /* Slightly smaller for better balance */
+    font-size: 0.8rem; /* Increased font size */
     font-weight: 500;
-    /* Gradient Text */
     background: linear-gradient(45deg, var(--tagline-gradient-start), var(--tagline-gradient-mid), var(--tagline-gradient-end));
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -moz-background-clip: text; /* For Firefox */
     background-clip: text;
-    /* text-fill-color: transparent; /* Not always needed */
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent; /* For Firefox */
+    /* text-fill-color: transparent; */ /* Standard, sometimes not needed with prefixes */
     
-    white-space: nowrap; /* Keep on one line */
-    padding-left: 2px; /* Small gap from "-" if it's part of the text */
-    /* The dash "-" should ideally be part of the span's text content for correct styling */
-    /* If dash is outside, this padding is not needed or should be on #logoText margin-right */
+    white-space: nowrap; 
+    line-height: 1; /* Align with Qodeo text */
+    display: inline-block; /* Ensure it takes space */
+    vertical-align: baseline; /* Important for alignment */
 }
 
 
-/* --- Main Content (No changes from previous full CSS for this section) --- */
+/* --- Main Content --- */
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
 .qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
@@ -125,6 +126,7 @@ body {
 .scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-color); }
 .site-footer { text-align: center; padding: 25px 0; background-color: var(--background-grey); color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light); font-size: 0.85rem; }
+
 @media (max-width: 767px) { 
     .header-tagline { display: none; } 
     #logoText { font-size: 1.5rem; margin-right: 0;} 
