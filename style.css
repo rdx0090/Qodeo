@@ -217,14 +217,35 @@ button, .button-primary {
     text-align: center;
     transition: background-color 0.2s ease, opacity 0.2s ease; letter-spacing: 0.3px; 
 }
-.actions button:last-child { margin-bottom: 0; }
 
-button:hover, .button-primary:hover { background-color: #1869c0; }
-button:active, .button-primary:active { background-color: #165ca8; }
-button:disabled, .button-primary:disabled {
-    background-color: var(--background-tertiary); color: var(--text-secondary);
-    cursor: not-allowed; opacity: 0.6; 
+/* UPDATED .actions and .actions button FOR ANIMATION & EQUAL WIDTH */
+.actions { 
+    display: flex; 
+    justify-content: center; 
+    width: 100%; 
+    gap: 12px; 
+    margin-top: 18px; 
 }
+.actions button {
+    background-color: var(--background-tertiary); 
+    flex-grow: 1; 
+    flex-basis: 0; 
+    padding: 10px 12px; 
+    font-size: 0.82rem; 
+    letter-spacing: 0.2px;
+    margin-bottom: 0; /* Remove bottom margin from buttons inside .actions */
+    transition: background-color 0.2s ease, transform 0.15s ease-out, box-shadow 0.2s ease; 
+}
+.actions button:hover { 
+    background-color: #3b4a69; 
+    transform: translateY(-2px); 
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+}
+.actions button:active {
+    transform: translateY(0px); 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
 
 #updateQrButton {
     background-color: var(--success-color); font-size: 1rem; 
@@ -232,13 +253,6 @@ button:disabled, .button-primary:disabled {
 }
 #updateQrButton:hover:not(:disabled) { background-color: var(--success-hover); }
 
-.actions { 
-    display: flex; justify-content: center; width: 100%; gap: 8px; 
-}
-.actions button {
-    background-color: var(--background-tertiary); flex-grow: 1; max-width: 170px; 
-}
-.actions button:hover { background-color: #3b4a69; }
 
 /* --- QR Code Canvas Styling (UPDATED FOR FILLING CONTAINER) --- */
 #qrCanvasContainer {
@@ -263,9 +277,9 @@ button:disabled, .button-primary:disabled {
 #qrCanvasContainer > canvas, 
 #qrCanvasContainer > img { 
     display: block; 
-    width: 100%;    /* Force child to take full width of parent */
-    height: 100%;   /* Force child to take full height of parent */
-    object-fit: contain; /* Maintain aspect ratio within 100% width/height */
+    width: 100%;    
+    height: 100%;   
+    object-fit: contain; 
     border-radius: 3px; 
 }
 
@@ -307,7 +321,10 @@ footer {
 /* --- Responsive Design Adjustments for Larger Screens (Desktop) --- */
 @media (min-width: 768px) { 
     body { font-size: 15px; } 
-    .container { max-width: 720px; } 
+    .container { 
+        width: 95%; /* Use more width on larger screens */
+        max-width: 720px; /* Keep a reasonable max for single column */
+    } 
     
     header #logoText { font-size: 1.9rem; }
     header #headerIcon { height: 30px; }
@@ -332,7 +349,7 @@ footer {
     button, .button-primary { font-size: 0.92rem; padding: 13px 20px; }
     #updateQrButton { font-size: 1rem; }
     
-    .actions button { width: auto; flex-grow: 0; }
+    /* .actions button { width: auto; flex-grow: 0; } /* Reverted this for equal width */
     
     #qrCanvasContainer { max-width: 280px; padding: 8px; } 
     .qr-data-text { font-size: 0.78rem; }
