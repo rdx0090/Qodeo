@@ -1,11 +1,14 @@
-/* === Qodeo New Light Theme - Header with Tagline === */
+/* === Qodeo New Light Theme - Header with Colorful Tagline === */
 
 /* --- Global Resets & Font Import --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #007bff; --secondary-color: #00b894; 
+    --primary-color: #007bff; --secondary-color: #00b894; /* Green for generate button */
+    --tagline-gradient-start: #00b894; /* Green */
+    --tagline-gradient-mid: #1f80e0;   /* Blue */
+    --tagline-gradient-end: #8a2be2;    /* Purple */
     --background-light: #ffffff; --background-grey: #f8f9fa; 
     --text-dark: #212529; --text-muted: #6c757d; 
     --border-light: #dee2e6; --border-darker: #ced4da;
@@ -31,45 +34,41 @@ body {
 
 #logoLink { 
     display: flex; 
-    align-items: center; 
+    align-items: baseline; /* Align to baseline for better text appearance */
     text-decoration: none; 
 }
 #headerIcon { 
-    height: 32px; /* Adjusted for two lines of text */
+    height: 28px; 
     width: auto; 
-    margin-right: 10px; 
-    align-self: center; /* Ensure it aligns with the center of the text block */
-}
-
-/* NEW: Wrapper for logo text and tagline */
-.logo-and-tagline {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2; /* Adjust for tighter spacing between Qodeo and tagline */
+    margin-right: 10px; /* Increased space slightly */
+    align-self: center; /* Center icon with the "Qodeo" text line */
 }
 
 #logoText { 
-    font-size: 1.6rem; /* Slightly adjusted if needed */
+    font-size: 1.75rem; 
     font-weight: 700; 
     color: var(--primary-color); 
     letter-spacing: -0.5px;
+    margin-right: 8px; /* Space between "Qodeo" and tagline */
+    line-height: 1; /* Ensure it aligns well with tagline */
 }
-/* NEW: Tagline styling */
-#tagline {
-    font-size: 0.65rem;
+/* Colorful Tagline Styling */
+.header-tagline {
+    font-size: 0.8rem; /* Adjusted size */
     font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.1px;
-    margin-top: -3px; /* Pull tagline closer to logoText */
+    background: linear-gradient(90deg, var(--tagline-gradient-start), var(--tagline-gradient-mid), var(--tagline-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* text-fill-color: transparent; /* Standard, may not be needed with -webkit */
+    white-space: nowrap; /* Try to keep it on one line */
+    /* padding-bottom: 1px; /* Fine-tune baseline alignment if needed */
 }
 
 
 /* --- Main Content --- */
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
-.qr-generator-section {
-    background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px;
-    border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px;
-}
+.qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
 
 /* QR Type Selector Grid */
@@ -132,14 +131,18 @@ body {
 
 /* --- Responsive Adjustments --- */
 @media (max-width: 767px) { 
-    .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; }
-    .qr-type-button { padding: 10px 8px; font-size: 0.75rem; min-height: 60px; }
-    .qr-type-button i { font-size: 1.4rem; margin-bottom: 5px; }
-    .input-area-wrapper #inputAreaTitle { font-size: 1.3rem; margin-bottom: 15px;}
-    .button-generate { padding: 12px 20px; font-size: 1rem; }
-    .preview-column, .options-column { padding: 20px; }
-    .preview-column h3, .options-column h3 { font-size: 1.1rem; }
-    #qrCanvasContainer { max-width: 220px; }
+    .header-tagline { display: none; } /* Hide tagline on very small screens if it causes layout issues */
+    #logoText { font-size: 1.5rem; } /* Adjust main logo text size on mobile */
+    #headerIcon { height: 26px; margin-right: 6px;}
+
+    .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; } /* Further adjust for mobile */
+    .qr-type-button { padding: 8px 6px; font-size: 0.7rem; min-height: 55px; }
+    .qr-type-button i { font-size: 1.3rem; margin-bottom: 4px; }
+    .input-area-wrapper #inputAreaTitle { font-size: 1.2rem; margin-bottom: 12px;}
+    .button-generate { padding: 10px 18px; font-size: 0.95rem; }
+    .preview-column, .options-column { padding: 15px; } /* Less padding on mobile */
+    .preview-column h3, .options-column h3 { font-size: 1.05rem; }
+    #qrCanvasContainer { max-width: 200px; } /* Smaller QR on mobile */
 }
 @media (min-width: 768px) and (max-width: 991px) { 
     .preview-and-options-section .container { flex-direction: column; }
