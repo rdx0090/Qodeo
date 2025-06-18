@@ -15,7 +15,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-
 // ==============================================================
 // === MAIN APPLICATION CODE                                   ===
 // ==============================================================
@@ -23,7 +22,6 @@ const db = firebase.firestore();
 document.addEventListener('DOMContentLoaded', () => {
 
     // PART 1: AUTHENTICATION
-    // First, let's get all the elements we need for Login/Logout
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
     const userProfileDiv = document.getElementById('user-profile');
@@ -32,52 +30,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalButton = document.getElementById('close-modal-button');
     const googleLoginButton = document.getElementById('google-login-button');
     const githubLoginButton = document.getElementById('github-login-button');
-    
-    // Auth UI Event Listeners (with checks to prevent errors if element not found)
+
     if(loginButton) loginButton.addEventListener('click', () => loginModalOverlay.classList.remove('hidden'));
     if(closeModalButton) closeModalButton.addEventListener('click', () => loginModalOverlay.classList.add('hidden'));
     if(loginModalOverlay) loginModalOverlay.addEventListener('click', (event) => {
-        if (event.target === loginModalOverlay) {
-            loginModalOverlay.classList.add('hidden');
-        }
+        if (event.target === loginModalOverlay) loginModalOverlay.classList.add('hidden');
     });
-
     const signInWithProvider = (provider) => {
         auth.signInWithPopup(provider).catch(error => console.error("Authentication Error:", error));
     };
-
     if(googleLoginButton) googleLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GoogleAuthProvider()));
     if(githubLoginButton) githubLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GithubAuthProvider()));
     if(logoutButton) logoutButton.addEventListener('click', () => auth.signOut());
 
-    // --- User State Listener (Listen for login/logout) ---
     auth.onAuthStateChanged(user => {
         if (user) {
-            // User is signed in
             if(loginModalOverlay) loginModalOverlay.classList.add('hidden');
             if(loginButton) loginButton.classList.add('hidden');
             if(userProfileDiv) userProfileDiv.classList.remove('hidden');
-            if(userAvatarImg) userAvatarImg.src = user.photoURL || 'images/default-avatar.png'; // Add a default image to your /images folder
-
+            if(userAvatarImg) userAvatarImg.src = user.photoURL || 'images/default-avatar.png';
             const userRef = db.collection('users').doc(user.uid);
             userRef.set({
                 displayName: user.displayName, email: user.email, photoURL: user.photoURL,
                 lastLogin: firebase.firestore.FieldValue.serverTimestamp()
             }, { merge: true });
-
         } else {
-            // User is signed out
             if(loginButton) loginButton.classList.remove('hidden');
             if(userProfileDiv) userProfileDiv.classList.add('hidden');
             if(userAvatarImg) userAvatarImg.src = '';
         }
     });
-    
+
     // =================================================================
-    // PART 2: YOUR ORIGINAL QR CODE SCRIPT
+    // PART 2: YOUR ORIGINAL QR CODE SCRIPT (FULLY RESTORED & FIXED)
     // =================================================================
     
-    // --- All your original DOM Elements ---
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
     const dotStyleSelect = document.getElementById('dotStyle');
@@ -127,16 +114,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrEventDescriptionInput = document.getElementById('qrEventDescription');
     const qrTypeButtons = document.querySelectorAll('.qr-type-button');
     const qrInputGroups = document.querySelectorAll('.qr-input-group');
-    
+
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let currentLogoBase64 = null;
     let currentQrType = 'url'; 
 
-    if (typeof QRCodeStyling === 'undefined') {
-        console.error("QRCodeStyling library not loaded."); return;
-    }
+    if (typeof QRCodeStyling === 'undefined') { console.error("QRCodeStyling library not loaded."); return; }
 
-    const previewQrWidth = 250; const previewQrHeight = 250; 
+    const previewQrWidth = 250; 
+    const previewQrHeight = 250; 
     const qrCodeInstance = new QRCodeStyling({
         width: previewQrWidth, height: previewQrHeight, type: 'svg',
         data: "https://qodeo.vercel.app", image: '',
@@ -149,60 +135,182 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function switchQrType(selectedType) {
         qrTypeButtons.forEach(btn => btn.classList.remove('active'));
-        qrInputGroups.forEach(group => group.classList.remove('active')); 
-
+        qrInputGroups.forEach(group => group.classList.remove('active'));
         const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedType}"]`);
         const activeInputGroupDiv = document.getElementById(`${selectedType}Inputs`);
-
         if (activeButton) activeButton.classList.add('active');
         if (activeInputGroupDiv) activeInputGroupDiv.classList.add('active');
         else {
             if(document.getElementById('urlInputs')) document.getElementById('urlInputs').classList.add('active'); 
             selectedType = 'url';
-            if(document.querySelector(`.qr-type-button[data-type="url"]`)) document.querySelector(`.qr-type-button[data-type="url"]`).classList.add('active'); 
+            if(document.querySelector(`.qr-type-button[data-type="url"]`)) document.querySelector(`.qr-type-button[data-type="url"]`).classList.add('active');
         }
         currentQrType = selectedType;
-
         let title = "Enter Data"; 
         const selectedButtonSpan = activeButton ? activeButton.querySelector('span') : null;
         if (selectedButtonSpan) title = `Enter details for ${selectedButtonSpan.textContent} QR`;
         else if (selectedType === 'url') title = 'Enter your Website URL';
         if(inputAreaTitle) inputAreaTitle.textContent = title;
-
         let placeholderData = "https://qodeo.pro";
         if (selectedType === 'text') placeholderData = "Your sample text";
         else if (selectedType === 'email') placeholderData = "mailto:test@example.com";
-        
         qrCodeInstance.update({ data: placeholderData });
         if(qrDataDisplay) qrDataDisplay.textContent = `Switched to ${selectedType.toUpperCase()}.`;
     }
 
-    // === YAHAN CODE ADD KIYA GAYA HAI ===
-    if (qrTypeButtons) {
-        qrTypeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                switchQrType(button.dataset.type);
-            });
-        });
-    }
-
     function getQrDataStringForInstance() {
-        // ... (Aapka poora getQrDataStringForInstance function jaisa pehle tha)
+        let dataString = "";
+        switch (currentQrType) {
+            case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
+            case 'text': dataString = qrDataTextInput.value || "Qodeo QR Text"; break;
+            case 'email':
+                const to = qrEmailToInput.value;
+                if (!to) { alert("Please enter 'To Email Address'."); return null; }
+                dataString = `mailto:${encodeURIComponent(to)}`;
+                if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`;
+                if (qrEmailBodyInput.value) dataString += (qrEmailSubjectInput.value ? '&' : '?') + `body=${encodeURIComponent(qrEmailBodyInput.value)}`;
+                break;
+            case 'phone':
+                const phoneNum = qrPhoneNumberInput.value;
+                if (!phoneNum) { alert("Please enter a Phone Number."); return null; }
+                dataString = `tel:${phoneNum}`; break;
+            case 'sms':
+                const smsNum = qrSmsNumberInput.value;
+                if (!smsNum) { alert("Please enter Phone Number for SMS."); return null; }
+                dataString = `smsto:${smsNum}`;
+                if (qrSmsMessageInput.value) dataString += `:${encodeURIComponent(qrSmsMessageInput.value)}`;
+                break;
+            case 'wifi':
+                const ssid = qrWifiSsidInput.value;
+                if (!ssid) { alert("Please enter Network Name (SSID)."); return null; }
+                const password = qrWifiPasswordInput.value;
+                const encryption = qrWifiEncryptionSelect.value;
+                const hidden = qrWifiHiddenCheckbox.checked ? 'true' : 'false';
+                dataString = `WIFI:S:${ssid};T:${encryption};P:${password};H:${hidden};;`; break;
+            case 'vcard':
+                const fn = vcardFormattedNameInput.value; 
+                if (!fn) { alert("Please enter 'Display Name' for vCard."); return null; }
+                dataString = "BEGIN:VCARD\nVERSION:3.0\n";
+                dataString += `N:${vcardLastNameInput.value || ''};${vcardFirstNameInput.value || ''}\n`;
+                dataString += `FN:${fn}\n`;
+                if (vcardOrganizationInput.value) dataString += `ORG:${vcardOrganizationInput.value}\n`;
+                if (vcardJobTitleInput.value) dataString += `TITLE:${vcardJobTitleInput.value}\n`;
+                if (vcardPhoneMobileInput.value) dataString += `TEL;TYPE=CELL,VOICE:${vcardPhoneMobileInput.value}\n`;
+                if (vcardPhoneWorkInput.value) dataString += `TEL;TYPE=WORK,VOICE:${vcardPhoneWorkInput.value}\n`;
+                if (vcardEmailInput.value) dataString += `EMAIL:${vcardEmailInput.value}\n`;
+                if (vcardWebsiteInput.value) dataString += `URL:${vcardWebsiteInput.value}\n`;
+                if (vcardAdrStreetInput.value || vcardAdrCityInput.value || vcardAdrRegionInput.value || vcardAdrPostcodeInput.value || vcardAdrCountryInput.value) {
+                    dataString += `ADR;TYPE=HOME:;;${vcardAdrStreetInput.value || ''};${vcardAdrCityInput.value || ''};${vcardAdrRegionInput.value || ''};${vcardAdrPostcodeInput.value || ''};${vcardAdrCountryInput.value || ''}\n`;
+                }
+                if (vcardNoteInput.value) dataString += `NOTE:${vcardNoteInput.value}\n`;
+                dataString += "END:VCARD";
+                break;
+            case 'location':
+                const lat = qrLocationLatitudeInput.value;
+                const lon = qrLocationLongitudeInput.value;
+                if (!lat || !lon) { alert("Please enter Latitude and Longitude."); return null; }
+                const query = qrLocationQueryInput.value;
+                dataString = `geo:${lat},${lon}`;
+                if (query) dataString += `?q=${encodeURIComponent(query)}`;
+                break;
+            case 'event':
+                const summary = qrEventSummaryInput.value;
+                const dtstart = qrEventDtStartInput.value;
+                const dtend = qrEventDtEndInput.value;
+                if (!summary || !dtstart || !dtend) { alert("Please fill Event Summary, Start, and End Date/Time."); return null; }
+                const formatDateTime = (datetime) => datetime ? datetime.replace(/[-:]/g, '').replace('T', 'T') + '00' : '';
+                dataString = "BEGIN:VEVENT\n";
+                dataString += `SUMMARY:${summary}\n`;
+                dataString += `DTSTART:${formatDateTime(dtstart)}\n`;
+                dataString += `DTEND:${formatDateTime(dtend)}\n`;
+                if (qrEventLocationInput.value) dataString += `LOCATION:${qrEventLocationInput.value}\n`;
+                if (qrEventDescriptionInput.value) dataString += `DESCRIPTION:${qrEventDescriptionInput.value}\n`;
+                dataString += "END:VEVENT";
+                break;
+            default: dataString = "https://qodeo.pro";
+        }
+        return dataString;
     }
+    
     async function generateQRCodePreview() {
-        // ... (Aapka poora generateQRCodePreview function jaisa pehle tha)
+        if (!generateQrMainButton) return;
+        const dataForQr = getQrDataStringForInstance();
+        if (dataForQr === null) return;
+        generateQrMainButton.disabled = true; generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        const options = {
+            data: dataForQr,
+            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
+            backgroundOptions: { color: backgroundColorInput.value },
+            image: currentLogoBase64 || '',
+        };
+        try {
+            await qrCodeInstance.update(options);
+            if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0,67)+"..." : dataForQr ; 
+        } catch (error) { 
+            console.error("Error updating QR Code:", error);
+        } finally { 
+            if(generateQrMainButton) {generateQrMainButton.disabled = false; generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';}
+        }
     }
-
-    // Aapke saare baki ke event listeners
+    
+    if (qrTypeButtons) { qrTypeButtons.forEach(button => { button.addEventListener('click', () => { switchQrType(button.dataset.type); }); }); }
     if (generateQrMainButton) generateQrMainButton.addEventListener('click', generateQRCodePreview);
-    if(logoUploadInput){ /*... logo upload listener ...*/ }
     [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
         if (input) input.addEventListener('change', generateQRCodePreview);
     });
-    // ... baki saare event listeners
-
-    // Initialize the first tab on page load
-    if (qrTypeButtons.length > 0) {
-        switchQrType('url'); 
+    if (logoUploadInput) { 
+        logoUploadInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) { currentLogoBase64 = e.target.result; if (logoPreview) { logoPreview.src = e.target.result; logoPreview.style.display = 'block'; } generateQRCodePreview(); };
+                reader.readAsDataURL(file);
+            } else { currentLogoBase64 = null; if (logoPreview) { logoPreview.src = "#"; logoPreview.style.display = 'none'; } generateQRCodePreview();}
+        });
     }
+
+    // === DOWNLOAD LOGIC (THE FIX) ===
+    if (downloadSvgButton) { 
+        downloadSvgButton.addEventListener('click', () => {
+            if (!qrCodeInstance) return;
+            qrCodeInstance.download({ name: 'qodeo-qr', extension: 'svg' });
+        });
+    }
+
+    if (downloadPngButton) { 
+        downloadPngButton.addEventListener('click', async () => { 
+            if (!qrCodeInstance) return;
+            
+            // For HD Download, we need to create a temporary instance with higher resolution
+            const highResWidth = 1024;
+            const highResHeight = 1024;
+            const currentOptions = qrCodeInstance._options;
+
+            // Prepare a temporary high-res QR code styling instance
+            const tempQrInstance = new QRCodeStyling({
+                ...currentOptions, // Copy all current options
+                width: highResWidth,
+                height: highResHeight,
+                type: 'canvas' // Important: PNG download works best with canvas type
+            });
+            
+            // Set a temporary loading state
+            downloadPngButton.textContent = "Preparing HD...";
+            downloadPngButton.disabled = true;
+
+            try {
+                // We don't need to append this to the screen, just use it for download
+                await tempQrInstance.download({ name: `qodeo-qr-hd`, extension: 'png' });
+            } catch (error) {
+                console.error("Error during HD PNG download:", error);
+                alert("Could not download HD PNG. Please try again.");
+            } finally {
+                // Reset the button state
+                downloadPngButton.textContent = "Download PNG";
+                downloadPngButton.disabled = false;
+            }
+        });
+    }
+
+    if (qrTypeButtons.length > 0) switchQrType('url'); 
 });
