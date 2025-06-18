@@ -1,4 +1,4 @@
-/* === Qodeo New Light Theme - Pulsating Tagline & All Current Features === */
+/* === Qodeo New Light Theme - Force Tagline Visibility on Mobile === */
 
 /* --- Global Resets & Font Import --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -6,8 +6,8 @@
 
 :root {
     --primary-color: #007bff; 
-    --secondary-color: #00b894; /* Green for generate button */
-    --tagline-color: var(--text-muted); /* Using muted text for tagline, can be changed */
+    --secondary-color: #00b894; 
+    --tagline-color: var(--text-muted); 
     --background-light: #ffffff; 
     --background-grey: #f8f9fa; 
     --text-dark: #212529; 
@@ -41,7 +41,6 @@ body {
     display: flex; 
     align-items: baseline; 
     text-decoration: none; 
-    /* Removed hover effect from here to apply only to tagline if desired, or keep for whole logo */
 }
 #headerIcon { 
     height: 28px; 
@@ -58,31 +57,20 @@ body {
     margin-right: 8px; 
     line-height: 1; 
 }
-/* Tagline Styling (WITH PULSATING ZOOM ANIMATION) */
 .header-tagline {
     display: inline-block; 
-    font-size: 0.75rem;  /* Back to a smaller, subtle size */
+    font-size: 0.75rem;  
     font-weight: 400;    
-    color: var(--tagline-color); /* Using variable for color */
+    color: var(--tagline-color); 
     white-space: nowrap; 
     line-height: 1; 
     vertical-align: baseline; 
-    animation: pulseZoomTagline 3s infinite ease-in-out; /* Applied animation */
-    transform-origin: center left; /* Zoom from the start of the text */
+    animation: pulseZoomTagline 3s infinite ease-in-out; 
+    transform-origin: center left; 
 }
 
-/* Responsive behavior for tagline */
-@media (max-width: 480px) { /* Increased breakpoint slightly */
-    .header-tagline {
-        display: none; 
-    }
-    #logoText {
-        margin-right: 0; 
-    }
-}
 
-/* --- Main Content (All other CSS rules from previous full style.css) --- */
-/* ... (Copy all styles from .site-main down to just BEFORE @keyframes fadeIn from the previous full CSS for "vCard Form Styling") ... */
+/* --- Main Content --- */
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
 .qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
@@ -137,9 +125,27 @@ body {
 .scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-color); }
 .site-footer { text-align: center; padding: 25px 0; background-color: var(--background-grey); color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light); font-size: 0.85rem; }
+
+/* --- Responsive Design Adjustments --- */
 @media (max-width: 767px) { 
-    /* .header-tagline { display: none; } /* Kept commented for now, tagline should be visible */
-    #logoText { font-size: 1.5rem; /* margin-right: 0; /* Keep margin if tagline shown */ } 
+    .header-tagline { /* Force display and styling for mobile */
+        display: inline-block !important; 
+        font-size: 0.7rem !important;     
+        color: var(--text-muted) !important; 
+        opacity: 1 !important;            
+        visibility: visible !important;   
+        animation: pulseZoomTagline 3s infinite ease-in-out !important; 
+        transform-origin: center left !important;
+        white-space: nowrap; 
+        vertical-align: baseline;
+        background: none !important; /* Remove any lingering gradient test */
+        -webkit-background-clip: unset !important;
+        -moz-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: var(--text-muted) !important; 
+        -moz-text-fill-color: var(--text-muted) !important;
+    }
+    #logoText { font-size: 1.5rem; margin-right: 5px; } 
     #headerIcon { height: 26px; margin-right: 6px;}
     .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; } 
     .qr-type-button { padding: 8px 6px; font-size: 0.7rem; min-height: 55px; }
