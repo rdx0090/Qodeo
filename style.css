@@ -58,7 +58,6 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 .checkbox-group { display: flex; align-items: center; gap: 8px; } /* Styling for checkbox groups */
 .checkbox-group input[type="checkbox"] { width: auto; margin-right: 5px; accent-color: var(--primary-color);} /* Basic styling for checkbox */
 .checkbox-group label { margin-bottom: 0; font-weight: normal; font-size: 0.9rem; color: var(--text-dark); }
-
 @media (max-width: 576px) { .form-row { flex-direction: column; gap: 0; } .form-row .control-group { flex-basis: 100%; margin-bottom: 15px; } .form-row .control-group:last-child { margin-bottom: 0; } }
 .button-generate { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 300px; margin: 25px auto 0; padding: 14px 25px; font-size: 1.1rem; font-weight: 600; color: white; background-color: var(--secondary-color); border: none; border-radius: 50px; cursor: pointer; transition: background-color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55), box-shadow 0.2s ease; box-shadow: var(--shadow-sm); }
 .button-generate i { margin-right: 10px; font-size: 1.1em; }
@@ -70,8 +69,33 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 .preview-column { flex: 1 1 300px; display: flex; flex-direction: column; align-items: center; }
 .options-column { flex: 1 1 400px; }
 .preview-column h3, .options-column h3 { font-size: 1.25rem; color: var(--text-dark); margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; }
-#qrCanvasContainer { width: 100%; max-width: 250px; height: auto; aspect-ratio: 1 / 1; margin-bottom: 10px; border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; padding: 8px; background-color: var(--background-light); border-radius: var(--border-radius-sm); overflow: hidden; }
-#qrCanvasContainer > canvas, #qrCanvasContainer > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+/* === THIS IS THE FIX FOR THE QR PREVIEW BOX === */
+#qrCanvasContainer {
+    width: 100%;
+    max-width: 250px;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-light);
+    background-color: var(--background-light);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 10px; /* This padding gives space around the QR code */
+}
+#qrCanvasContainer > canvas,
+#qrCanvasContainer > svg,
+#qrCanvasContainer > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+/* === END OF FIX === */
+
 .qr-data-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; margin-bottom: 15px; word-break: break-all; text-align: center; max-width: 100%; }
 .actions { display: flex; justify-content: center; width: 100%; gap: 10px; }
 .actions button { background-color: var(--background-grey); color: var(--text-dark); border: 1px solid var(--border-darker); flex-grow: 1; flex-basis: 0; padding: 10px 12px; font-size: 0.85rem; border-radius: var(--border-radius-sm); font-weight: 500; letter-spacing: 0.2px; cursor: pointer; transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55), box-shadow 0.2s ease-in-out; animation: none; }
@@ -96,155 +120,21 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 /* === USER AUTHENTICATION STYLES (NEW) === */
 /* ======================================= */
 
-/* Main container for login button/profile */
-#login-container {
-    display: flex;
-    align-items: center;
-}
-
-/* Default login button */
-#login-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-#login-button:hover {
-    background-color: #0069d9;
-}
-
-#login-button:active {
-    transform: scale(0.98);
-}
-
-/* User profile section (visible after login) */
-#user-profile {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-/* A helper class to hide elements */
-.hidden {
-    display: none !important;
-}
-
-/* User avatar/profile picture */
-#user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid var(--border-light);
-    object-fit: cover;
-}
-
-/* Logout button */
-#logout-button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#logout-button:hover {
-    background-color: #c82333;
-    transform: scale(1.1);
-}
-
-/* Login Modal (Popup) Styling */
-
-/* The dark overlay behind the modal */
-#login-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* The actual modal box */
-#login-modal-content {
-    background-color: white;
-    padding: 40px;
-    border-radius: var(--border-radius-md);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    text-align: center;
-    position: relative;
-    width: 90%;
-    max-width: 350px;
-}
-
-#login-modal-content h3 {
-    margin: 0;
-    margin-bottom: 25px;
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-/* Google & GitHub login buttons inside the modal */
-#google-login-button, #github-login-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: var(--border-radius-sm);
-    border: 1px solid var(--border-darker);
-    background-color: #fff;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-#google-login-button {
-    margin-bottom: 15px;
-}
-
-#google-login-button:hover, #github-login-button:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-#google-login-button .fa-google,
-#github-login-button .fa-github {
-    font-size: 1.2rem;
-}
-
-/* Close button for the modal */
-#close-modal-button {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: #aaa;
-    cursor: pointer;
-    line-height: 1;
-}
-
-#close-modal-button:hover {
-    color: var(--text-dark);
-}
+#login-container { display: flex; align-items: center; }
+#login-button { background-color: var(--primary-color); color: white; border: none; padding: 8px 16px; font-size: 0.9rem; font-weight: 500; border-radius: var(--border-radius-sm); cursor: pointer; transition: background-color 0.2s ease, transform 0.1s ease; }
+#login-button:hover { background-color: #0069d9; }
+#login-button:active { transform: scale(0.98); }
+#user-profile { display: flex; align-items: center; gap: 15px; }
+.hidden { display: none !important; }
+#user-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border-light); object-fit: cover; }
+#logout-button { background-color: #dc3545; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1rem; cursor: pointer; transition: background-color 0.2s ease, transform 0.2s ease; display: flex; align-items: center; justify-content: center; }
+#logout-button:hover { background-color: #c82333; transform: scale(1.1); }
+#login-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+#login-modal-content { background-color: white; padding: 40px; border-radius: var(--border-radius-md); box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; position: relative; width: 90%; max-width: 350px; }
+#login-modal-content h3 { margin: 0; margin-bottom: 25px; font-size: 1.6rem; font-weight: 600; color: var(--text-dark); }
+#google-login-button, #github-login-button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px; font-size: 1rem; font-weight: 500; border-radius: var(--border-radius-sm); border: 1px solid var(--border-darker); background-color: #fff; cursor: pointer; transition: all 0.2s ease; }
+#google-login-button { margin-bottom: 15px; }
+#google-login-button:hover, #github-login-button:hover { border-color: var(--primary-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+#google-login-button .fa-google, #github-login-button .fa-github { font-size: 1.2rem; }
+#close-modal-button { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; color: #aaa; cursor: pointer; line-height: 1; }
+#close-modal-button:hover { color: var(--text-dark); }
