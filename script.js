@@ -15,12 +15,11 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+
 // ==============================================================
 // === MAIN APPLICATION CODE                                   ===
 // ==============================================================
 
-// This makes sure our script ONLY runs after the entire HTML page is ready.
-// This is the FIX for "Core UI elements missing" error.
 document.addEventListener('DOMContentLoaded', () => {
 
     // PART 1: AUTHENTICATION
@@ -75,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // =================================================================
-    // PART 2: YOUR ORIGINAL QR CODE SCRIPT (Now it's inside DOMContentLoaded)
+    // PART 2: YOUR ORIGINAL QR CODE SCRIPT
     // =================================================================
     
     // --- All your original DOM Elements ---
@@ -128,20 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrEventDescriptionInput = document.getElementById('qrEventDescription');
     const qrTypeButtons = document.querySelectorAll('.qr-type-button');
     const qrInputGroups = document.querySelectorAll('.qr-input-group');
-
-    // THIS CHECK SHOULD NOW PASS
-    if (!qrDataUrlInput || !generateQrMainButton || !qrTypeButtons || !qrCanvasContainer || !inputAreaTitle) {
-        console.error("This shouldn't happen, but a core element is still missing!");
-        return; 
-    }
-
+    
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let currentLogoBase64 = null;
     let currentQrType = 'url'; 
 
     if (typeof QRCodeStyling === 'undefined') {
-        console.error("QRCodeStyling library not loaded.");
-        return;
+        console.error("QRCodeStyling library not loaded."); return;
     }
 
     const previewQrWidth = 250; const previewQrHeight = 250; 
@@ -153,16 +145,64 @@ document.addEventListener('DOMContentLoaded', () => {
         imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
         qrOptions: { errorCorrectionLevel: 'H' }
     });
-    qrCodeInstance.append(qrCanvasContainer);
+    if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
 
-    // ALL OF YOUR ORIGINAL FUNCTIONS (switchQrType, getQrDataStringForInstance, etc.)
-    // ... Paste all your functions from the original script.js here ...
-    function switchQrType(selectedType) { /* Your full function */ }
-    function getQrDataStringForInstance() { /* Your full function */ }
-    async function generateQRCodePreview() { /* Your full function */ }
-    
-    // ALL OF YOUR ORIGINAL EVENT LISTENERS
-    // ... Paste all your event listeners here ...
-    generateQrMainButton.addEventListener('click', generateQRCodePreview);
-    
+    function switchQrType(selectedType) {
+        qrTypeButtons.forEach(btn => btn.classList.remove('active'));
+        qrInputGroups.forEach(group => group.classList.remove('active')); 
+
+        const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedType}"]`);
+        const activeInputGroupDiv = document.getElementById(`${selectedType}Inputs`);
+
+        if (activeButton) activeButton.classList.add('active');
+        if (activeInputGroupDiv) activeInputGroupDiv.classList.add('active');
+        else {
+            if(document.getElementById('urlInputs')) document.getElementById('urlInputs').classList.add('active'); 
+            selectedType = 'url';
+            if(document.querySelector(`.qr-type-button[data-type="url"]`)) document.querySelector(`.qr-type-button[data-type="url"]`).classList.add('active'); 
+        }
+        currentQrType = selectedType;
+
+        let title = "Enter Data"; 
+        const selectedButtonSpan = activeButton ? activeButton.querySelector('span') : null;
+        if (selectedButtonSpan) title = `Enter details for ${selectedButtonSpan.textContent} QR`;
+        else if (selectedType === 'url') title = 'Enter your Website URL';
+        if(inputAreaTitle) inputAreaTitle.textContent = title;
+
+        let placeholderData = "https://qodeo.pro";
+        if (selectedType === 'text') placeholderData = "Your sample text";
+        else if (selectedType === 'email') placeholderData = "mailto:test@example.com";
+        
+        qrCodeInstance.update({ data: placeholderData });
+        if(qrDataDisplay) qrDataDisplay.textContent = `Switched to ${selectedType.toUpperCase()}.`;
+    }
+
+    // === YAHAN CODE ADD KIYA GAYA HAI ===
+    if (qrTypeButtons) {
+        qrTypeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                switchQrType(button.dataset.type);
+            });
+        });
+    }
+
+    function getQrDataStringForInstance() {
+        // ... (Aapka poora getQrDataStringForInstance function jaisa pehle tha)
+    }
+    async function generateQRCodePreview() {
+        // ... (Aapka poora generateQRCodePreview function jaisa pehle tha)
+    }
+
+    // Aapke saare baki ke event listeners
+    if (generateQrMainButton) generateQrMainButton.addEventListener('click', generateQRCodePreview);
+    if(logoUploadInput){ /*... logo upload listener ...*/ }
+    [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
+        if (input) input.addEventListener('change', generateQRCodePreview);
+    });
+    // ... baki saare event listeners
+
+    // Initialize the first tab on page load
+    if (qrTypeButtons.length > 0) {
+        switchQrType('url'); 
+    }
 });
