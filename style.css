@@ -1,4 +1,4 @@
-/* === Qodeo New Light Theme - Final Tagline & UI === */
+/* === Qodeo New Light Theme - Pulsating Tagline & All Current Features === */
 
 /* --- Global Resets & Font Import --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -6,7 +6,8 @@
 
 :root {
     --primary-color: #007bff; 
-    --secondary-color: #00b894; /* Green for generate button & tagline */
+    --secondary-color: #00b894; /* Green for generate button */
+    --tagline-color: var(--text-muted); /* Using muted text for tagline, can be changed */
     --background-light: #ffffff; 
     --background-grey: #f8f9fa; 
     --text-dark: #212529; 
@@ -40,16 +41,8 @@ body {
     display: flex; 
     align-items: baseline; 
     text-decoration: none; 
-    cursor: pointer; 
-    transition: transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* For hover on whole logo */
+    /* Removed hover effect from here to apply only to tagline if desired, or keep for whole logo */
 }
-#logoLink:hover {
-    transform: scale(1.02); /* Slight zoom on entire logo link on hover */
-}
-#logoLink:active {
-    transform: scale(0.99);
-}
-
 #headerIcon { 
     height: 28px; 
     width: auto; 
@@ -65,31 +58,35 @@ body {
     margin-right: 8px; 
     line-height: 1; 
 }
-/* Tagline Styling (SIMPLE SOLID COLOR, VISIBLE ON MOBILE) */
+/* Tagline Styling (WITH PULSATING ZOOM ANIMATION) */
 .header-tagline {
     display: inline-block; 
-    font-size: 0.8rem;  /* Readable font size */
-    font-weight: 500;    
-    color: var(--secondary-color); /* Using secondary color (green) */
+    font-size: 0.75rem;  /* Back to a smaller, subtle size */
+    font-weight: 400;    
+    color: var(--tagline-color); /* Using variable for color */
     white-space: nowrap; 
     line-height: 1; 
     vertical-align: baseline; 
-    opacity: 0.9; /* Slightly less prominent than main logo text */
+    animation: pulseZoomTagline 3s infinite ease-in-out; /* Applied animation */
+    transform-origin: center left; /* Zoom from the start of the text */
 }
 
-/* Responsive: Adjust tagline size or hide ONLY if absolutely necessary on very small screens */
-/* For now, we are keeping it visible. If it breaks layout on <360px, then hide. */
-/* @media (max-width: 359px) { 
-    .header-tagline { display: none; }
-    #logoText { margin-right: 0; }
-} */
-
+/* Responsive behavior for tagline */
+@media (max-width: 480px) { /* Increased breakpoint slightly */
+    .header-tagline {
+        display: none; 
+    }
+    #logoText {
+        margin-right: 0; 
+    }
+}
 
 /* --- Main Content (All other CSS rules from previous full style.css) --- */
+/* ... (Copy all styles from .site-main down to just BEFORE @keyframes fadeIn from the previous full CSS for "vCard Form Styling") ... */
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
 .qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
-.qr-type-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Adjusted minmax for better fit */ gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--border-light); padding-bottom: 20px; }
+.qr-type-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--border-light); padding-bottom: 20px; }
 .qr-type-button { background-color: var(--background-light); border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); padding: 10px 8px; font-size: 0.75rem; font-weight: 500; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); min-height: 65px; }
 .qr-type-button i { font-size: 1.4rem; margin-bottom: 6px; color: var(--text-muted); transition: color 0.2s ease; }
 .qr-type-button span { display: block; line-height: 1.2; }
@@ -141,8 +138,8 @@ body {
 .scannability-tips ul li::marker { color: var(--primary-color); }
 .site-footer { text-align: center; padding: 25px 0; background-color: var(--background-grey); color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light); font-size: 0.85rem; }
 @media (max-width: 767px) { 
-    /* .header-tagline { display: none; } /* KEEPING IT VISIBLE FOR NOW */
-    #logoText { font-size: 1.5rem; /* margin-right: 0; /* Keep margin if tagline is shown */ } 
+    /* .header-tagline { display: none; } /* Kept commented for now, tagline should be visible */
+    #logoText { font-size: 1.5rem; /* margin-right: 0; /* Keep margin if tagline shown */ } 
     #headerIcon { height: 26px; margin-right: 6px;}
     .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; } 
     .qr-type-button { padding: 8px 6px; font-size: 0.7rem; min-height: 55px; }
@@ -157,4 +154,16 @@ body {
     .preview-and-options-section .container { flex-direction: column; }
      .preview-column, .options-column { flex-basis: auto; }
 }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Keyframe animation for pulsating zoom on tagline */
+@keyframes pulseZoomTagline {
+    0% { transform: scale(1); opacity: 0.85; }
+    50% { transform: scale(1.03); opacity: 1; } 
+    100% { transform: scale(1); opacity: 0.85; }
+}
+
+/* Fade-in Animation for Tab Content */
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(5px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
