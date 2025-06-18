@@ -50,7 +50,6 @@
                     <div id="smsInputs" class="qr-input-group"><input type="tel" id="qrSmsNumber" placeholder="Phone Number"><textarea id="qrSmsMessage" placeholder="SMS Message" rows="3"></textarea></div>
                     <div id="wifiInputs" class="qr-input-group"><input type="text" id="qrWifiSsid" placeholder="Network Name (SSID)"><input type="password" id="qrWifiPassword" placeholder="Password (Optional)"><select id="qrWifiEncryption"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">No Encryption</option></select></div>
                     
-                    {/* vCard Inputs */}
                     <div id="vcardInputs" class="qr-input-group">
                         <div class="vcard-section-title">Basic Info</div>
                         <div class="form-row">
@@ -126,7 +125,7 @@
                             <textarea id="vcardNote" placeholder="Additional notes" rows="2"></textarea>
                         </div>
                     </div>
-                    <div id="locationInputs" class="qr-input-group"><p>Location inputs coming soon...</p></div>
+                    <div id="locationInputs" class="qr-input-group"><!-- Location inputs will go here --></div>
                 </div>
 
                 <button id="generateQrMainButton" class="button-generate"><i class="fas fa-qrcode"></i> Generate QR Code</button>
@@ -136,8 +135,8 @@
             <div class="container">
                 <div class="preview-column">
                     <h3>Your QR Code</h3>
-                    <div id="qrCanvasContainer"></div>
-                    <div id="qrDataDisplay" class="qr-data-text"></div>
+                    <div id="qrCanvasContainer"><!-- QR will be rendered here --></div>
+                    <div id="qrDataDisplay" class="qr-data-text"><!-- Data will be shown here --></div>
                     <div class="actions"><button id="downloadSvgButton">Download SVG</button><button id="downloadPngButton">Download PNG</button></div>
                 </div>
                 <div class="options-column">
