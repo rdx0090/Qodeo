@@ -1,184 +1,146 @@
-// script.js
+document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM Elements ---
+    const dotColorInput = document.getElementById('dotColor');
+    const backgroundColorInput = document.getElementById('backgroundColor');
+    const dotStyleSelect = document.getElementById('dotStyle');
+    const logoUploadInput = document.getElementById('logoUpload');
+    const logoPreview = document.getElementById('logoPreview');
+    
+    const generateQrMainButton = document.getElementById('generateQrMainButton'); // Using the new button ID
+    const downloadSvgButton = document.getElementById('downloadSvgButton');
+    const downloadPngButton = document.getElementById('downloadPngButton');
+    const qrCanvasContainer = document.getElementById('qrCanvasContainer');
+    const qrDataDisplay = document.getElementById('qrDataDisplay'); 
+    const yearSpan = document.getElementById('year');
+    const inputAreaTitle = document.getElementById('inputAreaTitle');
 
-    // ... (baaki saara code upar tak waisa hi) ...
+    // QR Type specific input fields (Only URL and Text for now)
+    const qrDataUrlInput = document.getElementById('qrDataUrl');
+    const qrDataTextInput = document.getElementById('qrDataText');
 
-    function getQrDataStringForInstance() {
-        let dataString = "";
-        // Har case ke andar hi uske specific inputs ko access karein aur validate karein
-        switch (currentQrType) {
+    // QR Type Selector Elements
+    const qrTypeButtons = document.querySelectorAll('.qr-type-button');
+    const qrInputGroups = document.querySelectorAll('.qr-input-group');
+
+    // --- Initial Checks & Setup ---
+    if (!qrDataUrlInput || !qrDataTextInput || !generateQrMainButton || qrTypeButtons.length === 0 || !qrCanvasContainer || !inputAreaTitle) {
+        console.error("Critical UI elements for basic tabs (URL/Text) are missing.");
+        if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red; font-size: small;'>Error: Core UI elements missing.</p>";
+        if(generateQrMainButton) generateQrMainButton.disabled = true;
+        return; 
+    }
+    
+    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+    let currentLogoBase64 = null;
+    let currentQrType = 'url'; // Default active QR type
+    let activeQrDataInput = qrDataUrlInput; // Default active input
+
+    if (typeof QRCodeStyling === 'undefined') {
+        console.error("QRCodeStyling library is not loaded.");
+        if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red; font-size:small;'>Error: QR Library missing.</p>";
+        if(generateQrMainButton) generateQrMainButton.disabled = true; 
+        return;
+    }
+
+    const previewQrWidth = 250; 
+    const previewQrHeight = 250; 
+
+    const qrCodeInstance = new QRCodeStyling({
+        width: previewQrWidth, height: previewQrHeight, type: 'svg',
+        data: activeQrDataInput.value || "https://qodeo.pro", 
+        image: '',
+        dotsOptions: { color: dotColorInput.value || "#000000", type: dotStyleSelect.value || "square" }, // Added defaults
+        backgroundOptions: { color: backgroundColorInput.value || "#ffffff" }, // Added defaults
+        imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
+        qrOptions: { errorCorrectionLevel: 'H' }
+    });
+    qrCodeInstance.append(qrCanvasContainer);
+
+    // --- Function to switch QR type and display relevant inputs ---
+    function switchQrType(selectedType) {
+        qrTypeButtons.forEach(btn => btn.classList.remove('active'));
+        qrInputGroups.forEach(group => group.classList.remove('active'));
+
+        const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedType}"]`);
+        const activeInputGroup = document.getElementById(`${selectedType}Inputs`);
+
+        if (activeButton) activeButton.classList.add('active');
+        if (activeInputGroup) activeInputGroup.classList.add('active');
+        
+        currentQrType = selectedType;
+        let title = "Enter Data";
+        
+        switch (selectedType) {
             case 'url':
-                dataString = qrDataUrlInput.value || "https://qodeo.pro";
+                title = 'Enter your Website URL';
+                activeQrDataInput = qrDataUrlInput;
                 break;
             case 'text':
-                dataString = qrDataTextInput.value || "Qodeo QR Text";
+                title = 'Enter your Text';
+                activeQrDataInput = qrDataTextInput;
                 break;
-            case 'email':
-                const to = qrEmailToInput.value;
-                // Default if all email fields are empty, otherwise validate 'to'
-                if (!to && !qrEmailSubjectInput.value && !qrEmailBodyInput.value) { 
-                    dataString = "mailto:info@example.com?subject=Inquiry&body=Hello"; 
-                    break; 
-                }
-                if (!to) { 
-                    // alert("Please enter 'To Email Address' for Email QR."); // Alert ko abhi generate button par rakhenge
-                    console.warn("Email 'To' field is empty.");
-                    return ""; // Return empty or a default, or null to indicate error
-                }
-                dataString = `mailto:${encodeURIComponent(to)}`;
-                if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`;
-                if (qrEmailBodyInput.value) dataString += (qrEmailSubjectInput.value ? '&' : '?') + `body=${encodeURIComponent(qrEmailBodyInput.value)}`;
+            // Other types are not handled by this basic script yet
+            default:
+                title = 'Enter your Website URL'; // Fallback to URL
+                activeQrDataInput = qrDataUrlInput;
+                // Hide all other input groups except URL's if default is hit from an unknown type
+                if (document.getElementById('urlInputs')) document.getElementById('urlInputs').classList.add('active');
+
+        }
+        inputAreaTitle.textContent = title;
+        generateQRCodePreview(); // Generate QR for the new type with default/empty values
+    }
+
+    // --- Event Listeners for QR Type Buttons ---
+    qrTypeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Only allow switching to implemented types for now
+            const type = button.dataset.type;
+            if (type === 'url' || type === 'text') {
+                switchQrType(type);
+            } else {
+                alert(type.toUpperCase() + " QR type is not fully implemented yet in this script version.");
+            }
+        });
+    });
+    
+    // --- Function to prepare data string based on active type ---
+    function getQrDataStringForInstance() {
+        let dataString = "";
+        if (!activeQrDataInput) return "https://qodeo.pro/error"; // Safety check
+
+        switch (currentQrType) {
+            case 'url':
+                dataString = activeQrDataInput.value || "https://qodeo.pro";
                 break;
-            case 'phone':
-                const phoneNum = qrPhoneNumberInput.value;
-                if (!phoneNum) { 
-                    // alert("Please enter a Phone Number for Phone QR."); 
-                    console.warn("Phone number field is empty.");
-                    return "";
-                }
-                dataString = `tel:${phoneNum}`; break;
-            case 'sms':
-                const smsNum = qrSmsNumberInput.value;
-                if (!smsNum && !qrSmsMessageInput.value) { dataString = "smsto:12345?body=Hello"; break; }
-                if (!smsNum) { 
-                    // alert("Please enter Phone Number for SMS QR."); 
-                    console.warn("SMS number field is empty.");
-                    return "";
-                }
-                dataString = `smsto:${smsNum}`;
-                if (qrSmsMessageInput.value) dataString += `:${encodeURIComponent(qrSmsMessageInput.value)}`;
+            case 'text':
+                dataString = activeQrDataInput.value || "Qodeo QR Text";
                 break;
-            case 'wifi':
-                const ssid = qrWifiSsidInput.value;
-                if (!ssid) { 
-                    // alert("Please enter Network Name (SSID) for Wi-Fi QR."); 
-                    console.warn("Wi-Fi SSID field is empty.");
-                    return "";
-                }
-                const password = qrWifiPasswordInput.value;
-                const encryption = qrWifiEncryptionSelect.value;
-                const hidden = qrWifiHiddenCheckbox.checked ? 'true' : 'false';
-                dataString = `WIFI:S:${ssid};T:${encryption};P:${password};H:${hidden};;`; break;
-            case 'vcard':
-                const fn = vcardFormattedNameInput.value; 
-                // IMPORTANT: This validation should only run when vCard is the *intended* type for generation,
-                // not just because it's the current tab when switching TO another tab.
-                // The alert will be moved to the generateQRCodePreview function.
-                if (!fn && generateQrMainButton.disabled) { // Check if it's during an actual generation attempt
-                    // This condition might be too broad. Let's handle validation in generateQRCodePreview.
-                }
-                dataString = "BEGIN:VCARD\nVERSION:3.0\n";
-                dataString += `N:${vcardLastNameInput.value || ''};${vcardFirstNameInput.value || ''}\n`;
-                dataString += `FN:${fn || (vcardFirstNameInput.value + " " + vcardLastNameInput.value).trim() || 'No Name'}\n`; // Fallback for FN
-                if (vcardOrganizationInput.value) dataString += `ORG:${vcardOrganizationInput.value}\n`;
-                if (vcardJobTitleInput.value) dataString += `TITLE:${vcardJobTitleInput.value}\n`;
-                if (vcardPhoneMobileInput.value) dataString += `TEL;TYPE=CELL,VOICE:${vcardPhoneMobileInput.value}\n`;
-                if (vcardPhoneWorkInput.value) dataString += `TEL;TYPE=WORK,VOICE:${vcardPhoneWorkInput.value}\n`;
-                if (vcardEmailInput.value) dataString += `EMAIL:${vcardEmailInput.value}\n`;
-                if (vcardWebsiteInput.value) dataString += `URL:${vcardWebsiteInput.value}\n`;
-                if (vcardAdrStreetInput.value || vcardAdrCityInput.value || vcardAdrRegionInput.value || vcardAdrPostcodeInput.value || vcardAdrCountryInput.value) {
-                    dataString += `ADR;TYPE=HOME:;;${vcardAdrStreetInput.value || ''};${vcardAdrCityInput.value || ''};${vcardAdrRegionInput.value || ''};${vcardAdrPostcodeInput.value || ''};${vcardAdrCountryInput.value || ''}\n`;
-                }
-                if (vcardNoteInput.value) dataString += `NOTE:${vcardNoteInput.value}\n`;
-                dataString += "END:VCARD";
-                break;
-            case 'location':
-                const lat = qrLocationLatitudeInput.value;
-                const lon = qrLocationLongitudeInput.value;
-                if (!lat || !lon) { 
-                    // alert("Please enter Latitude and Longitude."); 
-                    console.warn("Location lat/lon fields are empty.");
-                    return "";
-                }
-                const query = qrLocationQueryInput.value;
-                dataString = `geo:${lat},${lon}`;
-                if (query) dataString += `?q=${encodeURIComponent(query)}`;
-                break;
-            case 'event':
-                const summary = qrEventSummaryInput.value;
-                const dtstart = qrEventDtStartInput.value;
-                const dtend = qrEventDtEndInput.value;
-                if (!summary || !dtstart || !dtend) { 
-                    // alert("Please fill Event Summary, Start, and End Date/Time."); 
-                    console.warn("Event fields are empty.");
-                    return ""; // Return empty or default, validation at generation.
-                }
-                const formatDateTime = (datetime) => datetime ? datetime.replace(/[-:]/g, '').replace('T', 'T') + '00' : '';
-                dataString = "BEGIN:VEVENT\n";
-                dataString += `SUMMARY:${summary}\n`;
-                dataString += `DTSTART:${formatDateTime(dtstart)}\n`;
-                dataString += `DTEND:${formatDateTime(dtend)}\n`;
-                if (qrEventLocationInput.value) dataString += `LOCATION:${qrEventLocationInput.value}\n`;
-                if (qrEventDescriptionInput.value) dataString += `DESCRIPTION:${qrEventDescriptionInput.value}\n`;
-                dataString += "END:VEVENT";
-                break;
-            default: dataString = qrDataUrlInput.value || "https://qodeo.pro";
+            default:
+                dataString = "https://qodeo.pro/default"; // Fallback data
         }
         return dataString;
     }
 
-    // --- Update QR Code Function (generateQRCodePreview) ---
+    // --- Update QR Code Function (Now called generateQRCodePreview) ---
     async function generateQRCodePreview() {
         if (!generateQrMainButton) return; 
 
-        // VALIDATION MOVED HERE - specific to the currentQrType
-        if (currentQrType === 'vcard' && !vcardFormattedNameInput.value) {
-            alert("Please enter 'Display Name' for vCard.");
-            return; // Stop if validation fails
-        }
-        if (currentQrType === 'email' && !qrEmailToInput.value) {
-            alert("Please enter 'To Email Address' for Email QR.");
-            return;
-        }
-        if (currentQrType === 'phone' && !qrPhoneNumberInput.value) {
-            alert("Please enter a Phone Number for Phone QR.");
-            return;
-        }
-        if (currentQrType === 'sms' && !qrSmsNumberInput.value) {
-            alert("Please enter Phone Number for SMS QR.");
-            return;
-        }
-        if (currentQrType === 'wifi' && !qrWifiSsidInput.value) {
-            alert("Please enter Network Name (SSID) for Wi-Fi QR.");
-            return;
-        }
-        if (currentQrType === 'location' && (!qrLocationLatitudeInput.value || !qrLocationLongitudeInput.value)) {
-            alert("Please enter Latitude and Longitude for Location QR.");
-            return;
-        }
-        if (currentQrType === 'event' && (!qrEventSummaryInput.value || !qrEventDtStartInput.value || !qrEventDtEndInput.value)) {
-            alert("Please fill Event Summary, Start, and End Date/Time for Event QR.");
-            return;
-        }
-        // Add more validations for other types as needed
-
-
         const dataForQr = getQrDataStringForInstance();
-        // The null check from getQrDataStringForInstance might still be useful for very basic checks,
-        // but primary validation is now above.
-        if (dataForQr === null || dataForQr === "") { 
-            // This condition might now only catch cases where getQrDataStringForInstance returns empty for non-validated types
-            // or if a non-validated type somehow has no default and returns ""
-            console.warn("Data for QR is empty or null after validation pass, using default for preview.");
-            // generateQrMainButton.disabled = false; // Button state handled in finally
-            // generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
-            // qrCodeInstance.update({ data: "https://qodeo.pro/error-default" }); // Update with a default/error QR
-            // if (qrDataDisplay) qrDataDisplay.textContent = "Please fill required fields.";
-            // return;
-        }
-
-
+        
         generateQrMainButton.disabled = true; 
         generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
         
-        // ... (options object and rest of the try-catch-finally block remains the same) ...
         const options = {
-            data: dataForQr || "https://qodeo.pro/empty-data", // Fallback if dataForQr is still empty
-            width: previewQrWidth, height: previewQrHeight, image: currentLogoBase64 || '',
-            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
-            backgroundOptions: { color: backgroundColorInput.value },
+            data: dataForQr, 
+            width: previewQrWidth, height: previewQrHeight, 
+            image: currentLogoBase64 || '',
+            dotsOptions: { color: dotColorInput.value || "#000000", type: dotStyleSelect.value || "square" },
+            backgroundOptions: { color: backgroundColorInput.value || "#ffffff" },
             imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
             qrOptions: { errorCorrectionLevel: 'H' }
         };
+
         try {
             await new Promise(resolve => setTimeout(resolve, 50)); 
             qrCodeInstance.update(options);
@@ -191,52 +153,65 @@
             if(generateQrMainButton) {generateQrMainButton.disabled = false; generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';}
         }
     }
-    
-    // In switchQrType function, remove the direct call to generateQRCodePreview
-    // and instead just set up the UI. The preview will be generated when user clicks the main button.
-    // OR, if you want preview on tab switch, ensure generateQRCodePreview doesn't run strict validation then.
 
-    // Revised switchQrType for clarity
-    function switchQrType(selectedType) {
-        qrTypeButtons.forEach(btn => btn.classList.remove('active'));
-        qrInputGroups.forEach(group => group.classList.remove('active'));
+    // --- Event Listeners for Controls ---
+    if (logoUploadInput) { 
+        logoUploadInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) { currentLogoBase64 = e.target.result; if (logoPreview) { logoPreview.src = e.target.result; logoPreview.style.display = 'block'; }};
+                reader.onerror = function() { console.error("Error reading file."); alert("Could not load logo."); };
+                reader.readAsDataURL(file);
+            } else { currentLogoBase64 = null; if (logoPreview) { logoPreview.src = "#"; logoPreview.style.display = 'none'; }}
+        });
+    }
+    generateQrMainButton.addEventListener('click', generateQRCodePreview);
+    [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
+        if (input) input.addEventListener('change', generateQRCodePreview);
+    });
 
-        const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedType}"]`);
-        const activeInputGroup = document.getElementById(`${selectedType}Inputs`);
-
-        if (activeButton) activeButton.classList.add('active');
-        if (activeInputGroup) activeInputGroup.classList.add('active');
-        
-        currentQrType = selectedType;
-        let title = "Enter Data"; // Default title
-        const selectedButtonSpan = activeButton ? activeButton.querySelector('span') : null;
-        if (selectedButtonSpan) {
-            title = `Enter details for ${selectedButtonSpan.textContent} QR`;
-        }
-        inputAreaTitle.textContent = title;
-
-        // OPTION 1: Generate a placeholder/default QR when tab switches (without strict validation)
-        let placeholderData = "https://qodeo.pro"; // Generic placeholder
-        // You could set more specific placeholders per type if desired
-        qrCodeInstance.update({ data: placeholderData });
-        if(qrDataDisplay) qrDataDisplay.textContent = `Switched to ${selectedType.toUpperCase()}. Enter details and click Generate.`;
-
-
-        // OPTION 2: Don't auto-generate on tab switch. User must click "Generate QR Code".
-        // In this case, remove the qrCodeInstance.update() call above.
-        // The generateQRCodePreview() function (which has validation) will be called by the main button.
+    // --- Download Handlers ---
+    if (downloadSvgButton) { 
+        downloadSvgButton.addEventListener('click', () => {
+            const dataForDownload = getQrDataStringForInstance(); 
+            // Ensure instance has latest data for download (especially important if preview doesn't auto-update on every input change)
+            qrCodeInstance.update({ data: dataForDownload }); 
+            qrCodeInstance.download({ name: 'qodeo-qr', extension: 'svg' });
+        });
+    }
+    if (downloadPngButton) { 
+        downloadPngButton.addEventListener('click', async () => { 
+            const dataForDownload = getQrDataStringForInstance(); 
+            const highResWidth = 1024; const highResHeight = 1024; 
+            if (generateQrMainButton) { generateQrMainButton.disabled = true; generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing HD...'; }
+            if (downloadSvgButton) downloadSvgButton.disabled = true; if (downloadPngButton) downloadPngButton.disabled = true;
+            try {
+                const currentOptions = qrCodeInstance._options;
+                const highResOptions = { 
+                    ...currentOptions, width: highResWidth, height: highResHeight, type: 'png', 
+                    data: dataForDownload, image: currentLogoBase64 || '', 
+                    dotsOptions: { ...currentOptions.dotsOptions, color: dotColorInput.value || "#000000", type: dotStyleSelect.value || "square" }, 
+                    backgroundOptions: { ...currentOptions.backgroundOptions, color: backgroundColorInput.value || "#ffffff" }, 
+                    imageOptions: { ...currentOptions.imageOptions, hideBackgroundDots: true } 
+                };
+                const tempQrInstance = new QRCodeStyling(highResOptions);
+                await tempQrInstance.download({ name: `qodeo-qr-${highResWidth}x${highResHeight}`, extension: 'png' });
+            } catch (error) { console.error("Error during HD PNG download:", error); alert("Could not generate HD PNG.");
+            } finally {
+                if (generateQrMainButton) { generateQrMainButton.disabled = false; generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code'; }
+                if (downloadSvgButton) downloadSvgButton.disabled = false; if (downloadPngButton) downloadPngButton.disabled = false;
+            }
+        });
     }
 
-
-    // Initial setup
-    if (qrTypeButtons.length > 0) {
-        switchQrType(qrTypeButtons[0].dataset.type); // Activate the first tab (URL)
+    // --- Initialize View ---
+    // Activate the first tab (URL) by default if it exists
+    if (qrTypeButtons.length > 0 && document.getElementById('urlInputs')) {
+        switchQrType('url'); 
+    } else if (qrTypeButtons.length > 0) { // Fallback if 'url' tab isn't the first one somehow
+        switchQrType(qrTypeButtons[0].dataset.type);
     } else {
-        console.error("No QR type buttons found to initialize.");
+        console.error("No QR type buttons found to initialize default tab.");
     }
-    // The initial call to generateQRCodePreview() at the end of DOMContentLoaded might also trigger validation
-    // We should ensure it uses a safe default or that validation is only for explicit generation.
-    // generateQRCodePreview(); // Initial call on page load (now handled by switchQrType)
-    
-    // ... (baaki saara code neeche tak (download handlers etc.) waisa hi) ...
 });
