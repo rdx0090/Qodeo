@@ -1,9 +1,9 @@
 /* === Qodeo New Light Theme - More QR Types === */
+/* Aapka poora original CSS... */
 
-/* --- Global Resets & Font Import --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-:root { /* ... (Variables are same as last full CSS) ... */
+:root {
     --primary-color: #007bff; --secondary-color: #00b894; 
     --tagline-color: var(--text-muted); 
     --background-light: #ffffff; --background-grey: #f8f9fa; 
@@ -91,3 +91,160 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 @media (min-width: 768px) and (max-width: 991px) { .preview-and-options-section .container { flex-direction: column; } .preview-column, .options-column { flex-basis: auto; } }
 @keyframes pulseZoomTagline { 0% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.03); opacity: 1; } 100% { transform: scale(1); opacity: 0.85; } }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ======================================= */
+/* === USER AUTHENTICATION STYLES (NEW) === */
+/* ======================================= */
+
+/* Main container for login button/profile */
+#login-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Default login button */
+#login-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#login-button:hover {
+    background-color: #0069d9;
+}
+
+#login-button:active {
+    transform: scale(0.98);
+}
+
+/* User profile section (visible after login) */
+#user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* A helper class to hide elements */
+.hidden {
+    display: none !important;
+}
+
+/* User avatar/profile picture */
+#user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border-light);
+    object-fit: cover;
+}
+
+/* Logout button */
+#logout-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logout-button:hover {
+    background-color: #c82333;
+    transform: scale(1.1);
+}
+
+/* Login Modal (Popup) Styling */
+
+/* The dark overlay behind the modal */
+#login-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The actual modal box */
+#login-modal-content {
+    background-color: white;
+    padding: 40px;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    position: relative;
+    width: 90%;
+    max-width: 350px;
+}
+
+#login-modal-content h3 {
+    margin: 0;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Google & GitHub login buttons inside the modal */
+#google-login-button, #github-login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-darker);
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#google-login-button {
+    margin-bottom: 15px;
+}
+
+#google-login-button:hover, #github-login-button:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#google-login-button .fa-google,
+#github-login-button .fa-github {
+    font-size: 1.2rem;
+}
+
+/* Close button for the modal */
+#close-modal-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+}
+
+#close-modal-button:hover {
+    color: var(--text-dark);
+}
