@@ -13,13 +13,13 @@
     <link rel="shortcut icon" href="favicon.ico"> 
 </head>
 <body>
-    <!-- Aapka poora header, main, aur footer code yahan hai, bilkul aache se -->
     <header class="site-header">
         <div class="container header-container">
             <a href="index.html" id="logoLink">
                 <img src="images/qodeo-header-icon.jpg" alt="Qodeo Icon" id="headerIcon"> 
                 <span id="logoText">Qodeo</span>
             </a>
+            <nav class="site-nav"></nav>
             <div id="login-container">
                 <button id="login-button">Login</button>
                 <div id="user-profile" class="hidden">
@@ -31,29 +31,43 @@
     </header>
 
     <main class="site-main">
-        <!-- Poora QR generator ka content... -->
+        <section class="qr-generator-section">
+            <!-- Your Full QR Generator Section Here -->
+            <div class="container">
+                <div class="qr-type-selector-grid">
+                    <button class="qr-type-button active" data-type="url" title="Website URL"><i class="fas fa-link"></i><span>URL</span></button>
+                    <!-- All other buttons... -->
+                    <button class="qr-type-button" data-type="event" title="Calendar Event"><i class="fas fa-calendar-alt"></i><span>Event</span></button>
+                </div>
+                <div class="input-area-wrapper">
+                     <!-- All your input groups like urlInputs, textInputs etc. here... -->
+                </div>
+                <button id="generateQrMainButton" class="button-generate"><i class="fas fa-qrcode"></i> Generate QR Code</button>
+            </div>
+        </section>
+        <section class="preview-and-options-section">
+             <!-- Your Full Preview & Options Section Here... -->
+        </section>
     </main>
 
     <footer class="site-footer">
-        <!-- Aapka footer... -->
+        <div class="container"><p>© <span id="year"></span> Qodeo. All Rights Reserved.</p></div>
     </footer>
     
     <div id="login-modal-overlay" class="hidden">
-        <!-- Aapka poora modal ka content... -->
+        <div id="login-modal-content">
+            <h3>Join Qodeo</h3>
+            <button id="google-login-button"><i class="fab fa-google"></i> Continue with Google</button>
+            <button id="github-login-button"><i class="fab fa-github"></i> Continue with GitHub</button>
+            <button id="close-modal-button">×</button>
+        </div>
     </div>
 
-
-    <!-- === SARE SCRIPTS YAHAN HAIN === -->
-    
-    <!-- YEH NAYI DEBUGGING TOOL KI SCRIPT HAI -->
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
-    
-    <!-- Aapki baaki ki saari scripts -->
+    <!-- === SAHI SCRIPT ORDER === -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js"></script> <!-- Your script file last -->
 </body>
 </html>
