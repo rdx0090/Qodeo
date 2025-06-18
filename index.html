@@ -38,6 +38,7 @@
                     <button class="qr-type-button" data-type="wifi" title="Wi-Fi Network"><i class="fas fa-wifi"></i><span>Wi-Fi</span></button>
                     <button class="qr-type-button" data-type="vcard" title="Contact Card (vCard)"><i class="fas fa-address-card"></i><span>vCard</span></button>
                     <button class="qr-type-button" data-type="location" title="Geolocation"><i class="fas fa-map-marker-alt"></i><span>Location</span></button>
+                    <button class="qr-type-button" data-type="event" title="Calendar Event"><i class="fas fa-calendar-alt"></i><span>Event</span></button>
                 </div>
 
                 <div class="input-area-wrapper">
@@ -48,7 +49,13 @@
                     <div id="emailInputs" class="qr-input-group"><input type="email" id="qrEmailTo" placeholder="To: recipient@example.com"><input type="text" id="qrEmailSubject" placeholder="Subject (Optional)"><textarea id="qrEmailBody" placeholder="Message (Optional)" rows="3"></textarea></div>
                     <div id="phoneInputs" class="qr-input-group"><input type="tel" id="qrPhoneNumber" placeholder="Phone Number (e.g., +1234567890)"></div>
                     <div id="smsInputs" class="qr-input-group"><input type="tel" id="qrSmsNumber" placeholder="Phone Number"><textarea id="qrSmsMessage" placeholder="SMS Message" rows="3"></textarea></div>
-                    <div id="wifiInputs" class="qr-input-group"><input type="text" id="qrWifiSsid" placeholder="Network Name (SSID)"><input type="password" id="qrWifiPassword" placeholder="Password (Optional)"><select id="qrWifiEncryption"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">No Encryption</option></select></div>
+                    
+                    <div id="wifiInputs" class="qr-input-group">
+                        <div class="control-group"><label for="qrWifiSsid">Network Name (SSID):</label><input type="text" id="qrWifiSsid" placeholder="MyHomeWiFi"></div>
+                        <div class="control-group"><label for="qrWifiPassword">Password (Optional):</label><input type="password" id="qrWifiPassword" placeholder="Password"></div>
+                        <div class="control-group"><label for="qrWifiEncryption">Encryption:</label><select id="qrWifiEncryption"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">No Encryption</option></select></div>
+                        <div class="control-group checkbox-group"><input type="checkbox" id="qrWifiHidden"><label for="qrWifiHidden">Hidden SSID</label></div>
+                    </div>
                     
                     <div id="vcardInputs" class="qr-input-group">
                         <div class="vcard-section-title">Basic Info</div>
@@ -67,7 +74,27 @@
                         <div class="control-group"><label for="vcardAdrCountry">Country:</label><input type="text" id="vcardAdrCountry" placeholder="USA"></div>
                         <div class="control-group"><label for="vcardNote">Note:</label><textarea id="vcardNote" placeholder="Additional notes" rows="2"></textarea></div>
                     </div>
-                    <div id="locationInputs" class="qr-input-group"><!-- Location inputs will go here --></div>
+
+                    <div id="locationInputs" class="qr-input-group">
+                        <div class="vcard-section-title">Geolocation</div>
+                        <div class="form-row">
+                            <div class="control-group half-width"><label for="qrLocationLatitude">Latitude:</label><input type="text" id="qrLocationLatitude" placeholder="e.g., 34.0522"></div>
+                            <div class="control-group half-width"><label for="qrLocationLongitude">Longitude:</label><input type="text" id="qrLocationLongitude" placeholder="e.g., -118.2437"></div>
+                        </div>
+                        <div class="control-group"><label for="qrLocationQuery">Optional Query (e.g., for search):</label><input type="text" id="qrLocationQuery" placeholder="e.g., Eiffel Tower"></div>
+                    </div>
+
+                    <div id="eventInputs" class="qr-input-group">
+                        <div class="vcard-section-title">Calendar Event</div>
+                        <div class="control-group"><label for="qrEventSummary">Event Summary/Title:</label><input type="text" id="qrEventSummary" placeholder="Meeting with Team"></div>
+                        <div class="control-group"><label for="qrEventLocation">Location:</label><input type="text" id="qrEventLocation" placeholder="Conference Room A"></div>
+                        <div class="form-row">
+                            <div class="control-group half-width"><label for="qrEventDtStart">Start Date & Time:</label><input type="datetime-local" id="qrEventDtStart"></div>
+                            <div class="control-group half-width"><label for="qrEventDtEnd">End Date & Time:</label><input type="datetime-local" id="qrEventDtEnd"></div>
+                        </div>
+                        <div class="control-group"><label for="qrEventDescription">Description (Optional):</label><textarea id="qrEventDescription" placeholder="Discuss project updates" rows="3"></textarea></div>
+                    </div>
+
                 </div>
 
                 <button id="generateQrMainButton" class="button-generate"><i class="fas fa-qrcode"></i> Generate QR Code</button>
@@ -77,8 +104,7 @@
             <div class="container">
                 <div class="preview-column">
                     <h3>Your QR Code</h3>
-                    <div id="qrCanvasContainer"><!-- QR will be rendered here --></div>
-                    <div id="qrDataDisplay" class="qr-data-text"><!-- Data will be shown here --></div>
+                    <div id="qrCanvasContainer"></div><div id="qrDataDisplay" class="qr-data-text"></div>
                     <div class="actions"><button id="downloadSvgButton">Download SVG</button><button id="downloadPngButton">Download PNG</button></div>
                 </div>
                 <div class="options-column">
@@ -94,9 +120,7 @@
     </main>
 
     <footer class="site-footer">
-        <div class="container">
-            <p>© <span id="year"></span> Qodeo. All Rights Reserved.</p>
-        </div>
+        <div class="container"><p>© <span id="year"></span> Qodeo. All Rights Reserved.</p></div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
