@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrWifiSsidInput = document.getElementById('qrWifiSsid');
     const qrWifiPasswordInput = document.getElementById('qrWifiPassword');
     const qrWifiEncryptionSelect = document.getElementById('qrWifiEncryption');
+    const qrWifiHiddenCheckbox = document.getElementById('qrWifiHidden'); // New for Wi-Fi
     // vCard Inputs
     const vcardFirstNameInput = document.getElementById('vcardFirstName');
     const vcardLastNameInput = document.getElementById('vcardLastName');
@@ -41,29 +42,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const vcardAdrPostcodeInput = document.getElementById('vcardAdrPostcode');
     const vcardAdrCountryInput = document.getElementById('vcardAdrCountry');
     const vcardNoteInput = document.getElementById('vcardNote');
+    // Location Inputs
+    const qrLocationLatitudeInput = document.getElementById('qrLocationLatitude');
+    const qrLocationLongitudeInput = document.getElementById('qrLocationLongitude');
+    const qrLocationQueryInput = document.getElementById('qrLocationQuery');
+    // Event Inputs
+    const qrEventSummaryInput = document.getElementById('qrEventSummary');
+    const qrEventLocationInput = document.getElementById('qrEventLocation');
+    const qrEventDtStartInput = document.getElementById('qrEventDtStart');
+    const qrEventDtEndInput = document.getElementById('qrEventDtEnd');
+    const qrEventDescriptionInput = document.getElementById('qrEventDescription');
 
     const qrTypeButtons = document.querySelectorAll('.qr-type-button');
     const qrInputGroups = document.querySelectorAll('.qr-input-group');
 
     if (!qrDataUrlInput || !generateQrMainButton || qrTypeButtons.length === 0 || !qrCanvasContainer || !inputAreaTitle) {
-        console.error("Core UI elements missing.");
-        if(generateQrMainButton) generateQrMainButton.disabled = true; return; 
+        console.error("Core UI elements missing."); if(generateQrMainButton) generateQrMainButton.disabled = true; return; 
     }
     
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let currentLogoBase64 = null;
     let currentQrType = 'url'; 
-    let currentQrDataInputs = { main: qrDataUrlInput };
+    // No need for currentQrDataInputs object anymore, we'll get values directly
 
     if (typeof QRCodeStyling === 'undefined') {
-        console.error("QRCodeStyling library not loaded.");
-        if(generateQrMainButton) generateQrMainButton.disabled = true; return;
+        console.error("QRCodeStyling library not loaded."); if(generateQrMainButton) generateQrMainButton.disabled = true; return;
     }
 
     const previewQrWidth = 250; const previewQrHeight = 250; 
     const qrCodeInstance = new QRCodeStyling({
         width: previewQrWidth, height: previewQrHeight, type: 'svg',
-        data: currentQrDataInputs.main.value || "https://qodeo.pro", image: '',
+        data: qrDataUrlInput.value || "https://qodeo.pro", image: '',
         dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
         backgroundOptions: { color: backgroundColorInput.value },
         imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
@@ -80,19 +89,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeInputGroup) activeInputGroup.classList.add('active');
         currentQrType = selectedType;
         let title = "Enter your Data";
-        switch (selectedType) {
-            case 'url': title = 'Enter your Website URL'; currentQrDataInputs = { main: qrDataUrlInput }; break;
-            case 'text': title = 'Enter your Text'; currentQrDataInputs = { main: qrDataTextInput }; break;
-            case 'email': title = 'Create an Email QR Code'; currentQrDataInputs = { to: qrEmailToInput, subject: qrEmailSubjectInput, body: qrEmailBodyInput }; break;
-            case 'phone': title = 'Enter Phone Number'; currentQrDataInputs = { main: qrPhoneNumberInput }; break;
-            case 'sms': title = 'Create an SMS QR Code'; currentQrDataInputs = { number: qrSmsNumberInput, message: qrSmsMessageInput }; break;
-            case 'wifi': title = 'Setup Wi-Fi Access QR'; currentQrDataInputs = { ssid: qrWifiSsidInput, password: qrWifiPasswordInput, encryption: qrWifiEncryptionSelect }; break;
-            case 'vcard': title = 'Create a Contact Card (vCard)'; currentQrDataInputs = { /* Will be set by specific vCard fields */ formattedName: vcardFormattedNameInput, firstName: vcardFirstNameInput, lastName: vcardLastNameInput, phoneMobile: vcardPhoneMobileInput, phoneWork: vcardPhoneWorkInput, email: vcardEmailInput, website: vcardWebsiteInput, organization: vcardOrganizationInput, jobTitle: vcardJobTitleInput, adrStreet: vcardAdrStreetInput, adrCity: vcardAdrCityInput, adrRegion: vcardAdrRegionInput, adrPostcode: vcardAdrPostcodeInput, adrCountry: vcardAdrCountryInput, note: vcardNoteInput }; break;
-            // Add cases for location etc.
-            default: title = 'Enter your Website URL'; currentQrDataInputs = { main: qrDataUrlInput };
+        // Set title based on selected type
+        const selectedButton = document.querySelector(`.qr-type-button[data-type="${selectedType}"]`);
+        if (selectedButton && selectedButton.querySelector('span')) {
+            title = `Enter details for ${selectedButton.querySelector('span').textContent} QR`;
+        } else { // Fallback titles
+            switch (selectedType) {
+                case 'url': title = 'Enter your Website URL'; break;
+                case 'text': title = 'Enter your Text'; break;
+                case 'email': title = 'Create an Email QR Code'; break;
+                case 'phone': title = 'Enter Phone Number'; break;
+                case 'sms': title = 'Create an SMS QR Code'; break;
+                case 'wifi': title = 'Setup Wi-Fi Access QR'; break;
+                case 'vcard': title = 'Create a Contact Card (vCard)'; break;
+                case 'location': title = 'Enter Geolocation Coordinates'; break;
+                case 'event': title = 'Create a Calendar Event QR'; break;
+                default: title = 'Enter your Data';
+            }
         }
         inputAreaTitle.textContent = title;
-        // generateQRCodePreview(); // Update QR with default/empty values for new type
+        generateQRCodePreview(); // Update QR with default/empty values for new type
     }
 
     qrTypeButtons.forEach(button => {
@@ -102,43 +118,44 @@ document.addEventListener('DOMContentLoaded', () => {
     function getQrDataStringForInstance() {
         let dataString = "";
         switch (currentQrType) {
-            case 'url': dataString = currentQrDataInputs.main.value || "https://qodeo.pro"; break;
-            case 'text': dataString = currentQrDataInputs.main.value || "Qodeo QR Text"; break;
+            case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
+            case 'text': dataString = qrDataTextInput.value || "Qodeo QR Text"; break;
             case 'email':
-                const to = currentQrDataInputs.to.value;
-                if (!to && !currentQrDataInputs.subject.value && !currentQrDataInputs.body.value) { dataString = "mailto:info@example.com?subject=Inquiry&body=Hello"; break; } // Default if all empty
-                if (!to) { alert("Please enter 'To Email Address' for Email QR."); return null; }
+                const to = qrEmailToInput.value;
+                if (!to && !qrEmailSubjectInput.value && !qrEmailBodyInput.value) { dataString = "mailto:info@example.com?subject=Inquiry&body=Hello"; break; }
+                if (!to) { alert("Please enter 'To Email Address'."); return null; }
                 dataString = `mailto:${encodeURIComponent(to)}`;
-                if (currentQrDataInputs.subject.value) dataString += `?subject=${encodeURIComponent(currentQrDataInputs.subject.value)}`;
-                if (currentQrDataInputs.body.value) dataString += (currentQrDataInputs.subject.value ? '&' : '?') + `body=${encodeURIComponent(currentQrDataInputs.body.value)}`;
+                if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`;
+                if (qrEmailBodyInput.value) dataString += (qrEmailSubjectInput.value ? '&' : '?') + `body=${encodeURIComponent(qrEmailBodyInput.value)}`;
                 break;
             case 'phone':
-                const phoneNum = currentQrDataInputs.main.value;
-                if (!phoneNum) { alert("Please enter a Phone Number for Phone QR."); return null; }
+                const phoneNum = qrPhoneNumberInput.value;
+                if (!phoneNum) { alert("Please enter a Phone Number."); return null; }
                 dataString = `tel:${phoneNum}`; break;
             case 'sms':
-                const smsNum = currentQrDataInputs.number.value;
-                if (!smsNum && !currentQrDataInputs.message.value) { dataString = "smsto:12345?body=Hello"; break; }
-                if (!smsNum) { alert("Please enter Phone Number for SMS QR."); return null; }
+                const smsNum = qrSmsNumberInput.value;
+                if (!smsNum && !qrSmsMessageInput.value) { dataString = "smsto:12345?body=Hello"; break; }
+                if (!smsNum) { alert("Please enter Phone Number for SMS."); return null; }
                 dataString = `smsto:${smsNum}`;
-                if (currentQrDataInputs.message.value) dataString += `:${encodeURIComponent(currentQrDataInputs.message.value)}`;
+                if (qrSmsMessageInput.value) dataString += `:${encodeURIComponent(qrSmsMessageInput.value)}`;
                 break;
             case 'wifi':
-                const ssid = currentQrDataInputs.ssid.value;
-                const password = currentQrDataInputs.password.value;
-                const encryption = currentQrDataInputs.encryption.value;
-                if (!ssid) { alert("Please enter Network Name (SSID) for Wi-Fi QR."); return null; }
-                dataString = `WIFI:T:${encryption};S:${ssid};P:${password};;`; break;
+                const ssid = qrWifiSsidInput.value;
+                const password = qrWifiPasswordInput.value;
+                const encryption = qrWifiEncryptionSelect.value;
+                const hidden = qrWifiHiddenCheckbox.checked ? 'true' : 'false';
+                if (!ssid) { alert("Please enter Network Name (SSID)."); return null; }
+                dataString = `WIFI:S:${ssid};T:${encryption};P:${password};H:${hidden};;`; break;
             case 'vcard':
-                const fn = vcardFormattedNameInput.value; // Formatted Name is usually N and FN
+                const fn = vcardFormattedNameInput.value; 
                 if (!fn) { alert("Please enter 'Display Name' for vCard."); return null; }
                 dataString = "BEGIN:VCARD\nVERSION:3.0\n";
                 dataString += `N:${vcardLastNameInput.value || ''};${vcardFirstNameInput.value || ''}\n`;
                 dataString += `FN:${fn}\n`;
                 if (vcardOrganizationInput.value) dataString += `ORG:${vcardOrganizationInput.value}\n`;
                 if (vcardJobTitleInput.value) dataString += `TITLE:${vcardJobTitleInput.value}\n`;
-                if (vcardPhoneMobileInput.value) dataString += `TEL;TYPE=CELL:${vcardPhoneMobileInput.value}\n`;
-                if (vcardPhoneWorkInput.value) dataString += `TEL;TYPE=WORK:${vcardPhoneWorkInput.value}\n`;
+                if (vcardPhoneMobileInput.value) dataString += `TEL;TYPE=CELL,VOICE:${vcardPhoneMobileInput.value}\n`;
+                if (vcardPhoneWorkInput.value) dataString += `TEL;TYPE=WORK,VOICE:${vcardPhoneWorkInput.value}\n`;
                 if (vcardEmailInput.value) dataString += `EMAIL:${vcardEmailInput.value}\n`;
                 if (vcardWebsiteInput.value) dataString += `URL:${vcardWebsiteInput.value}\n`;
                 if (vcardAdrStreetInput.value || vcardAdrCityInput.value || vcardAdrRegionInput.value || vcardAdrPostcodeInput.value || vcardAdrCountryInput.value) {
@@ -146,6 +163,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (vcardNoteInput.value) dataString += `NOTE:${vcardNoteInput.value}\n`;
                 dataString += "END:VCARD";
+                break;
+            case 'location':
+                const lat = qrLocationLatitudeInput.value;
+                const lon = qrLocationLongitudeInput.value;
+                const query = qrLocationQueryInput.value;
+                if (!lat || !lon) { alert("Please enter Latitude and Longitude."); return null; }
+                dataString = `geo:${lat},${lon}`;
+                if (query) dataString += `?q=${encodeURIComponent(query)}`;
+                break;
+            case 'event':
+                const summary = qrEventSummaryInput.value;
+                const dtstart = qrEventDtStartInput.value;
+                const dtend = qrEventDtEndInput.value;
+                if (!summary || !dtstart || !dtend) { alert("Please fill Event Summary, Start, and End Date/Time."); return null; }
+                // Convert yyyy-MM-ddThh:mm to yyyyMMddThhmmssZ (UTC) or without Z for local
+                // For simplicity, we'll assume local time. Proper UTC conversion is more complex.
+                const formatDateTime = (datetime) => datetime ? datetime.replace(/[-:]/g, '').replace('T', 'T') + '00' : '';
+                dataString = "BEGIN:VEVENT\n";
+                dataString += `SUMMARY:${summary}\n`;
+                dataString += `DTSTART:${formatDateTime(dtstart)}\n`;
+                dataString += `DTEND:${formatDateTime(dtend)}\n`;
+                if (qrEventLocationInput.value) dataString += `LOCATION:${qrEventLocationInput.value}\n`;
+                if (qrEventDescriptionInput.value) dataString += `DESCRIPTION:${qrEventDescriptionInput.value}\n`;
+                dataString += "END:VEVENT";
                 break;
             default: dataString = "https://qodeo.pro";
         }
