@@ -1,25 +1,16 @@
-// === Firebase SDKs Ko Import Karna ===
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-
-// === FIREBASE CONFIG ===
+// === Firebase Ko Initialize Karna (Compatibility Mode for Simplicity) ===
 // !!! YAHAN APNA FIREBASE CONFIG PASTE KAREIN !!!
 const firebaseConfig = {
-  apiKey: "AIza...", // <-- PASTE YOUR KEY
-  authDomain: "qodeo-qr.firebaseapp.com", // <-- PASTE YOURS
-  projectId: "qodeo-qr", // <-- PASTE YOURS
-  storageBucket: "qodeo-qr.appspot.com", // <-- PASTE YOURS
-  messagingSenderId: "...", // <-- PASTE YOURS
-  appId: "..." // <-- PASTE YOURS
+    apiKey: "AIzaSy...YOUR_KEY...",
+    authDomain: "qodeo-qr.firebaseapp.com",
+    projectId: "qodeo-qr",
+    storageBucket: "qodeo-qr.appspot.com",
+    messagingSenderId: "...",
+    appId: "...",
 };
-
-
-// === Firebase Ko Initialize Karna ===
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 
 // === Main Application Code ===
@@ -35,107 +26,61 @@ document.addEventListener('DOMContentLoaded', () => {
     const googleLoginBtn = document.getElementById('googleLoginBtn');
     const githubLoginBtn = document.getElementById('githubLoginBtn');
 
-
-    // --- AAPKE PURANE DOM ELEMENTS (QR Generator ke liye) ---
-    const dotColorInput = document.getElementById('dotColor');
-    const backgroundColorInput = document.getElementById('backgroundColor');
-    // ... aapke baaki saare elements jaise qrDataUrlInput etc.
-    
-
     // === NAYA CODE: AUTHENTICATION (LOGIN/LOGOUT) LOGIC ===
-
-    // -- Modal (Popup) ko Kholna/Band Karna --
     const openLoginModal = () => loginModal.classList.add('visible');
     const closeLoginModal = () => loginModal.classList.remove('visible');
-    
     loginBtn.addEventListener('click', openLoginModal);
     closeModalBtn.addEventListener('click', closeLoginModal);
-    loginModal.addEventListener('click', (e) => {
-        if (e.target === loginModal) { // Sirf overlay par click hone par band karein
-            closeLoginModal();
-        }
-    });
+    loginModal.addEventListener('click', (e) => { if (e.target === loginModal) closeLoginModal(); });
 
-    // -- Google se Login --
-    const signInWithGoogle = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            const result = await signInWithPopup(auth, provider);
+    const signInWithGoogle = () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).then(result => {
             console.log("Logged in with Google:", result.user);
             closeLoginModal();
-        } catch (error) {
-            console.error("Google login error:", error);
-        }
+        }).catch(error => console.error("Google login error:", error));
     };
     googleLoginBtn.addEventListener('click', signInWithGoogle);
 
-    // -- GitHub se Login --
-    const signInWithGitHub = async () => {
-        const provider = new GithubAuthProvider();
-        try {
-            const result = await signInWithPopup(auth, provider);
+    const signInWithGitHub = () => {
+        const provider = new firebase.auth.GithubAuthProvider();
+        auth.signInWithPopup(provider).then(result => {
             console.log("Logged in with GitHub:", result.user);
             closeLoginModal();
-        } catch (error) {
-            console.error("GitHub login error:", error);
-        }
+        }).catch(error => console.error("GitHub login error:", error));
     };
     githubLoginBtn.addEventListener('click', signInWithGitHub);
     
-    // -- Logout --
-    logoutBtn.addEventListener('click', () => {
-        signOut(auth).then(() => {
-            console.log("User logged out");
-        }).catch((error) => {
-            console.error("Logout Error:", error);
-        });
-    });
+    logoutBtn.addEventListener('click', () => auth.signOut());
 
-
-    // --- AUTH STATE OBSERVER (Sabse Zaroori Hissa) ---
-    // Yeh check karta hai ki user login hai ya nahi, aur uske hisaab se UI badalta hai.
-    onAuthStateChanged(auth, user => {
+    auth.onAuthStateChanged(user => {
         if (user) {
-            // User is signed in
             loginBtn.classList.add('hidden');
             profileInfo.classList.remove('hidden');
-            userProfilePic.src = user.photoURL || 'default-profile.png'; // Agar photo nahi hai toh default
-
-            // User ka data database mein save karna
-            saveUserToDb(user);
-
+            userProfilePic.src = user.photoURL || 'images/default-profile.png'; // Provide a default image
+            const userRef = db.collection("users").doc(user.uid);
+            userRef.set({
+                displayName: user.displayName, email: user.email, photoURL: user.photoURL, lastLogin: new Date()
+            }, { merge: true }).catch(error => console.error("Error saving user data:", error));
         } else {
-            // User is signed out
             loginBtn.classList.remove('hidden');
             profileInfo.classList.add('hidden');
             userProfilePic.src = '';
         }
     });
 
-    // -- Helper function to save user data to Firestore --
-    const saveUserToDb = async (user) => {
-        const userRef = doc(db, "users", user.uid); // user.uid ek unique ID hai
-        try {
-            await setDoc(userRef, {
-                displayName: user.displayName,
-                email: user.email,
-                photoURL: user.photoURL,
-                lastLogin: new Date()
-            }, { merge: true }); // merge: true se purana data delete nahi hota
-            console.log("User data saved to Firestore");
-        } catch (error) {
-            console.error("Error saving user data:", error);
-        }
-    };
-
     // =============================================================
     // === AAPKA PURANA QR CODE GENERATOR KA CODE NEECHE HAI      ===
-    // === YEH BILKUL BHI CHANGE NAHI KIYA GAYA HAI              ===
     // =============================================================
-    
-    // Aapka poora purana script.js ka code (variables, functions, event listeners)
-    // yahan se shuru hota hai...
-    
-    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-    // ...and so on. The rest of your script goes here.
+
+    // --- PURANE DOM ELEMENTS ---
+    const qrDataUrlInput = document.getElementById('qrDataUrl');
+    // ... Saare purane elements yahan hain ...
+
+    // --- PURANI FUNCTIONS ---
+    const getQrDataStringForInstance = () => { /* ... Aapka poora function ... */ };
+    const generateQRCodePreview = async () => { /* ... Aapka poora function ... */ };
+
+    // --- PURANE EVENT LISTENERS ---
+    // ... Aapke saare purane event listeners yahan hain ...
 });
