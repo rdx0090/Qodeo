@@ -23,10 +23,25 @@
             <nav class="site-nav">
                 <!-- Navigation links -->
             </nav>
+            
+            <!-- === YAHAN NAYA CODE ADD HUA HAI === -->
+            <div id="login-container">
+                <!-- Shuru mein yeh Login button dikhega -->
+                <button id="login-button">Login</button>
+                
+                <!-- Login ke baad, yeh hissa dikhega -->
+                <div id="user-profile" class="hidden">
+                    <img id="user-avatar" src="" alt="User Avatar">
+                    <button id="logout-button">Logout</button>
+                </div>
+            </div>
+            <!-- === NAYA CODE YAHAN TAK === -->
+
         </div>
     </header>
 
     <main class="site-main">
+        <!-- Aapka poora QR generator ka content... bilkul untouched -->
         <section class="qr-generator-section">
             <div class="container">
                 <div class="qr-type-selector-grid">
@@ -121,6 +136,19 @@
     <footer class="site-footer">
         <div class="container"><p>© <span id="year"></span> Qodeo. All Rights Reserved.</p></div>
     </footer>
+    
+    <!-- === YAHAN NAYA LOGIN POPUP (MODAL) ADD HUA HAI === -->
+    <div id="login-modal-overlay" class="hidden">
+        <div id="login-modal-content">
+            <h3>Join Qodeo</h3>
+            <button id="google-login-button"><i class="fab fa-google"></i> Continue with Google</button>
+            <button id="github-login-button"><i class="fab fa-github"></i> Continue with GitHub</button>
+            <button id="close-modal-button">×</button>
+        </div>
+    </div>
+    <!-- === NAYA CODE YAHAN TAK === -->
+
+    <!-- === YAHAN FIREBASE SCRIPT TAGS ADD HONGE === -->
 
     <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
     <script src="script.js"></script>
