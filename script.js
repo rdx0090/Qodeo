@@ -1,21 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM Elements ---
-    // Common Customization Inputs
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
     const dotStyleSelect = document.getElementById('dotStyle');
     const logoUploadInput = document.getElementById('logoUpload');
     const logoPreview = document.getElementById('logoPreview');
-    
-    // Action Buttons & Display Areas
-    const generateQrMainButton = document.getElementById('generateQrMainButton'); // Changed from updateQrButton
+    const generateQrMainButton = document.getElementById('generateQrMainButton');
     const downloadSvgButton = document.getElementById('downloadSvgButton');
     const downloadPngButton = document.getElementById('downloadPngButton');
     const qrCanvasContainer = document.getElementById('qrCanvasContainer');
     const qrDataDisplay = document.getElementById('qrDataDisplay'); 
     const yearSpan = document.getElementById('year');
     const inputAreaTitle = document.getElementById('inputAreaTitle');
-
 
     // QR Type specific input fields
     const qrDataUrlInput = document.getElementById('qrDataUrl');
@@ -29,42 +25,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrWifiSsidInput = document.getElementById('qrWifiSsid');
     const qrWifiPasswordInput = document.getElementById('qrWifiPassword');
     const qrWifiEncryptionSelect = document.getElementById('qrWifiEncryption');
-    // Add vCard and Location inputs when implemented
+    // vCard Inputs
+    const vcardFirstNameInput = document.getElementById('vcardFirstName');
+    const vcardLastNameInput = document.getElementById('vcardLastName');
+    const vcardFormattedNameInput = document.getElementById('vcardFormattedName');
+    const vcardPhoneMobileInput = document.getElementById('vcardPhoneMobile');
+    const vcardPhoneWorkInput = document.getElementById('vcardPhoneWork');
+    const vcardEmailInput = document.getElementById('vcardEmail');
+    const vcardWebsiteInput = document.getElementById('vcardWebsite');
+    const vcardOrganizationInput = document.getElementById('vcardOrganization');
+    const vcardJobTitleInput = document.getElementById('vcardJobTitle');
+    const vcardAdrStreetInput = document.getElementById('vcardAdrStreet');
+    const vcardAdrCityInput = document.getElementById('vcardAdrCity');
+    const vcardAdrRegionInput = document.getElementById('vcardAdrRegion');
+    const vcardAdrPostcodeInput = document.getElementById('vcardAdrPostcode');
+    const vcardAdrCountryInput = document.getElementById('vcardAdrCountry');
+    const vcardNoteInput = document.getElementById('vcardNote');
 
-    // QR Type Selector Elements
     const qrTypeButtons = document.querySelectorAll('.qr-type-button');
     const qrInputGroups = document.querySelectorAll('.qr-input-group');
 
-    // --- Initial Checks & Setup ---
     if (!qrDataUrlInput || !generateQrMainButton || qrTypeButtons.length === 0 || !qrCanvasContainer || !inputAreaTitle) {
-        console.error("Critical UI elements for Qodeo are missing. App cannot initialize.");
-        if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red; font-size: small;'>Error: Core UI elements missing. Cannot run.</p>";
-        if(generateQrMainButton) generateQrMainButton.disabled = true;
-        return; 
+        console.error("Core UI elements missing.");
+        if(generateQrMainButton) generateQrMainButton.disabled = true; return; 
     }
     
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let currentLogoBase64 = null;
-    let currentQrType = 'url'; // Default active QR type
-    let currentQrDataInputs = { // Object to hold references to current active inputs
-        main: qrDataUrlInput // Default
-    };
-
+    let currentQrType = 'url'; 
+    let currentQrDataInputs = { main: qrDataUrlInput };
 
     if (typeof QRCodeStyling === 'undefined') {
         console.error("QRCodeStyling library not loaded.");
-        if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red; font-size:small;'>Error: QR Library missing.</p>";
-        if(generateQrMainButton) generateQrMainButton.disabled = true; 
-        return;
+        if(generateQrMainButton) generateQrMainButton.disabled = true; return;
     }
 
-    const previewQrWidth = 250; // Size for the preview canvas
-    const previewQrHeight = 250; 
-
+    const previewQrWidth = 250; const previewQrHeight = 250; 
     const qrCodeInstance = new QRCodeStyling({
         width: previewQrWidth, height: previewQrHeight, type: 'svg',
-        data: qrDataUrlInput.value || "https://qodeo.pro", // Initial data from default active tab
-        image: '',
+        data: currentQrDataInputs.main.value || "https://qodeo.pro", image: '',
         dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
         backgroundOptions: { color: backgroundColorInput.value },
         imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
@@ -72,97 +71,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     qrCodeInstance.append(qrCanvasContainer);
 
-    // --- Function to switch QR type and display relevant inputs ---
     function switchQrType(selectedType) {
         qrTypeButtons.forEach(btn => btn.classList.remove('active'));
         qrInputGroups.forEach(group => group.classList.remove('active'));
-
         const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedType}"]`);
         const activeInputGroup = document.getElementById(`${selectedType}Inputs`);
-
         if (activeButton) activeButton.classList.add('active');
         if (activeInputGroup) activeInputGroup.classList.add('active');
-
         currentQrType = selectedType;
-
-        // Update title and set currentQrDataInputs references
+        let title = "Enter your Data";
         switch (selectedType) {
-            case 'url':
-                inputAreaTitle.textContent = 'Enter your Website URL';
-                currentQrDataInputs = { main: qrDataUrlInput };
-                break;
-            case 'text':
-                inputAreaTitle.textContent = 'Enter your Text';
-                currentQrDataInputs = { main: qrDataTextInput };
-                break;
-            case 'email':
-                inputAreaTitle.textContent = 'Create an Email QR Code';
-                currentQrDataInputs = { 
-                    to: qrEmailToInput, 
-                    subject: qrEmailSubjectInput, 
-                    body: qrEmailBodyInput 
-                };
-                break;
-            case 'phone':
-                inputAreaTitle.textContent = 'Enter Phone Number';
-                currentQrDataInputs = { main: qrPhoneNumberInput };
-                break;
-            case 'sms':
-                inputAreaTitle.textContent = 'Create an SMS QR Code';
-                currentQrDataInputs = { 
-                    number: qrSmsNumberInput, 
-                    message: qrSmsMessageInput 
-                };
-                break;
-            case 'wifi':
-                inputAreaTitle.textContent = 'Setup Wi-Fi Access QR';
-                currentQrDataInputs = { 
-                    ssid: qrWifiSsidInput, 
-                    password: qrWifiPasswordInput, 
-                    encryption: qrWifiEncryptionSelect 
-                };
-                break;
-            // Add cases for vcard, location etc.
-            default:
-                inputAreaTitle.textContent = 'Enter your Data';
-                currentQrDataInputs = { main: qrDataUrlInput }; // Fallback
+            case 'url': title = 'Enter your Website URL'; currentQrDataInputs = { main: qrDataUrlInput }; break;
+            case 'text': title = 'Enter your Text'; currentQrDataInputs = { main: qrDataTextInput }; break;
+            case 'email': title = 'Create an Email QR Code'; currentQrDataInputs = { to: qrEmailToInput, subject: qrEmailSubjectInput, body: qrEmailBodyInput }; break;
+            case 'phone': title = 'Enter Phone Number'; currentQrDataInputs = { main: qrPhoneNumberInput }; break;
+            case 'sms': title = 'Create an SMS QR Code'; currentQrDataInputs = { number: qrSmsNumberInput, message: qrSmsMessageInput }; break;
+            case 'wifi': title = 'Setup Wi-Fi Access QR'; currentQrDataInputs = { ssid: qrWifiSsidInput, password: qrWifiPasswordInput, encryption: qrWifiEncryptionSelect }; break;
+            case 'vcard': title = 'Create a Contact Card (vCard)'; currentQrDataInputs = { /* Will be set by specific vCard fields */ formattedName: vcardFormattedNameInput, firstName: vcardFirstNameInput, lastName: vcardLastNameInput, phoneMobile: vcardPhoneMobileInput, phoneWork: vcardPhoneWorkInput, email: vcardEmailInput, website: vcardWebsiteInput, organization: vcardOrganizationInput, jobTitle: vcardJobTitleInput, adrStreet: vcardAdrStreetInput, adrCity: vcardAdrCityInput, adrRegion: vcardAdrRegionInput, adrPostcode: vcardAdrPostcodeInput, adrCountry: vcardAdrCountryInput, note: vcardNoteInput }; break;
+            // Add cases for location etc.
+            default: title = 'Enter your Website URL'; currentQrDataInputs = { main: qrDataUrlInput };
         }
-        // updateQRCodePreview(); // Generate QR for the new type with default/empty values
+        inputAreaTitle.textContent = title;
+        // generateQRCodePreview(); // Update QR with default/empty values for new type
     }
 
-    // --- Event Listeners for QR Type Buttons ---
     qrTypeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            switchQrType(button.dataset.type);
-        });
+        button.addEventListener('click', () => { switchQrType(button.dataset.type); });
     });
     
-    // --- Function to prepare data string based on active type ---
     function getQrDataStringForInstance() {
         let dataString = "";
-        // Use currentQrDataInputs to get values
         switch (currentQrType) {
-            case 'url':
-                dataString = currentQrDataInputs.main.value || "https://qodeo.pro";
-                break;
-            case 'text':
-                dataString = currentQrDataInputs.main.value || "Qodeo QR Text";
-                break;
+            case 'url': dataString = currentQrDataInputs.main.value || "https://qodeo.pro"; break;
+            case 'text': dataString = currentQrDataInputs.main.value || "Qodeo QR Text"; break;
             case 'email':
                 const to = currentQrDataInputs.to.value;
-                if (!to) { alert("Please enter 'To Email Address'"); return null; }
+                if (!to && !currentQrDataInputs.subject.value && !currentQrDataInputs.body.value) { dataString = "mailto:info@example.com?subject=Inquiry&body=Hello"; break; } // Default if all empty
+                if (!to) { alert("Please enter 'To Email Address' for Email QR."); return null; }
                 dataString = `mailto:${encodeURIComponent(to)}`;
                 if (currentQrDataInputs.subject.value) dataString += `?subject=${encodeURIComponent(currentQrDataInputs.subject.value)}`;
                 if (currentQrDataInputs.body.value) dataString += (currentQrDataInputs.subject.value ? '&' : '?') + `body=${encodeURIComponent(currentQrDataInputs.body.value)}`;
                 break;
             case 'phone':
                 const phoneNum = currentQrDataInputs.main.value;
-                if (!phoneNum) { alert("Please enter a Phone Number"); return null; }
-                dataString = `tel:${phoneNum}`;
-                break;
+                if (!phoneNum) { alert("Please enter a Phone Number for Phone QR."); return null; }
+                dataString = `tel:${phoneNum}`; break;
             case 'sms':
                 const smsNum = currentQrDataInputs.number.value;
-                if (!smsNum) { alert("Please enter Phone Number for SMS"); return null; }
+                if (!smsNum && !currentQrDataInputs.message.value) { dataString = "smsto:12345?body=Hello"; break; }
+                if (!smsNum) { alert("Please enter Phone Number for SMS QR."); return null; }
                 dataString = `smsto:${smsNum}`;
                 if (currentQrDataInputs.message.value) dataString += `:${encodeURIComponent(currentQrDataInputs.message.value)}`;
                 break;
@@ -170,40 +127,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 const ssid = currentQrDataInputs.ssid.value;
                 const password = currentQrDataInputs.password.value;
                 const encryption = currentQrDataInputs.encryption.value;
-                if (!ssid) { alert("Please enter Network Name (SSID)"); return null; }
-                dataString = `WIFI:T:${encryption};S:${ssid};P:${password};;`;
+                if (!ssid) { alert("Please enter Network Name (SSID) for Wi-Fi QR."); return null; }
+                dataString = `WIFI:T:${encryption};S:${ssid};P:${password};;`; break;
+            case 'vcard':
+                const fn = vcardFormattedNameInput.value; // Formatted Name is usually N and FN
+                if (!fn) { alert("Please enter 'Display Name' for vCard."); return null; }
+                dataString = "BEGIN:VCARD\nVERSION:3.0\n";
+                dataString += `N:${vcardLastNameInput.value || ''};${vcardFirstNameInput.value || ''}\n`;
+                dataString += `FN:${fn}\n`;
+                if (vcardOrganizationInput.value) dataString += `ORG:${vcardOrganizationInput.value}\n`;
+                if (vcardJobTitleInput.value) dataString += `TITLE:${vcardJobTitleInput.value}\n`;
+                if (vcardPhoneMobileInput.value) dataString += `TEL;TYPE=CELL:${vcardPhoneMobileInput.value}\n`;
+                if (vcardPhoneWorkInput.value) dataString += `TEL;TYPE=WORK:${vcardPhoneWorkInput.value}\n`;
+                if (vcardEmailInput.value) dataString += `EMAIL:${vcardEmailInput.value}\n`;
+                if (vcardWebsiteInput.value) dataString += `URL:${vcardWebsiteInput.value}\n`;
+                if (vcardAdrStreetInput.value || vcardAdrCityInput.value || vcardAdrRegionInput.value || vcardAdrPostcodeInput.value || vcardAdrCountryInput.value) {
+                    dataString += `ADR;TYPE=HOME:;;${vcardAdrStreetInput.value || ''};${vcardAdrCityInput.value || ''};${vcardAdrRegionInput.value || ''};${vcardAdrPostcodeInput.value || ''};${vcardAdrCountryInput.value || ''}\n`;
+                }
+                if (vcardNoteInput.value) dataString += `NOTE:${vcardNoteInput.value}\n`;
+                dataString += "END:VCARD";
                 break;
-            // Add vCard and location later
-            default:
-                dataString = "https://qodeo.pro"; // Fallback
+            default: dataString = "https://qodeo.pro";
         }
         return dataString;
     }
 
-    // --- Update QR Code Function (Now called generateQRCodePreview) ---
     async function generateQRCodePreview() {
         if (!generateQrMainButton) return; 
-
         const dataForQr = getQrDataStringForInstance();
-        if (dataForQr === null) { // If validation failed in getQrDataStringForInstance
-            generateQrMainButton.disabled = false;
-            generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
+        if (dataForQr === null) {
+            if(generateQrMainButton) {generateQrMainButton.disabled = false; generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';}
             return;
         }
-
-        generateQrMainButton.disabled = true;
-        generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-        
+        generateQrMainButton.disabled = true; generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
         const options = {
-            data: dataForQr, 
-            width: previewQrWidth, height: previewQrHeight,
-            image: currentLogoBase64 || '',
+            data: dataForQr, width: previewQrWidth, height: previewQrHeight, image: currentLogoBase64 || '',
             dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
             backgroundOptions: { color: backgroundColorInput.value },
             imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
             qrOptions: { errorCorrectionLevel: 'H' }
         };
-
         try {
             await new Promise(resolve => setTimeout(resolve, 50)); 
             qrCodeInstance.update(options);
@@ -213,92 +176,51 @@ document.addEventListener('DOMContentLoaded', () => {
             if(qrCanvasContainer) qrCanvasContainer.innerHTML = "<p style='color:red; font-size:small;'>Error updating QR.</p>";
             if (qrDataDisplay) qrDataDisplay.textContent = 'Error!'; 
         } finally {
-            generateQrMainButton.disabled = false;
-            generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
+            if(generateQrMainButton) {generateQrMainButton.disabled = false; generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';}
         }
     }
 
-    // --- Event Listeners for Controls ---
     if (logoUploadInput) { 
         logoUploadInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentLogoBase64 = e.target.result;
-                    if (logoPreview) { logoPreview.src = e.target.result; logoPreview.style.display = 'block'; }
-                    // generateQRCodePreview(); // Optional: Auto-update on logo change
-                };
+                reader.onload = function(e) { currentLogoBase64 = e.target.result; if (logoPreview) { logoPreview.src = e.target.result; logoPreview.style.display = 'block'; }};
                 reader.onerror = function() { console.error("Error reading file."); alert("Could not load logo."); };
                 reader.readAsDataURL(file);
-            } else {
-                currentLogoBase64 = null;
-                if (logoPreview) { logoPreview.src = "#"; logoPreview.style.display = 'none'; }
-                // generateQRCodePreview(); // Optional: Auto-update if logo is cleared
-            }
+            } else { currentLogoBase64 = null; if (logoPreview) { logoPreview.src = "#"; logoPreview.style.display = 'none'; }}
         });
     }
-    // Listener for the main generate button
     generateQrMainButton.addEventListener('click', generateQRCodePreview);
-
-    // Add listeners to common customization options to auto-update preview
     [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
         if (input) input.addEventListener('change', generateQRCodePreview);
     });
 
-
-    // --- Download Handlers ---
     if (downloadSvgButton) { 
         downloadSvgButton.addEventListener('click', () => {
-            const dataForDownload = getQrDataStringForInstance();
-            if (dataForDownload === null) return;
-            // Update instance with latest customization before SVG download
-            const currentPreviewOptions = {
-                data: dataForDownload,
-                dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
-                backgroundOptions: { color: backgroundColorInput.value },
-                image: currentLogoBase64 || '',
-                imageOptions: qrCodeInstance._options.imageOptions, // Keep existing imageOptions
-                qrOptions: qrCodeInstance._options.qrOptions       // Keep existing qrOptions
-            };
+            const dataForDownload = getQrDataStringForInstance(); if (dataForDownload === null) return;
+            const currentPreviewOptions = { data: dataForDownload, dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value }, backgroundOptions: { color: backgroundColorInput.value }, image: currentLogoBase64 || '', imageOptions: qrCodeInstance._options.imageOptions, qrOptions: qrCodeInstance._options.qrOptions };
             qrCodeInstance.update(currentPreviewOptions);
             qrCodeInstance.download({ name: 'qodeo-qr', extension: 'svg' });
         });
     }
     if (downloadPngButton) { 
         downloadPngButton.addEventListener('click', async () => { 
-            const dataForDownload = getQrDataStringForInstance();
-            if (dataForDownload === null) return;
-
+            const dataForDownload = getQrDataStringForInstance(); if (dataForDownload === null) return;
             const highResWidth = 1024; const highResHeight = 1024; 
-            
-            // Disable buttons
             if (generateQrMainButton) { generateQrMainButton.disabled = true; generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing HD...'; }
-            if (downloadSvgButton) downloadSvgButton.disabled = true;
-            if (downloadPngButton) downloadPngButton.disabled = true;
-
+            if (downloadSvgButton) downloadSvgButton.disabled = true; if (downloadPngButton) downloadPngButton.disabled = true;
             try {
                 const currentOptions = qrCodeInstance._options;
-                const highResOptions = {
-                    ...currentOptions, width: highResWidth, height: highResHeight, type: 'png', 
-                    data: dataForDownload, image: currentLogoBase64 || '', 
-                    dotsOptions: { ...currentOptions.dotsOptions, color: dotColorInput.value, type: dotStyleSelect.value },
-                    backgroundOptions: { ...currentOptions.backgroundOptions, color: backgroundColorInput.value },
-                    imageOptions: { ...currentOptions.imageOptions, hideBackgroundDots: true } // Ensure all imageOptions are passed
-                };
+                const highResOptions = { ...currentOptions, width: highResWidth, height: highResHeight, type: 'png', data: dataForDownload, image: currentLogoBase64 || '', dotsOptions: { ...currentOptions.dotsOptions, color: dotColorInput.value, type: dotStyleSelect.value }, backgroundOptions: { ...currentOptions.backgroundOptions, color: backgroundColorInput.value }, imageOptions: { ...currentOptions.imageOptions, hideBackgroundDots: true } };
                 const tempQrInstance = new QRCodeStyling(highResOptions);
                 await tempQrInstance.download({ name: `qodeo-qr-${highResWidth}x${highResHeight}`, extension: 'png' });
-            } catch (error) {
-                console.error("Error during HD PNG download:", error); alert("Could not generate HD PNG.");
+            } catch (error) { console.error("Error during HD PNG download:", error); alert("Could not generate HD PNG.");
             } finally {
-                // Re-enable buttons
                 if (generateQrMainButton) { generateQrMainButton.disabled = false; generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code'; }
-                if (downloadSvgButton) downloadSvgButton.disabled = false;
-                if (downloadPngButton) downloadPngButton.disabled = false;
+                if (downloadSvgButton) downloadSvgButton.disabled = false; if (downloadPngButton) downloadPngButton.disabled = false;
             }
         });
     }
-
-    // --- Initialize View ---
-    switchQrType(currentQrType); // Set initial active tab and QR code
+    switchQrType(currentQrType); 
 });
