@@ -34,7 +34,6 @@
     <main class="site-main">
         <section class="qr-generator-section">
             <div class="container">
-                <!-- === AAPKE SAARE BUTTONS WAPAS AA GAYE HAIN === -->
                 <div class="qr-type-selector-grid">
                     <button class="qr-type-button active" data-type="url" title="Website URL"><i class="fas fa-link"></i><span>URL</span></button>
                     <button class="qr-type-button" data-type="text" title="Plain Text"><i class="fas fa-font"></i><span>Text</span></button>
@@ -47,10 +46,8 @@
                     <button class="qr-type-button" data-type="event" title="Calendar Event"><i class="fas fa-calendar-alt"></i><span>Event</span></button>
                 </div>
 
-                <!-- === AAPKA POORA INPUT AREA WAPAS AA GAYA HAI === -->
                 <div class="input-area-wrapper">
                     <h2 id="inputAreaTitle">Enter your Website URL</h2>
-
                     <div id="urlInputs" class="qr-input-group active"><input type="url" id="qrDataUrl" placeholder="https://www.example.com"></div>
                     <div id="textInputs" class="qr-input-group"><textarea id="qrDataText" placeholder="Enter your text here..." rows="5"></textarea></div>
                     <div id="emailInputs" class="qr-input-group"><input type="email" id="qrEmailTo" placeholder="To: recipient@example.com"><input type="text" id="qrEmailSubject" placeholder="Subject (Optional)"><textarea id="qrEmailBody" placeholder="Message (Optional)" rows="3"></textarea></div>
@@ -101,7 +98,21 @@
                 <div class="preview-column">
                     <h3>Your QR Code</h3>
                     <div id="qrCanvasContainer"></div><div id="qrDataDisplay" class="qr-data-text"></div>
-                    <div class="actions"><button id="downloadSvgButton">Download SVG</button><button id="downloadPngButton">Download PNG</button></div>
+                    
+                    <!-- === YAHAN PAR BADLAAV KIYA GAYA HAI === -->
+                    <div class="actions">
+                        <button id="downloadSvgButton">Download SVG</button>
+                        
+                        <!-- Naya "Save to Cloud" button yahan add kiya gaya hai -->
+                        <button id="saveQrButton" class="button-save">
+                            <i class="fas fa-cloud-arrow-up"></i>
+                            <span>Save</span>
+                        </button>
+
+                        <button id="downloadPngButton">Download PNG</button>
+                    </div>
+                    <!-- === BADLAAV KHATAM === -->
+
                 </div>
                 <div class="options-column">
                     <h3>Customize Design</h3>
@@ -118,7 +129,7 @@
     <footer class="site-footer">
         <div class="container"><p>© <span id="year"></span> Qodeo. All Rights Reserved.</p></div>
     </footer>
-    
+
     <div id="login-modal-overlay" class="hidden">
         <div id="login-modal-content">
             <h3>Join Qodeo</h3>
@@ -128,7 +139,6 @@
         </div>
     </div>
 
-    <!-- === Scripts at the end of body for best performance === -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
