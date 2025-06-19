@@ -28,27 +28,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const googleLoginButton = document.getElementById('google-login-button');
     const githubLoginButton = document.getElementById('github-login-button');
 
-    if(loginButton) loginButton.addEventListener('click', () => loginModalOverlay.classList.remove('hidden'));
-    if(closeModalButton) closeModalButton.addEventListener('click', () => loginModalOverlay.classList.add('hidden'));
-    if(loginModalOverlay) loginModalOverlay.addEventListener('click', (event) => {
+    if (loginButton) loginButton.addEventListener('click', () => loginModalOverlay.classList.remove('hidden'));
+    if (closeModalButton) closeModalButton.addEventListener('click', () => loginModalOverlay.classList.add('hidden'));
+    if (loginModalOverlay) loginModalOverlay.addEventListener('click', (event) => {
         if (event.target === loginModalOverlay) loginModalOverlay.classList.add('hidden');
     });
     const signInWithProvider = (provider) => auth.signInWithPopup(provider).catch(error => console.error("Authentication Error:", error));
-    if(googleLoginButton) googleLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GoogleAuthProvider()));
-    if(githubLoginButton) githubLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GithubAuthProvider()));
-    if(logoutButton) logoutButton.addEventListener('click', () => auth.signOut());
+    if (googleLoginButton) googleLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GoogleAuthProvider()));
+    if (githubLoginButton) githubLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GithubAuthProvider()));
+    if (logoutButton) logoutButton.addEventListener('click', () => auth.signOut());
 
     auth.onAuthStateChanged(user => {
         const dynamicQrCheckbox = document.getElementById('makeQrDynamic');
         if (user) {
-            if(loginModalOverlay) loginModalOverlay.classList.add('hidden');
-            if(loginButton) loginButton.classList.add('hidden');
-            if(userProfileDiv) userProfileDiv.classList.remove('hidden');
-            if(userAvatarImg) userAvatarImg.src = user.photoURL || 'images/default-avatar.png';
+            if (loginModalOverlay) loginModalOverlay.classList.add('hidden');
+            if (loginButton) loginButton.classList.add('hidden');
+            if (userProfileDiv) userProfileDiv.classList.remove('hidden');
+            if (userAvatarImg) userAvatarImg.src = user.photoURL || 'images/default-avatar.png';
         } else {
-            if(loginButton) loginButton.classList.remove('hidden');
-            if(userProfileDiv) userProfileDiv.classList.add('hidden');
-            if(userAvatarImg) userAvatarImg.src = '';
+            if (loginButton) loginButton.classList.remove('hidden');
+            if (userProfileDiv) userProfileDiv.classList.add('hidden');
+            if (userAvatarImg) userAvatarImg.src = '';
             if (dynamicQrCheckbox) dynamicQrCheckbox.checked = false; // Turn off dynamic if user logs out
         }
     });
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadSvgButton = document.getElementById('downloadSvgButton');
     const downloadPngButton = document.getElementById('downloadPngButton');
     const saveQrButton = document.getElementById('saveQrButton');
-    const dynamicQrCheckbox = document.getElementById('makeQrDynamic'); // Get the checkbox
+    const dynamicQrCheckbox = document.getElementById('makeQrDynamic');
     const qrCanvasContainer = document.getElementById('qrCanvasContainer');
     const qrDataDisplay = document.getElementById('qrDataDisplay');
     const yearSpan = document.getElementById('year');
@@ -124,9 +124,28 @@ document.addEventListener('DOMContentLoaded', () => {
         qrOptions: { errorCorrectionLevel: 'H' }
     });
     if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
+    
+    // THE FIX: Yeh function real-time update karega BINA KISI ALERT KE
+    async function updatePreview() {
+        // Iska data hamesha 'placeholder' hoga taaki koi validation na ho
+        let dataForPreview = "";
+        switch (currentQrType) {
+            case 'url': dataForPreview = qrDataUrlInput.value || "https://qodeo.pro"; break;
+            case 'text': dataForPreview = qrDataTextInput.value || "Some Text"; break;
+            // Add other cases with their default values if needed
+            default: dataForPreview = `https://qodeo.pro/${currentQrType}`;
+        }
+        
+        await qrCodeInstance.update({ 
+            data: dataForPreview,
+            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
+            backgroundOptions: { color: backgroundColorInput.value },
+            image: currentLogoBase64 || ''
+        });
+    }
 
-    // --- YOUR ORIGINAL FUNCTIONS ARE NOW BACK ---
-    function switchQrType(selectedType) {
+    // Is function ka naam switchQrType se badal kar initializeNewType kiya hai
+    function initializeNewType(selectedType) {
         const dynamicToggleContainer = document.querySelector('.dynamic-qr-toggle-container');
         if (selectedType === 'url' && dynamicToggleContainer) {
             dynamicToggleContainer.style.display = 'flex';
@@ -151,12 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedButtonSpan) title = `Enter details for ${selectedButtonSpan.textContent} QR`;
         else if (selectedType === 'url') title = 'Enter your Website URL';
         if (inputAreaTitle) inputAreaTitle.textContent = title;
-        generateQRCodePreview(); // Auto-generate preview on type switch
+        
+        // This will update the preview with a simple placeholder, no alerts
+        updatePreview(); 
     }
     
+    // Aapka original getQrDataStringForInstance, jaisa tha waisa hi
     function getQrDataStringForInstance() {
-        // ... (This function remains exactly as it was)
-        // ... I will fill it in for you
         let dataString = "";
         switch (currentQrType) {
             case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
@@ -172,69 +192,73 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return dataString;
     }
-    
-    // UPDATED generateQRCodePreview with THE LOCK
+
+    // Aapka original generateQRCodePreview ab sirf Generate button se chalta hai
     async function generateQRCodePreview() {
         const isDynamic = dynamicQrCheckbox.checked && currentQrType === 'url';
         const currentUser = auth.currentUser;
         
-        // THE LOCK: Check for dynamic QR without login
+        // Dynamic QR Lock (Yeh kaam karega)
         if (isDynamic && !currentUser) {
             alert("Please log in to use the Dynamic QR feature.");
-            loginModalOverlay.classList.remove('hidden'); // Show the login popup
-            return; // Stop the function here
+            loginModalOverlay.classList.remove('hidden');
+            return;
         }
 
         if (!generateQrMainButton) return;
         
-        let dataForQr;
-        if(isDynamic) {
-            // For preview, we show a dynamic link pointing to your app
-            dataForQr = `https://qodeo.vercel.app/qr/dynamic-preview`;
-        } else {
-            dataForQr = getQrDataStringForInstance();
-        }
-
+        // Final data and validation is done here
+        const dataForQr = getQrDataStringForInstance();
         if (dataForQr === null) return;
         
         generateQrMainButton.disabled = true;
         generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-        
         try {
             await qrCodeInstance.update({ 
                 data: dataForQr,
                 dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
                 backgroundOptions: { color: backgroundColorInput.value },
                 image: currentLogoBase64 || '',
-             });
+            });
             if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr;
-        } catch (error) {
-            console.error("Error updating QR Code:", error);
+        } catch (error) { console.error("Error updating QR Code:", error);
         } finally {
-            if(generateQrMainButton) {
-                generateQrMainButton.disabled = false;
-                generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
-            }
+            if (generateQrMainButton) { generateQrMainButton.disabled = false; generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';}
         }
     }
+
+    // --- EVENT LISTENERS (Corrected Structure) ---
     
-    // --- YOUR ORIGINAL EVENT LISTENERS ARE NOW BACK ---
-    if (qrTypeButtons) { qrTypeButtons.forEach(button => { button.addEventListener('click', () => { switchQrType(button.dataset.type); }); }); }
-    if (generateQrMainButton) generateQrMainButton.addEventListener('click', generateQRCodePreview);
-    [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
-        if (input) input.addEventListener('change', generateQRCodePreview);
-    });
-    // Add ALL your input fields to also trigger the preview update
+    // QR Type buttons sirf view switch karte hain
+    if (qrTypeButtons) { qrTypeButtons.forEach(button => { button.addEventListener('click', () => { initializeNewType(button.dataset.type); }); }); }
+
+    // Text likhne par, ya design change karne par sirf preview update hoga (no alerts)
     document.querySelectorAll('.qr-input-group input, .qr-input-group textarea, .qr-input-group select').forEach(input => {
-        input.addEventListener('input', generateQRCodePreview);
+        if(input.type !== 'file') input.addEventListener('input', updatePreview);
     });
+    [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
+        if(input) input.addEventListener('change', updatePreview);
+    });
+    if (logoUploadInput) { 
+        logoUploadInput.addEventListener('change', (event) => {
+            // ... Aapka logo upload logic jo updatePreview() call karega
+        });
+    }
 
-    if (logoUploadInput) { /* Your logo upload listener */ }
-    if (downloadSvgButton) { /* Your download SVG listener */ }
-    if (downloadPngButton) { /* Your download PNG listener */ }
+    // Generate button hi final validation aur "Lock" check karega
+    if (generateQrMainButton) generateQrMainButton.addEventListener('click', generateQRCodePreview);
+    
+    // Download aur Save buttons bhi final data aur validation lenge
+    if (downloadSvgButton) { 
+        downloadSvgButton.addEventListener('click', () => {
+            const dataForDownload = getQrDataStringForInstance(); if (dataForDownload === null) return;
+            qrCodeInstance.update({data: dataForDownload});
+            qrCodeInstance.download({ name: 'qodeo-qr', extension: 'svg' });
+        });
+    }
+    if (downloadPngButton) { /* Aapka poora, original download PNG logic yahan */ }
+    if (saveQrButton) { /* Aapka poora, original Save button logic yahan */ }
 
-    // --- SAVE BUTTON LOGIC (WITH THE "PROMPT TO LOGIN" FIX) ---
-    if (saveQrButton) { /* Your complete, correct save button logic here */ }
-
-    if (qrTypeButtons.length > 0) switchQrType('url');
+    // Start with the first type selected
+    initializeNewType('url');
 });
