@@ -23,10 +23,14 @@
             <nav class="site-nav"></nav>
             <div id="login-container">
                 <button id="login-button">Login</button>
+                <!-- === YAHAN BADLAAV KIYA GAYA HAI === -->
                 <div id="user-profile" class="hidden">
-                    <img id="user-avatar" src="" alt="User Avatar">
+                    <a href="dashboard.html" id="dashboard-link" title="My Dashboard">
+                        <img id="user-avatar" src="" alt="User Avatar">
+                    </a>
                     <button id="logout-button"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
+                <!-- === BADLAAV KHATAM === -->
             </div>
         </div>
     </header>
@@ -89,7 +93,6 @@
                         <div class="control-group"><label for="qrEventDescription">Description (Optional):</label><textarea id="qrEventDescription" placeholder="Discuss project updates" rows="3"></textarea></div>
                     </div>
                 </div>
-
                 <button id="generateQrMainButton" class="button-generate"><i class="fas fa-qrcode"></i> Generate QR Code</button>
             </div>
         </section>
@@ -98,21 +101,14 @@
                 <div class="preview-column">
                     <h3>Your QR Code</h3>
                     <div id="qrCanvasContainer"></div><div id="qrDataDisplay" class="qr-data-text"></div>
-                    
-                    <!-- === YAHAN PAR BADLAAV KIYA GAYA HAI === -->
                     <div class="actions">
                         <button id="downloadSvgButton">Download SVG</button>
-                        
-                        <!-- Naya "Save to Cloud" button yahan add kiya gaya hai -->
                         <button id="saveQrButton" class="button-save">
                             <i class="fas fa-cloud-arrow-up"></i>
                             <span>Save</span>
                         </button>
-
                         <button id="downloadPngButton">Download PNG</button>
                     </div>
-                    <!-- === BADLAAV KHATAM === -->
-
                 </div>
                 <div class="options-column">
                     <h3>Customize Design</h3>
