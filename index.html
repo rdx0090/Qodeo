@@ -23,14 +23,12 @@
             <nav class="site-nav"></nav>
             <div id="login-container">
                 <button id="login-button">Login</button>
-                <!-- === YAHAN BADLAAV KIYA GAYA HAI === -->
                 <div id="user-profile" class="hidden">
                     <a href="dashboard.html" id="dashboard-link" title="My Dashboard">
                         <img id="user-avatar" src="" alt="User Avatar">
                     </a>
                     <button id="logout-button"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
-                <!-- === BADLAAV KHATAM === -->
             </div>
         </div>
     </header>
@@ -52,7 +50,22 @@
 
                 <div class="input-area-wrapper">
                     <h2 id="inputAreaTitle">Enter your Website URL</h2>
-                    <div id="urlInputs" class="qr-input-group active"><input type="url" id="qrDataUrl" placeholder="https://www.example.com"></div>
+                    <div id="urlInputs" class="qr-input-group active">
+                        <input type="url" id="qrDataUrl" placeholder="https://www.example.com">
+                        
+                        <!-- === YAHAN PAR NAYA SWITCH ADD KIYA GAYA HAI === -->
+                        <div class="dynamic-qr-toggle-container">
+                            <label class="switch">
+                                <input type="checkbox" id="makeQrDynamic">
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="toggle-label">
+                                Make it a **Dynamic QR** 
+                                <i class="fas fa-bolt" title="Allows you to change the destination URL later. Login required."></i>
+                            </span>
+                        </div>
+                        <!-- === SWITCH KHATAM === -->
+                    </div>
                     <div id="textInputs" class="qr-input-group"><textarea id="qrDataText" placeholder="Enter your text here..." rows="5"></textarea></div>
                     <div id="emailInputs" class="qr-input-group"><input type="email" id="qrEmailTo" placeholder="To: recipient@example.com"><input type="text" id="qrEmailSubject" placeholder="Subject (Optional)"><textarea id="qrEmailBody" placeholder="Message (Optional)" rows="3"></textarea></div>
                     <div id="phoneInputs" class="qr-input-group"><input type="tel" id="qrPhoneNumber" placeholder="Phone Number (e.g., +1234567890)"></div>
