@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/qr/:slug",
+      "destination": "/api/redirect?slug=:slug"
+    }
+  ]
+}
