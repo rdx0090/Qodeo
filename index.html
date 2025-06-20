@@ -52,8 +52,7 @@
                     <h2 id="inputAreaTitle">Enter your Website URL</h2>
                     <div id="urlInputs" class="qr-input-group active">
                         <input type="url" id="qrDataUrl" placeholder="https://www.example.com">
-                        
-                        <!-- === YAHAN PAR NAYA SWITCH ADD KIYA GAYA HAI === -->
+
                         <div class="dynamic-qr-toggle-container">
                             <label class="switch">
                                 <input type="checkbox" id="makeQrDynamic">
@@ -64,7 +63,6 @@
                                 <i class="fas fa-bolt" title="Allows you to change the destination URL later. Login required."></i>
                             </span>
                         </div>
-                        <!-- === SWITCH KHATAM === -->
                     </div>
                     <div id="textInputs" class="qr-input-group"><textarea id="qrDataText" placeholder="Enter your text here..." rows="5"></textarea></div>
                     <div id="emailInputs" class="qr-input-group"><input type="email" id="qrEmailTo" placeholder="To: recipient@example.com"><input type="text" id="qrEmailSubject" placeholder="Subject (Optional)"><textarea id="qrEmailBody" placeholder="Message (Optional)" rows="3"></textarea></div>
@@ -147,6 +145,9 @@
             <button id="close-modal-button">×</button>
         </div>
     </div>
+    
+    <!-- === SOUND EFFECT ELEMENT (NEWLY ADDED) === -->
+    <audio id="qrSound" src="sounds/qr-generate.mp3" preload="auto"></audio>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
