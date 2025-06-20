@@ -89,13 +89,13 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 @keyframes pulseZoomTagline { 0% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.03); opacity: 1; } 100% { transform: scale(1); opacity: 0.85; } }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* === USER AUTHENTICATION STYLES (NEW) === */
+/* === USER AUTHENTICATION STYLES === */
 #login-container { display: flex; align-items: center; }
 #login-button { background-color: var(--primary-color); color: white; border: none; padding: 8px 16px; font-size: 0.9rem; font-weight: 500; border-radius: var(--border-radius-sm); cursor: pointer; transition: background-color 0.2s ease, transform 0.1s ease; }
 #login-button:hover { background-color: #0069d9; }
 #login-button:active { transform: scale(0.98); }
 #user-profile { display: flex; align-items: center; gap: 15px; }
-#user-profile a { text-decoration: none; display: flex; } /* To make sure the link behavior is correct */
+#user-profile a { text-decoration: none; display: flex; }
 .hidden { display: none !important; }
 #user-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border-light); object-fit: cover; transition: box-shadow 0.2s; }
 #user-avatar:hover { box-shadow: 0 0 0 3px rgba(0,123,255,0.3); }
@@ -140,7 +140,7 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 #no-qr-message a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
 #no-qr-message a:hover { text-decoration: underline; }
 
-/* === DYNAMIC QR TOGGLE SWITCH STYLES (NEW) === */
+/* === DYNAMIC QR TOGGLE SWITCH STYLES === */
 .dynamic-qr-toggle-container {
     display: flex;
     align-items: center;
@@ -204,55 +204,134 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
-/* ========================================= */
-/* === QR CODE GENERATION ANIMATION (NEW) === */
-/* ========================================= */
-
-/* QR Code container ko animation ke liye taiyaar karna */
+/* === QR CODE GENERATION ANIMATION === */
 #qrCanvasContainer {
-    position: relative; /* Animation elements ko iske andar rakhne ke liye zaroori */
-    overflow: hidden;   /* Jo cheez bahar jaye, use chupane ke liye zaroori */
-    /* Hum aapke pehle se set kiye gaye border aur background ko use karenge */
+    position: relative;
+    overflow: hidden;
 }
-
-/* Yeh class hum JavaScript se add karenge jab animation chalani hogi */
 #qrCanvasContainer.generating {
-    box-shadow: 0 0 20px rgba(0, 255, 200, 0.4); /* Animation ke waqt halki si glow */
-    background-color: #f0f2f5; /* Ek halka background color jab QR load ho raha ho */
+    box-shadow: 0 0 20px rgba(0, 255, 200, 0.4);
+    background-color: #f0f2f5;
 }
-
-/* Asli animation ki line (laser scanner) banane ke liye */
 #qrCanvasContainer.generating::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px; /* Line ki motai */
-    /* Neon green/cyan gradient for a tech look */
+    height: 4px;
     background: linear-gradient(90deg, transparent, #00ffc8, transparent); 
     box-shadow: 0 0 10px #00ffc8, 0 0 20px #00ffc8, 0 0 30px #00ffc8;
     border-radius: 2px;
-    /* Animation ka naam, duration, aur behaviour */
     animation: scan-and-reveal 1.5s ease-in-out forwards;
 }
-
-/* Animation ko define karna (kya hoga kab) */
 @keyframes scan-and-reveal {
-    0% {
-        top: -10px;      /* Line container ke thoda upar se start hogi */
-        opacity: 0.8;
-    }
-    50% {
-        top: 100%;       /* Animation ke aadhe me line neeche tak scan karegi */
-        opacity: 1;
-    }
-    90% {
-        top: 100%;
-        opacity: 0;
-    }
-    100% {
-        top: 100%;
-        opacity: 0;      /* Animation ke end me line poori tarah gayab ho jayegi */
-    }
+    0% { top: -10px; opacity: 0.8; }
+    50% { top: 100%; opacity: 1; }
+    90% { top: 100%; opacity: 0; }
+    100% { top: 100%; opacity: 0; }
+}
+
+/* ========================================= */
+/* === DOWNLOAD QUALITY MODAL STYLES (NEW) === */
+/* ========================================= */
+#download-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Thoda dark overlay */
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+#download-modal-content {
+    background-color: white;
+    padding: 30px 40px; /* Thodi zyada padding */
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+    text-align: center;
+    position: relative;
+    width: 90%;
+    max-width: 450px;
+}
+#download-modal-content h3 {
+    margin: 0 0 25px 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+#close-download-modal-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+#close-download-modal-button:hover {
+    color: var(--text-dark);
+    transform: rotate(90deg);
+}
+.quality-options {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.quality-btn {
+    flex: 1;
+    background-color: var(--background-grey);
+    border: 2px solid var(--border-light);
+    border-radius: var(--border-radius-md);
+    padding: 20px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.quality-btn:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+.quality-btn i {
+    font-size: 2.2rem; /* Thode bade icons */
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+.quality-btn[data-quality="hd"] i {
+    color: #88d3ce; /* Save button ke gradient se milta julta */
+}
+.quality-btn[data-quality="hd"]:hover {
+    border-color: #88d3ce;
+}
+.quality-btn span {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+.quality-btn small {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.hd-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    padding: 10px;
+    background-color: #fffbe6; /* Halka peela background */
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #ffeeba;
+}
+.hd-note i {
+    color: #ffc107;
+    margin-right: 5px;
 }
