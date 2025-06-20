@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedButtonSpan) title = `Enter details for ${selectedButtonSpan.textContent} QR`;
         else if (selectedType === 'url') title = 'Enter your Website URL';
         if (inputAreaTitle) inputAreaTitle.textContent = title;
-        
+
         // ** THE CHANGE IS HERE: Call generateQRCodePreview without validation **
         generateQRCodePreview(false); // `false` means don't show alerts
     }
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- UPDATED EVENT LISTENERS ---
     if (qrTypeButtons) { qrTypeButtons.forEach(button => { button.addEventListener('click', () => { switchQrType(button.dataset.type); }); }); }
-    
+
     // ** THE CHANGE IS HERE: Call generateQRCodePreview with validation **
     if (generateQrMainButton) {
         generateQrMainButton.addEventListener('click', () => generateQRCodePreview(true)); // `true` means show alerts
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginModalOverlay.classList.remove('hidden');
                 return;
             }
-            
+
             // ** THE CHANGE IS HERE: Validate before saving **
             const dataToSave = getQrDataStringForInstance(true); // `true` to validate
             if (dataToSave === null) {
