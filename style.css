@@ -203,3 +203,56 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+/* ========================================= */
+/* === QR CODE GENERATION ANIMATION (NEW) === */
+/* ========================================= */
+
+/* QR Code container ko animation ke liye taiyaar karna */
+#qrCanvasContainer {
+    position: relative; /* Animation elements ko iske andar rakhne ke liye zaroori */
+    overflow: hidden;   /* Jo cheez bahar jaye, use chupane ke liye zaroori */
+    /* Hum aapke pehle se set kiye gaye border aur background ko use karenge */
+}
+
+/* Yeh class hum JavaScript se add karenge jab animation chalani hogi */
+#qrCanvasContainer.generating {
+    box-shadow: 0 0 20px rgba(0, 255, 200, 0.4); /* Animation ke waqt halki si glow */
+    background-color: #f0f2f5; /* Ek halka background color jab QR load ho raha ho */
+}
+
+/* Asli animation ki line (laser scanner) banane ke liye */
+#qrCanvasContainer.generating::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px; /* Line ki motai */
+    /* Neon green/cyan gradient for a tech look */
+    background: linear-gradient(90deg, transparent, #00ffc8, transparent); 
+    box-shadow: 0 0 10px #00ffc8, 0 0 20px #00ffc8, 0 0 30px #00ffc8;
+    border-radius: 2px;
+    /* Animation ka naam, duration, aur behaviour */
+    animation: scan-and-reveal 1.5s ease-in-out forwards;
+}
+
+/* Animation ko define karna (kya hoga kab) */
+@keyframes scan-and-reveal {
+    0% {
+        top: -10px;      /* Line container ke thoda upar se start hogi */
+        opacity: 0.8;
+    }
+    50% {
+        top: 100%;       /* Animation ke aadhe me line neeche tak scan karegi */
+        opacity: 1;
+    }
+    90% {
+        top: 100%;
+        opacity: 0;
+    }
+    100% {
+        top: 100%;
+        opacity: 0;      /* Animation ke end me line poori tarah gayab ho jayegi */
+    }
+}
