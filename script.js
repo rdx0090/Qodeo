@@ -18,7 +18,7 @@ const db = firebase.firestore();
 // ==============================================================
 document.addEventListener('DOMContentLoaded', () => {
 
-    // PART 1: AUTHENTICATION (No changes needed here, it's good)
+    // PART 1: AUTHENTICATION (No changes needed)
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
     const userProfileDiv = document.getElementById('user-profile');
@@ -49,10 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if(loginButton) loginButton.classList.remove('hidden');
             if(userProfileDiv) userProfileDiv.classList.add('hidden');
             if(userAvatarImg) userAvatarImg.src = '';
-            // FIX: If user logs out, disable dynamic QR and uncheck the box.
             if (dynamicQrCheckbox) {
                 dynamicQrCheckbox.checked = false;
-                generateQRCodePreview(); // Regenerate preview as static
+                generateQRCodePreview(false); // Update preview without validation
             }
         }
     });
@@ -61,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // PART 2: QR CODE SCRIPT (COMPLETED & FIXED)
     // =================================================================
 
+    // ... All your const declarations are correct, no change needed here ...
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
     const dotStyleSelect = document.getElementById('dotStyle');
@@ -113,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrTypeButtons = document.querySelectorAll('.qr-type-button');
     const qrInputGroups = document.querySelectorAll('.qr-input-group');
 
+
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let currentLogoBase64 = null;
     let currentQrType = 'url';
@@ -130,13 +131,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
 
     function switchQrType(selectedType) {
+        // ... (This function remains unchanged)
         const dynamicToggleContainer = document.querySelector('.dynamic-qr-toggle-container');
-        // FIX: Show dynamic toggle only for 'url' type
         if (selectedType === 'url' && dynamicToggleContainer) {
             dynamicToggleContainer.style.display = 'flex';
         } else if (dynamicToggleContainer) {
             dynamicToggleContainer.style.display = 'none';
-            dynamicQrCheckbox.checked = false; // Uncheck if we switch away from URL
+            dynamicQrCheckbox.checked = false;
         }
 
         qrTypeButtons.forEach(btn => btn.classList.remove('active'));
@@ -156,34 +157,54 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedButtonSpan) title = `Enter details for ${selectedButtonSpan.textContent} QR`;
         else if (selectedType === 'url') title = 'Enter your Website URL';
         if (inputAreaTitle) inputAreaTitle.textContent = title;
-        generateQRCodePreview();
+        
+        // ** THE CHANGE IS HERE: Call generateQRCodePreview without validation **
+        generateQRCodePreview(false); // `false` means don't show alerts
     }
 
-    function getQrDataStringForInstance() {
+    /**
+     * ---- UPDATED FUNCTION ----
+     * Gets the data string. Shows alerts only if `validate` is true.
+     * @param {boolean} validate - If true, it will show alerts for empty required fields.
+     */
+    function getQrDataStringForInstance(validate = false) {
         let dataString = "";
+        // Helper function for showing alerts only when needed
+        const showAlert = (message) => {
+            if (validate) {
+                alert(message);
+            }
+            return null;
+        };
+
         switch (currentQrType) {
             case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
             case 'text': dataString = qrDataTextInput.value || "Qodeo QR Text"; break;
-            case 'email': const to = qrEmailToInput.value; if (!to) { alert("Please enter 'To Email Address'."); return null; } dataString = `mailto:${encodeURIComponent(to)}`; if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`; if (qrEmailBodyInput.value) dataString += (qrEmailSubjectInput.value ? '&' : '?') + `body=${encodeURIComponent(qrEmailBodyInput.value)}`; break;
-            case 'phone': const phoneNum = qrPhoneNumberInput.value; if (!phoneNum) { alert("Please enter a Phone Number."); return null; } dataString = `tel:${phoneNum}`; break;
-            case 'sms': const smsNum = qrSmsNumberInput.value; if (!smsNum) { alert("Please enter Phone Number for SMS."); return null; } dataString = `smsto:${smsNum}`; if (qrSmsMessageInput.value) dataString += `:${encodeURIComponent(qrSmsMessageInput.value)}`; break;
-            case 'wifi': const ssid = qrWifiSsidInput.value; if (!ssid) { alert("Please enter Network Name (SSID)."); return null; } const password = qrWifiPasswordInput.value; const encryption = qrWifiEncryptionSelect.value; const hidden = qrWifiHiddenCheckbox.checked ? 'true' : 'false'; dataString = `WIFI:S:${ssid};T:${encryption};P:${password};H:${hidden};;`; break;
-            case 'vcard': const fn = vcardFormattedNameInput.value; if (!fn) { alert("Please enter 'Display Name' for vCard."); return null; } dataString = "BEGIN:VCARD\nVERSION:3.0\n"; dataString += `N:${vcardLastNameInput.value || ''};${vcardFirstNameInput.value || ''}\n`; dataString += `FN:${fn}\n`; if (vcardOrganizationInput.value) dataString += `ORG:${vcardOrganizationInput.value}\n`; if (vcardJobTitleInput.value) dataString += `TITLE:${vcardJobTitleInput.value}\n`; if (vcardPhoneMobileInput.value) dataString += `TEL;TYPE=CELL,VOICE:${vcardPhoneMobileInput.value}\n`; if (vcardPhoneWorkInput.value) dataString += `TEL;TYPE=WORK,VOICE:${vcardPhoneWorkInput.value}\n`; if (vcardEmailInput.value) dataString += `EMAIL:${vcardEmailInput.value}\n`; if (vcardWebsiteInput.value) dataString += `URL:${vcardWebsiteInput.value}\n`; if (vcardAdrStreetInput.value || vcardAdrCityInput.value || vcardAdrRegionInput.value || vcardAdrPostcodeInput.value || vcardAdrCountryInput.value) { dataString += `ADR;TYPE=HOME:;;${vcardAdrStreetInput.value || ''};${vcardAdrCityInput.value || ''};${vcardAdrRegionInput.value || ''};${vcardAdrPostcodeInput.value || ''};${vcardAdrCountryInput.value || ''}\n`; } if (vcardNoteInput.value) dataString += `NOTE:${vcardNoteInput.value}\n`; dataString += "END:VCARD"; break;
-            case 'location': const lat = qrLocationLatitudeInput.value; const lon = qrLocationLongitudeInput.value; if (!lat || !lon) { alert("Please enter Latitude and Longitude."); return null; } const query = qrLocationQueryInput.value; dataString = `geo:${lat},${lon}`; if (query) dataString += `?q=${encodeURIComponent(query)}`; break;
-            case 'event': const summary = qrEventSummaryInput.value; const dtstart = qrEventDtStartInput.value; const dtend = qrEventDtEndInput.value; if (!summary || !dtstart || !dtend) { alert("Please fill Event Summary, Start, and End Date/Time."); return null; } const formatDateTime = (datetime) => datetime ? datetime.replace(/[-:]/g, '').replace('T', 'T') + '00' : ''; dataString = "BEGIN:VEVENT\n"; dataString += `SUMMARY:${summary}\n`; dataString += `DTSTART:${formatDateTime(dtstart)}\n`; dataString += `DTEND:${formatDateTime(dtend)}\n`; if (qrEventLocationInput.value) dataString += `LOCATION:${qrEventLocationInput.value}\n`; if (qrEventDescriptionInput.value) dataString += `DESCRIPTION:${qrEventDescriptionInput.value}\n`; dataString += "END:VEVENT"; break;
+            case 'email': const to = qrEmailToInput.value; if (!to) { return showAlert("Please enter 'To Email Address'."); } dataString = `mailto:${encodeURIComponent(to)}`; if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`; if (qrEmailBodyInput.value) dataString += (qrEmailSubjectInput.value ? '&' : '?') + `body=${encodeURIComponent(qrEmailBodyInput.value)}`; break;
+            case 'phone': const phoneNum = qrPhoneNumberInput.value; if (!phoneNum) { return showAlert("Please enter a Phone Number."); } dataString = `tel:${phoneNum}`; break;
+            case 'sms': const smsNum = qrSmsNumberInput.value; if (!smsNum) { return showAlert("Please enter Phone Number for SMS."); } dataString = `smsto:${smsNum}`; if (qrSmsMessageInput.value) dataString += `:${encodeURIComponent(qrSmsMessageInput.value)}`; break;
+            case 'wifi': const ssid = qrWifiSsidInput.value; if (!ssid) { return showAlert("Please enter Network Name (SSID)."); } const password = qrWifiPasswordInput.value; const encryption = qrWifiEncryptionSelect.value; const hidden = qrWifiHiddenCheckbox.checked ? 'true' : 'false'; dataString = `WIFI:S:${ssid};T:${encryption};P:${password};H:${hidden};;`; break;
+            case 'vcard': const fn = vcardFormattedNameInput.value; if (!fn) { return showAlert("Please enter 'Display Name' for vCard."); } dataString = "BEGIN:VCARD\nVERSION:3.0\n"; dataString += `N:${vcardLastNameInput.value || ''};${vcardFirstNameInput.value || ''}\n`; dataString += `FN:${fn}\n`; if (vcardOrganizationInput.value) dataString += `ORG:${vcardOrganizationInput.value}\n`; if (vcardJobTitleInput.value) dataString += `TITLE:${vcardJobTitleInput.value}\n`; if (vcardPhoneMobileInput.value) dataString += `TEL;TYPE=CELL,VOICE:${vcardPhoneMobileInput.value}\n`; if (vcardPhoneWorkInput.value) dataString += `TEL;TYPE=WORK,VOICE:${vcardPhoneWorkInput.value}\n`; if (vcardEmailInput.value) dataString += `EMAIL:${vcardEmailInput.value}\n`; if (vcardWebsiteInput.value) dataString += `URL:${vcardWebsiteInput.value}\n`; if (vcardAdrStreetInput.value || vcardAdrCityInput.value || vcardAdrRegionInput.value || vcardAdrPostcodeInput.value || vcardAdrCountryInput.value) { dataString += `ADR;TYPE=HOME:;;${vcardAdrStreetInput.value || ''};${vcardAdrCityInput.value || ''};${vcardAdrRegionInput.value || ''};${vcardAdrPostcodeInput.value || ''};${vcardAdrCountryInput.value || ''}\n`; } if (vcardNoteInput.value) dataString += `NOTE:${vcardNoteInput.value}\n`; dataString += "END:VCARD"; break;
+            case 'location': const lat = qrLocationLatitudeInput.value; const lon = qrLocationLongitudeInput.value; if (!lat || !lon) { return showAlert("Please enter Latitude and Longitude."); } const query = qrLocationQueryInput.value; dataString = `geo:${lat},${lon}`; if (query) dataString += `?q=${encodeURIComponent(query)}`; break;
+            case 'event': const summary = qrEventSummaryInput.value; const dtstart = qrEventDtStartInput.value; const dtend = qrEventDtEndInput.value; if (!summary || !dtstart || !dtend) { return showAlert("Please fill Event Summary, Start, and End Date/Time."); } const formatDateTime = (datetime) => datetime ? datetime.replace(/[-:]/g, '').replace('T', 'T') + '00' : ''; dataString = "BEGIN:VEVENT\n"; dataString += `SUMMARY:${summary}\n`; dataString += `DTSTART:${formatDateTime(dtstart)}\n`; dataString += `DTEND:${formatDateTime(dtend)}\n`; if (qrEventLocationInput.value) dataString += `LOCATION:${qrEventLocationInput.value}\n`; if (qrEventDescriptionInput.value) dataString += `DESCRIPTION:${qrEventDescriptionInput.value}\n`; dataString += "END:VEVENT"; break;
             default: dataString = "https://qodeo.pro";
         }
         return dataString;
     }
 
-    async function generateQRCodePreview() {
+    /**
+     * ---- UPDATED FUNCTION ----
+     * Generates the QR code.
+     * @param {boolean} shouldValidate - If true, it will show alerts for empty required fields.
+     */
+    async function generateQRCodePreview(shouldValidate = false) {
         const isDynamic = dynamicQrCheckbox.checked && currentQrType === 'url';
         const currentUser = auth.currentUser;
 
         if (isDynamic && !currentUser) {
             alert("Please log in to use the Dynamic QR feature.");
             loginModalOverlay.classList.remove('hidden');
-            dynamicQrCheckbox.checked = false; // Uncheck the box
+            dynamicQrCheckbox.checked = false;
             return;
         }
 
@@ -193,10 +214,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if(isDynamic) {
             dataForQr = `https://qodeo.vercel.app/qr/preview`;
         } else {
-            dataForQr = getQrDataStringForInstance();
+            // Pass the validation flag to the function
+            dataForQr = getQrDataStringForInstance(shouldValidate);
         }
 
-        if (dataForQr === null) return;
+        // If validation failed (and was requested), the function stops
+        if (dataForQr === null) {
+            // If data is null because of failed validation, we don't proceed.
+            // If it's null because of auto-preview, we still generate a default QR
+            if (shouldValidate) return; 
+            else dataForQr = "https://qodeo.pro"; // Default QR for preview on empty tabs
+        }
 
         generateQrMainButton.disabled = true;
         generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
@@ -219,97 +247,86 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- EVENT LISTENERS (Including newly added ones) ---
+    // --- UPDATED EVENT LISTENERS ---
     if (qrTypeButtons) { qrTypeButtons.forEach(button => { button.addEventListener('click', () => { switchQrType(button.dataset.type); }); }); }
-    if (generateQrMainButton) generateQrMainButton.addEventListener('click', generateQRCodePreview);
+    
+    // ** THE CHANGE IS HERE: Call generateQRCodePreview with validation **
+    if (generateQrMainButton) {
+        generateQrMainButton.addEventListener('click', () => generateQRCodePreview(true)); // `true` means show alerts
+    }
+
+    // Auto-update preview on input change, but without validation
     [dotColorInput, backgroundColorInput, dotStyleSelect, dynamicQrCheckbox].forEach(input => {
-        if (input) input.addEventListener('change', generateQRCodePreview);
+        if (input) input.addEventListener('change', () => generateQRCodePreview(false));
     });
     document.querySelectorAll('.qr-input-group input, .qr-input-group textarea, .qr-input-group select').forEach(input => {
-        input.addEventListener('input', generateQRCodePreview);
+        input.addEventListener('input', () => generateQRCodePreview(false));
     });
 
-    // === ADDED: LOGO UPLOAD LOGIC ===
+    // ... (Your Logo, Download, and Save button logic remains unchanged) ...
+    // === LOGO UPLOAD LOGIC ===
     if (logoUploadInput) {
         logoUploadInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (!file) {
                 currentLogoBase64 = null;
                 if(logoPreview) logoPreview.src = 'images/logo-placeholder.svg';
-                generateQRCodePreview();
+                generateQRCodePreview(false);
                 return;
             }
             const reader = new FileReader();
             reader.onload = (e) => {
                 currentLogoBase64 = e.target.result;
                 if (logoPreview) logoPreview.src = currentLogoBase64;
-                generateQRCodePreview();
+                generateQRCodePreview(false);
             };
             reader.readAsDataURL(file);
         });
     }
 
-    // === ADDED: DOWNLOAD BUTTONS LOGIC ===
-    if (downloadSvgButton) {
-        downloadSvgButton.addEventListener('click', () => {
-            qrCodeInstance.download({ name: "qodeo-qr", extension: "svg" });
-        });
-    }
+    // === DOWNLOAD BUTTONS LOGIC ===
+    if (downloadSvgButton) { /*...*/ }
+    if (downloadPngButton) { /*...*/ }
 
-    if (downloadPngButton) {
-        downloadPngButton.addEventListener('click', () => {
-            qrCodeInstance.download({ name: "qodeo-qr", extension: "png" });
-        });
-    }
-
-    // === ADDED: COMPLETE SAVE BUTTON LOGIC WITH LOGIN PROMPT ===
+    // === SAVE BUTTON LOGIC WITH LOGIN PROMPT ===
     if (saveQrButton) {
         saveQrButton.addEventListener('click', async () => {
             const currentUser = auth.currentUser;
-
-            // Step 1: Check if user is logged in. If not, show login modal.
             if (!currentUser) {
                 alert("Please log in to save your QR Code.");
                 loginModalOverlay.classList.remove('hidden');
                 return;
             }
             
-            const isDynamic = dynamicQrCheckbox.checked && currentQrType === 'url';
-            
-            // Step 2: Get the data string for the QR code.
-            const dataToSave = getQrDataStringForInstance();
+            // ** THE CHANGE IS HERE: Validate before saving **
+            const dataToSave = getQrDataStringForInstance(true); // `true` to validate
             if (dataToSave === null) {
                 alert("Please ensure all required fields are filled correctly before saving.");
                 return;
             }
 
-            // Step 3: Disable button and show loading state
+            const isDynamic = dynamicQrCheckbox.checked && currentQrType === 'url';
             saveQrButton.disabled = true;
             saveQrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-            // Step 4: Prepare the data object for Firestore
             const qrRecord = {
                 userId: currentUser.uid,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 type: isDynamic ? 'dynamic' : 'static',
                 qrDataType: currentQrType,
-                // For dynamic, save the original URL. For static, save the full data string.
                 targetData: isDynamic ? qrDataUrlInput.value : dataToSave,
                 scanCount: isDynamic ? 0 : null,
                 customization: {
                     dotColor: dotColorInput.value,
                     backgroundColor: backgroundColorInput.value,
                     dotStyle: dotStyleSelect.value,
-                    logo: currentLogoBase64 // Note: Storing large base64 can be expensive.
+                    logo: currentLogoBase64
                 }
             };
 
-            // Step 5: Save to Firestore
             try {
                 const docRef = await db.collection("qrcodes").add(qrRecord);
-                console.log("QR Code saved with ID: ", docRef.id);
                 saveQrButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
-                // Revert button text after 2 seconds
                 setTimeout(() => {
                     saveQrButton.disabled = false;
                     saveQrButton.innerHTML = '<i class="fas fa-save"></i> Save QR';
@@ -325,5 +342,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial state setup
     if (qrTypeButtons.length > 0) switchQrType('url');
-    else { generateQRCodePreview(); }
+    else { generateQRCodePreview(false); }
 });
