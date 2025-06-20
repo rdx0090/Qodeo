@@ -18,7 +18,7 @@ const db = firebase.firestore();
 // ==============================================================
 document.addEventListener('DOMContentLoaded', () => {
 
-    // PART 1: AUTHENTICATION (No changes needed)
+    // PART 1: AUTHENTICATION
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
     const userProfileDiv = document.getElementById('user-profile');
@@ -51,16 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if(userAvatarImg) userAvatarImg.src = '';
             if (dynamicQrCheckbox) {
                 dynamicQrCheckbox.checked = false;
-                generateQRCodePreview(false); // Update preview without validation
+                generateQRCodePreview(false);
             }
         }
     });
 
     // =================================================================
-    // PART 2: QR CODE SCRIPT (COMPLETED & FIXED)
+    // PART 2: QR CODE SCRIPT
     // =================================================================
-
-    // ... All your const declarations are correct, no change needed here ...
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
     const dotStyleSelect = document.getElementById('dotStyle');
@@ -113,16 +111,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrTypeButtons = document.querySelectorAll('.qr-type-button');
     const qrInputGroups = document.querySelectorAll('.qr-input-group');
 
-
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let currentLogoBase64 = null;
     let currentQrType = 'url';
     if (typeof QRCodeStyling === 'undefined') { console.error("QRCodeStyling library not loaded."); return; }
-    const previewQrWidth = 250;
-    const previewQrHeight = 250;
+
     const qrCodeInstance = new QRCodeStyling({
-        width: previewQrWidth, height: previewQrHeight, type: 'svg',
-        data: "https://qodeo.vercel.app", image: '',
+        width: 250, height: 250, type: 'svg',
+        data: "https://qodeo.pro", image: '',
         dotsOptions: { color: "#000000", type: "square" },
         backgroundOptions: { color: "#ffffff" },
         imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
@@ -131,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
 
     function switchQrType(selectedType) {
-        // ... (This function remains unchanged)
         const dynamicToggleContainer = document.querySelector('.dynamic-qr-toggle-container');
         if (selectedType === 'url' && dynamicToggleContainer) {
             dynamicToggleContainer.style.display = 'flex';
@@ -139,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dynamicToggleContainer.style.display = 'none';
             dynamicQrCheckbox.checked = false;
         }
-
         qrTypeButtons.forEach(btn => btn.classList.remove('active'));
         qrInputGroups.forEach(group => group.classList.remove('active'));
         const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedType}"]`);
@@ -157,26 +151,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedButtonSpan) title = `Enter details for ${selectedButtonSpan.textContent} QR`;
         else if (selectedType === 'url') title = 'Enter your Website URL';
         if (inputAreaTitle) inputAreaTitle.textContent = title;
-
-        // ** THE CHANGE IS HERE: Call generateQRCodePreview without validation **
-        generateQRCodePreview(false); // `false` means don't show alerts
+        generateQRCodePreview(false);
     }
 
-    /**
-     * ---- UPDATED FUNCTION ----
-     * Gets the data string. Shows alerts only if `validate` is true.
-     * @param {boolean} validate - If true, it will show alerts for empty required fields.
-     */
     function getQrDataStringForInstance(validate = false) {
         let dataString = "";
-        // Helper function for showing alerts only when needed
         const showAlert = (message) => {
-            if (validate) {
-                alert(message);
-            }
+            if (validate) alert(message);
             return null;
         };
-
         switch (currentQrType) {
             case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
             case 'text': dataString = qrDataTextInput.value || "Qodeo QR Text"; break;
@@ -192,11 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return dataString;
     }
 
-    /**
-     * ---- UPDATED FUNCTION ----
-     * Generates the QR code.
-     * @param {boolean} shouldValidate - If true, it will show alerts for empty required fields.
-     */
+    // =======================================================
+    // === FINAL, FIXED FUNCTION WITH ANIMATION LOGIC      ===
+    // =======================================================
     async function generateQRCodePreview(shouldValidate = false) {
         const isDynamic = dynamicQrCheckbox.checked && currentQrType === 'url';
         const currentUser = auth.currentUser;
@@ -210,52 +191,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!generateQrMainButton) return;
 
-        let dataForQr;
-        if(isDynamic) {
-            dataForQr = `https://qodeo.vercel.app/qr/preview`;
-        } else {
-            // Pass the validation flag to the function
-            dataForQr = getQrDataStringForInstance(shouldValidate);
-        }
-
-        // If validation failed (and was requested), the function stops
+        let dataForQr = isDynamic ? `https://qodeo.vercel.app/qr/preview` : getQrDataStringForInstance(shouldValidate);
+        
         if (dataForQr === null) {
-            // If data is null because of failed validation, we don't proceed.
-            // If it's null because of auto-preview, we still generate a default QR
-            if (shouldValidate) return; 
-            else dataForQr = "https://qodeo.pro"; // Default QR for preview on empty tabs
+            if (shouldValidate) return;
+            dataForQr = "https://qodeo.pro";
         }
 
         generateQrMainButton.disabled = true;
         generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
 
-        try {
-            await qrCodeInstance.update({ 
-                data: dataForQr,
-                dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
-                backgroundOptions: { color: backgroundColorInput.value },
-                image: currentLogoBase64 || '',
-             });
-            if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr;
-        } catch (error) {
-            console.error("Error updating QR Code:", error);
-        } finally {
-            if(generateQrMainButton) {
+        if (shouldValidate && qrCanvasContainer) {
+            qrCanvasContainer.innerHTML = '';
+            qrCanvasContainer.classList.add('generating');
+        }
+
+        // Update the main QR instance with the latest options
+        qrCodeInstance.update({
+            data: dataForQr,
+            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
+            backgroundOptions: { color: backgroundColorInput.value },
+            image: currentLogoBase64 || '',
+        });
+        
+        // Only re-append if it's not already there or if we are running animation
+        if (shouldValidate || !qrCanvasContainer.querySelector('svg')) {
+           if (qrCanvasContainer) {
+               qrCanvasContainer.innerHTML = ''; // Clear first
+               qrCodeInstance.append(qrCanvasContainer);
+           }
+        }
+        
+        if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr;
+
+        // Use a single timer to handle UI reset
+        setTimeout(() => {
+            if (shouldValidate && qrCanvasContainer) {
+                qrCanvasContainer.classList.remove('generating');
+            }
+            if (generateQrMainButton) {
                 generateQrMainButton.disabled = false;
                 generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
             }
-        }
+        }, shouldValidate ? 1500 : 0); // Only delay if animating
     }
 
-    // --- UPDATED EVENT LISTENERS ---
-    if (qrTypeButtons) { qrTypeButtons.forEach(button => { button.addEventListener('click', () => { switchQrType(button.dataset.type); }); }); }
-
-    // ** THE CHANGE IS HERE: Call generateQRCodePreview with validation **
-    if (generateQrMainButton) {
-        generateQrMainButton.addEventListener('click', () => generateQRCodePreview(true)); // `true` means show alerts
-    }
-
-    // Auto-update preview on input change, but without validation
+    // --- EVENT LISTENERS ---
+    if (qrTypeButtons) qrTypeButtons.forEach(button => button.addEventListener('click', () => switchQrType(button.dataset.type)));
+    if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => generateQRCodePreview(true));
     [dotColorInput, backgroundColorInput, dotStyleSelect, dynamicQrCheckbox].forEach(input => {
         if (input) input.addEventListener('change', () => generateQRCodePreview(false));
     });
@@ -263,32 +246,65 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('input', () => generateQRCodePreview(false));
     });
 
-    // ... (Your Logo, Download, and Save button logic remains unchanged) ...
-    // === LOGO UPLOAD LOGIC ===
     if (logoUploadInput) {
         logoUploadInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (!file) {
                 currentLogoBase64 = null;
-                if(logoPreview) logoPreview.src = 'images/logo-placeholder.svg';
+                if(logoPreview) { logoPreview.src = '#'; logoPreview.style.display = 'none'; }
                 generateQRCodePreview(false);
                 return;
             }
             const reader = new FileReader();
             reader.onload = (e) => {
                 currentLogoBase64 = e.target.result;
-                if (logoPreview) logoPreview.src = currentLogoBase64;
+                if (logoPreview) { logoPreview.src = currentLogoBase64; logoPreview.style.display = 'block'; }
                 generateQRCodePreview(false);
             };
             reader.readAsDataURL(file);
         });
     }
 
-    // === DOWNLOAD BUTTONS LOGIC ===
-    if (downloadSvgButton) { /*...*/ }
-    if (downloadPngButton) { /*...*/ }
+    // =======================================================
+    // === FINAL, FIXED DOWNLOAD LOGIC                     ===
+    // =======================================================
+    function handleDownload(extension) {
+        const currentUser = auth.currentUser;
+        
+        const dataForDownload = getQrDataStringForInstance(true);
+        if (dataForDownload === null) {
+            alert("Please fill in the required fields before downloading.");
+            return;
+        }
 
-    // === SAVE BUTTON LOGIC WITH LOGIN PROMPT ===
+        const isHD = currentUser;
+        const size = isHD ? 1024 : 300;
+        
+        if (isHD) {
+            alert(`Downloading HD ${extension.toUpperCase()} (1024x1024).`);
+        }
+
+        // Create a new instance for download with correct data and options
+        const downloadInstance = new QRCodeStyling({
+            width: size,
+            height: size,
+            type: 'svg', // Always generate SVG first for quality
+            data: dataForDownload,
+            image: currentLogoBase64 || '',
+            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
+            backgroundOptions: { color: backgroundColorInput.value },
+            imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
+            qrOptions: { errorCorrectionLevel: 'H' }
+        });
+        
+        downloadInstance.download({ name: `qodeo-qr${isHD ? '-hd' : ''}`, extension: extension });
+    }
+
+    if (downloadSvgButton) downloadSvgButton.addEventListener('click', () => handleDownload('svg'));
+    if (downloadPngButton) downloadPngButton.addEventListener('click', () => handleDownload('png'));
+
+
+    // === SAVE BUTTON LOGIC ===
     if (saveQrButton) {
         saveQrButton.addEventListener('click', async () => {
             const currentUser = auth.currentUser;
@@ -297,14 +313,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginModalOverlay.classList.remove('hidden');
                 return;
             }
-
-            // ** THE CHANGE IS HERE: Validate before saving **
-            const dataToSave = getQrDataStringForInstance(true); // `true` to validate
+            const dataToSave = getQrDataStringForInstance(true);
             if (dataToSave === null) {
                 alert("Please ensure all required fields are filled correctly before saving.");
                 return;
             }
-
             const isDynamic = dynamicQrCheckbox.checked && currentQrType === 'url';
             saveQrButton.disabled = true;
             saveQrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
@@ -323,19 +336,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     logo: currentLogoBase64
                 }
             };
-
             try {
-                const docRef = await db.collection("qrcodes").add(qrRecord);
+                await db.collection("qrcodes").add(qrRecord);
                 saveQrButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
                 setTimeout(() => {
                     saveQrButton.disabled = false;
-                    saveQrButton.innerHTML = '<i class="fas fa-save"></i> Save QR';
+                    saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
                 }, 2000);
             } catch (error) {
                 console.error("Error saving QR Code to Firestore: ", error);
-                alert("Could not save QR Code. Please try again.");
                 saveQrButton.disabled = false;
-                saveQrButton.innerHTML = '<i class="fas fa-save"></i> Save QR';
+                saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
             }
         });
     }
