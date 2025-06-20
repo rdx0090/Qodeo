@@ -145,8 +145,32 @@
             <button id="close-modal-button">×</button>
         </div>
     </div>
-    
-    <!-- === SOUND EFFECT ELEMENT (NEWLY ADDED) === -->
+
+    <!-- === NEW: DOWNLOAD QUALITY MODAL (ADDED) === -->
+    <div id="download-modal-overlay" class="hidden">
+        <div id="download-modal-content">
+            <h3>Choose Download Quality</h3>
+            <div class="quality-options">
+                <button class="quality-btn" data-quality="low" data-size="300">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>Standard Quality</span>
+                    <small>300x300 px</small>
+                </button>
+                <button class="quality-btn" data-quality="hd" data-size="1024">
+                    <i class="fas fa-gem"></i>
+                    <span>High Quality (HD)</span>
+                    <small>1024x1024 px</small>
+                </button>
+            </div>
+            <p class="hd-note">
+                <i class="fas fa-lock"></i> HD Quality requires login.
+            </p>
+            <button id="close-download-modal-button">×</button>
+        </div>
+    </div>
+    <!-- === MODAL ENDS HERE === -->
+
+    <!-- === SOUND EFFECT ELEMENT (ALREADY PRESENT) === -->
     <audio id="qrSound" src="sounds/qr-generate.mp3" preload="auto"></audio>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
