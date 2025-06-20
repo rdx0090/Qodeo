@@ -59,6 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     // PART 2: QR CODE SCRIPT
     // =================================================================
+    
+    // === NEW: GET THE AUDIO ELEMENT ONCE AT THE TOP ===
+    const qrSound = document.getElementById('qrSound');
+    
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
     const dotStyleSelect = document.getElementById('dotStyle');
@@ -127,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
 
     function switchQrType(selectedType) {
+        //... function is unchanged
         const dynamicToggleContainer = document.querySelector('.dynamic-qr-toggle-container');
         if (selectedType === 'url' && dynamicToggleContainer) {
             dynamicToggleContainer.style.display = 'flex';
@@ -155,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getQrDataStringForInstance(validate = false) {
+        //... function is unchanged
         let dataString = "";
         const showAlert = (message) => {
             if (validate) alert(message);
@@ -176,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =======================================================
-    // === FINAL, FIXED FUNCTION WITH ANIMATION LOGIC      ===
+    // === FINAL, FIXED FUNCTION WITH SOUND & ANIMATION    ===
     // =======================================================
     async function generateQRCodePreview(shouldValidate = false) {
         const isDynamic = dynamicQrCheckbox.checked && currentQrType === 'url';
@@ -202,11 +208,16 @@ document.addEventListener('DOMContentLoaded', () => {
         generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
 
         if (shouldValidate && qrCanvasContainer) {
+            // === SOUND PLAY (NEW) ===
+            if (qrSound) {
+                qrSound.currentTime = 0;
+                qrSound.play().catch(error => console.log("Sound play was interrupted by user action."));
+            }
+            
             qrCanvasContainer.innerHTML = '';
             qrCanvasContainer.classList.add('generating');
         }
 
-        // Update the main QR instance with the latest options
         qrCodeInstance.update({
             data: dataForQr,
             dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
@@ -214,17 +225,15 @@ document.addEventListener('DOMContentLoaded', () => {
             image: currentLogoBase64 || '',
         });
         
-        // Only re-append if it's not already there or if we are running animation
         if (shouldValidate || !qrCanvasContainer.querySelector('svg')) {
            if (qrCanvasContainer) {
-               qrCanvasContainer.innerHTML = ''; // Clear first
+               qrCanvasContainer.innerHTML = '';
                qrCodeInstance.append(qrCanvasContainer);
            }
         }
         
         if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr;
 
-        // Use a single timer to handle UI reset
         setTimeout(() => {
             if (shouldValidate && qrCanvasContainer) {
                 qrCanvasContainer.classList.remove('generating');
@@ -233,10 +242,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 generateQrMainButton.disabled = false;
                 generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
             }
-        }, shouldValidate ? 1500 : 0); // Only delay if animating
+        }, shouldValidate ? 1500 : 0);
     }
 
     // --- EVENT LISTENERS ---
+    // ... (unchanged)
     if (qrTypeButtons) qrTypeButtons.forEach(button => button.addEventListener('click', () => switchQrType(button.dataset.type)));
     if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => generateQRCodePreview(true));
     [dotColorInput, backgroundColorInput, dotStyleSelect, dynamicQrCheckbox].forEach(input => {
@@ -247,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (logoUploadInput) {
+        // ... (unchanged)
         logoUploadInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (!file) {
@@ -265,9 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =======================================================
-    // === FINAL, FIXED DOWNLOAD LOGIC                     ===
-    // =======================================================
+    // === DOWNLOAD LOGIC ===
+    // ... (unchanged)
     function handleDownload(extension) {
         const currentUser = auth.currentUser;
         
@@ -284,11 +294,10 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Downloading HD ${extension.toUpperCase()} (1024x1024).`);
         }
 
-        // Create a new instance for download with correct data and options
         const downloadInstance = new QRCodeStyling({
             width: size,
             height: size,
-            type: 'svg', // Always generate SVG first for quality
+            type: 'svg',
             data: dataForDownload,
             image: currentLogoBase64 || '',
             dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
@@ -305,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // === SAVE BUTTON LOGIC ===
+    // ... (unchanged)
     if (saveQrButton) {
         saveQrButton.addEventListener('click', async () => {
             const currentUser = auth.currentUser;
