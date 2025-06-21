@@ -334,14 +334,14 @@ input:checked + .slider:before {
     margin-right: 5px;
 }
 
-/* ================================================ */
-/* === FINAL PRO BUTTON & PRO PAGE STYLES (v2)  === */
-/* ================================================ */
+/* ======================================================== */
+/* === FINAL PRO BUTTON & PRO PAGE STYLES (v4 - ULTIMATE) === */
+/* ======================================================== */
 
 /* Container for the Pro Button to center it */
 .pro-button-container {
     text-align: center;
-    margin-bottom: 30px; /* Input area se pehle thoda space */
+    margin-bottom: 30px;
     border-top: 1px solid var(--border-light);
     padding-top: 25px;
 }
@@ -356,63 +356,97 @@ input:checked + .slider:before {
     font-size: 1.1rem;
     font-weight: 700;
     text-decoration: none;
-
-    /* Richer, darker Golden Gradient */
+    
     background: linear-gradient(145deg, #FBB03B, #FFD700);
-    color: #4B3621; /* Dark Brown for contrast */
-
+    color: #4B3621;
+    
     border-radius: 50px;
-    border: 2px solid #fff; /* White border for a premium feel */
+    border: 2px solid #fff;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 0 0 3px #FBB03B;
-
+    
     position: relative;
     overflow: hidden;
     z-index: 1;
+    
+    /* Attach the new zoom animation here */
+    animation: pulse-zoom-pro 2.5s infinite ease-in-out;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #pro-features-button-main i {
     font-size: 1.2em;
+    z-index: 2; /* Make sure icon is above the animation */
 }
 
+#pro-features-button-main span {
+    z-index: 2; /* Make sure text is above the animation */
+}
+
+/* Hover par animation ko thoda bada karenge */
 #pro-features-button-main:hover {
-    transform: scale(1.05);
+    animation-play-state: paused; /* Hover par pulse-zoom animation ruk jayegi */
+    transform: scale(1.05); /* Aur sirf scale wala effect dikhega */
     box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 0 0 4px #FFD700;
 }
 
-/* === THE 24x7 FIRECRACKER ANIMATION === */
-#pro-features-button-main::before {
+/* === THE FIRECRACKER ANIMATION === */
+#pro-features-button-main::before, 
+#pro-features-button-main::after {
     content: '';
     position: absolute;
     z-index: -1;
-    width: 150%;
-    height: 150%;
-    /* The firecracker/sparks effect */
+    top: -20px; left: -20px; right: -20px; bottom: -20px;
+    
     background-image: 
-        radial-gradient(circle at 10% 20%, #ffffff 1px, transparent 2px),
-        radial-gradient(circle at 80% 30%, #ffffff 1px, transparent 2px),
-        radial-gradient(circle at 25% 90%, #fff700 1px, transparent 2px),
-        radial-gradient(circle at 90% 85%, #fff700 2px, transparent 3px),
-        radial-gradient(circle at 50% 50%, #ffffff 2px, transparent 3px);
+        radial-gradient(circle at 10% 20%, #ffffff 1px, transparent 1px),
+        radial-gradient(circle at 80% 30%, #ffffff 2px, transparent 2px),
+        radial-gradient(circle at 25% 90%, #fff700 1px, transparent 1px),
+        radial-gradient(circle at 90% 85%, #fff700 2px, transparent 2px),
+        radial-gradient(circle at 50% 50%, #ffffff 2px, transparent 2px),
+        radial-gradient(circle at 5% 55%, #ffffff 1px, transparent 1px),
+        radial-gradient(circle at 60% 70%, #fff700 1px, transparent 1px);
+    
     background-size: 100px 100px;
-
-    /* Animation: make the sparks move and fade */
-    animation: sparkle-flow 10s infinite linear;
     opacity: 0;
-    transition: opacity 0.5s ease;
 }
 
-/* On hover, make the sparks visible */
-#pro-features-button-main:hover::before {
-    opacity: 0.25;
+/* Animation Layer 1 (Slow and steady sparks) */
+#pro-features-button-main::before {
+    animation: sparkle-flow-1 15s infinite linear;
+    animation-delay: 1s;
 }
 
-@keyframes sparkle-flow {
+/* Animation Layer 2 (Faster, smaller sparks) */
+#pro-features-button-main::after {
+    background-size: 50px 50px; /* Denser sparks */
+    animation: sparkle-flow-2 8s infinite linear;
+    animation-delay: 1.5s;
+}
+
+@keyframes sparkle-flow-1 {
+    0%   { opacity: 0; transform: translate(0, 50px); }
+    10%  { opacity: 0.5; }
+    90%  { opacity: 0.5; }
+    100% { opacity: 0; transform: translate(-50px, -100px); }
+}
+
+@keyframes sparkle-flow-2 {
+    0%   { opacity: 0; transform: translate(0, -50px); }
+    15%  { opacity: 0.4; }
+    85%  { opacity: 0.4; }
+    100% { opacity: 0; transform: translate(50px, 100px); }
+}
+
+/* === Keyframes for the Pulse-Zoom Animation === */
+@keyframes pulse-zoom-pro {
     0% {
-        transform: translate(0, 0);
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03); /* Halka sa zoom in */
     }
     100% {
-        transform: translate(-100px, -100px); /* Sparks move diagonally */
+        transform: scale(1);
     }
 }
 
@@ -424,7 +458,6 @@ input:checked + .slider:before {
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border-light);
 }
-
 .pro-page-header .fa-crown {
     font-size: 3rem;
     color: #ffc107;
