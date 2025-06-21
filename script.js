@@ -5,15 +5,13 @@ const firebaseConfig = {
     apiKey: "AIzaSyDNFQRtlvEJsvbmabHoLYduBfqRcPdgFpw",
     authDomain: "qodeo-qr.firebaseapp.com",
     projectId: "qodeo-qr",
-    storageBucket: "qodeo-qr.appspot.com", // Firebase Storage ke liye zaroori
+    storageBucket: "qodeo-qr.appspot.com",
     messagingSenderId: "238610791735",
     appId: "1:238610791735:web:bc59eac9903994533f2eb2"
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-
-// Cloudinary Details (Aapne provide ki thi)
 const CLOUD_NAME = 'drork8wvy';
 const UPLOAD_PRESET = 'qodeo_uploads';
 
@@ -64,11 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // =================================================================
     // PART 2: QR CODE SCRIPT
-    // =================================================================
-    
-    // === All Const Declarations ===
     const qrSound = document.getElementById('qrSound');
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
@@ -147,14 +141,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // === INITIALIZATION & ROUTING LOGIC ===
     const urlParams = new URLSearchParams(window.location.search);
     const toolFromUrl = urlParams.get('tool');
-
     if (toolFromUrl) {
         auth.onAuthStateChanged(user => {
             if (user) {
                 switchTool(toolFromUrl);
             } else {
                 alert("Please log in to use Pro features.");
-                loginModalOverlay.classList.remove('hidden');
+                if(loginModalOverlay) loginModalOverlay.classList.remove('hidden');
                 switchTool('url');
             }
         });
@@ -178,14 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
             pdf: 'Upload a PDF File (Pro)', app_store: 'Enter App Store Links (Pro)'
         };
         inputAreaTitle.textContent = titleMap[selectedTool] || 'Enter Data';
-        
         generateQRCodePreview(false);
     }
 
     // === EVENT LISTENERS ===
-    qrTypeButtons.forEach(button => {
-        button.addEventListener('click', () => switchTool(button.dataset.type));
-    });
+    qrTypeButtons.forEach(button => button.addEventListener('click', () => switchTool(button.dataset.type)));
     
     if (pdfUploadLabel) pdfUploadLabel.addEventListener('click', () => pdfUploadInput.click());
     if (pdfUploadInput) pdfUploadInput.addEventListener('change', (e) => {
@@ -198,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => {
-        const proTools = ['pdf', 'app_store'];
+        const proTools = ['pdf'];
         if (proTools.includes(currentTool)) {
             if (!auth.currentUser) {
                 alert("Please log in to use this Pro feature.");
@@ -235,19 +225,77 @@ document.addEventListener('DOMContentLoaded', () => {
     // === DOWNLOAD & SAVE LOGIC ===
     let downloadExtension = 'png';
     function openDownloadModal(extension) {
-        // ... (Download modal logic remains unchanged) ...
+        const dataForDownload = getQrDataStringForInstance(true);
+        if (dataForDownload === null && currentTool !== 'pdf') { alert("Please fill required fields before downloading."); return; }
+        if (currentTool === 'pdf' && !qrDataDisplay.textContent.startsWith('http')) { alert("Please generate a PDF QR code first."); return; }
+        downloadExtension = extension;
+        if(downloadModalOverlay) downloadModalOverlay.classList.remove('hidden');
     }
-    function closeDownloadModal() { /* ... */ }
+    function closeDownloadModal() { if(downloadModalOverlay) downloadModalOverlay.classList.add('hidden'); }
     if (downloadSvgButton) downloadSvgButton.addEventListener('click', () => openDownloadModal('svg'));
     if (downloadPngButton) downloadPngButton.addEventListener('click', () => openDownloadModal('png'));
     if (closeDownloadModalButton) closeDownloadModalButton.addEventListener('click', closeDownloadModal);
     if (downloadModalOverlay) downloadModalOverlay.addEventListener('click', (event) => { if(event.target === downloadModalOverlay) closeDownloadModal(); });
-    if (qualityButtons) qualityButtons.forEach(button => { /* ... */ });
-    function initiateDownload(size, extension) { /* ... */ }
-    if (saveQrButton) saveQrButton.addEventListener('click', async () => { /* ... */ });
+
+    if (qualityButtons) qualityButtons.forEach(button => button.addEventListener('click', () => {
+        const quality = button.dataset.quality;
+        const size = parseInt(button.dataset.size, 10);
+        if (quality === 'hd' && !auth.currentUser) {
+            closeDownloadModal();
+            alert("Please log in to download in HD quality.");
+            loginModalOverlay.classList.remove('hidden');
+            return;
+        }
+        closeDownloadModal();
+        initiateDownload(size, downloadExtension);
+    }));
+
+    function initiateDownload(size, extension) {
+        let dataForDownload = getQrDataStringForInstance(false);
+        if(currentTool === 'pdf') dataForDownload = qrDataDisplay.textContent;
+
+        if (size === 1024) alert(`Downloading HD ${extension.toUpperCase()} (${size}x${size}).`);
+        
+        const downloadInstance = new QRCodeStyling({
+            width: size, height: size, type: 'svg', data: dataForDownload, image: currentLogoBase64 || '',
+            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
+            backgroundOptions: { color: backgroundColorInput.value },
+            imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
+            qrOptions: { errorCorrectionLevel: 'H' }
+        });
+        downloadInstance.download({ name: `qodeo-qr${size === 1024 ? '-hd' : ''}`, extension: extension });
+    }
+
+    if (saveQrButton) saveQrButton.addEventListener('click', async () => {
+        if (!auth.currentUser) { alert("Please log in to save your QR Code."); loginModalOverlay.classList.remove('hidden'); return; }
+        let dataToSave = getQrDataStringForInstance(true);
+        if (currentTool === 'pdf') dataToSave = qrDataDisplay.textContent;
+        if (!dataToSave || dataToSave === "https://qodeo.pro") { alert("Please generate a QR code first before saving."); return; }
+        
+        saveQrButton.disabled = true;
+        saveQrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        const qrRecord = {
+            userId: auth.currentUser.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            type: currentTool === 'pdf' ? 'pro' : (dynamicQrCheckbox.checked ? 'dynamic' : 'static'),
+            qrDataType: currentTool, targetData: dataToSave, scanCount: 0,
+            customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
+        };
+
+        try {
+            await db.collection("qrcodes").add(qrRecord);
+            saveQrButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
+            setTimeout(() => {
+                saveQrButton.disabled = false;
+                saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
+            }, 2000);
+        } catch (error) {
+            alert("Could not save QR Code.");
+            resetSaveButton();
+        }
+    });
 
     // === HELPER FUNCTIONS ===
-    
     function handlePdfUpload() {
         const file = pdfUploadInput.files[0];
         if (!file) { alert('Please select a PDF file.'); return; }
@@ -269,8 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.secure_url) {
                 progressDiv.style.width = '100%';
                 generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generating QR...';
-                await finalizeQrGeneration(data.secure_url, true); // Generate with sound & animation
-                saveProQrToFirestore('pdf', data.secure_url, data.public_id);
+                await finalizeQrGeneration(data.secure_url, true);
             } else { throw new Error(data.error.message || 'Upload failed'); }
         })
         .catch(error => {
@@ -279,14 +326,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    async function saveProQrToFirestore(toolType, url, publicId) {
-        // ... (This function remains unchanged) ...
-    }
-
     async function generateQRCodePreview(shouldValidate) {
-        const dataForQr = getQrDataStringForInstance(shouldValidate, currentTool);
+        const dataForQr = getQrDataStringForInstance(shouldValidate);
         if (dataForQr) {
-            await finalizeQrGeneration(dataForQr, shouldValidate); // Pass validation flag
+            await finalizeQrGeneration(dataForQr, shouldValidate);
         } else if (shouldValidate) {
             resetGenerateButton();
         }
@@ -313,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
            }
         }
         
-        if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr;
+        if (qrDataDisplay) qrDataDisplay.textContent = dataForQr;
         
         if (withAnimationAndSound) {
             setTimeout(() => {
@@ -321,15 +364,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetGenerateButton();
             }, 1500);
         } else {
-            resetGenerateButton();
+            if(!generateQrMainButton.disabled) resetGenerateButton();
         }
     }
 
     function resetGenerateButton() {
-        // ... (This function remains unchanged) ...
+        generateQrMainButton.disabled = false;
+        generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
+        if (pdfUploadProgress) {
+            setTimeout(() => {
+                pdfUploadProgress.style.display = 'none';
+                pdfUploadProgress.querySelector('.progress').style.width = '0%';
+            }, 2000);
+        }
     }
 
-    function getQrDataStringForInstance(validate = false, tool = currentTool) {
-        // ... (This function remains unchanged) ...
+    function resetSaveButton() {
+        saveQrButton.disabled = false;
+        saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
+    }
+
+    function getQrDataStringForInstance(validate = false) {
+        let dataString = "";
+        const showAlert = (message) => { if (validate) alert(message); return null; };
+        switch (currentTool) {
+            case 'url': dataString = qrDataUrlInput.value; if(!dataString && validate) return showAlert("Please enter a URL."); break;
+            case 'text': dataString = qrDataTextInput.value; if(!dataString && validate) return showAlert("Please enter text."); break;
+            // ... (baaki saare cases jaisa ka taisa)
+            default: dataString = "https://qodeo.pro";
+        }
+        return dataString || "https://qodeo.pro";
     }
 });
