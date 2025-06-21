@@ -57,87 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (userAvatarImg) userAvatarImg.src = '';
             if (dynamicQrCheckbox) {
                 dynamicQrCheckbox.checked = false;
-                generateQRCodePreview(false, 'url');
             }
         }
+        generateQRCodePreview(false);
     });
 
     // PART 2: QR CODE SCRIPT
-    const qrSound = document.getElementById('qrSound');
-    const dotColorInput = document.getElementById('dotColor');
-    const backgroundColorInput = document.getElementById('backgroundColor');
-    const dotStyleSelect = document.getElementById('dotStyle');
-    const logoUploadInput = document.getElementById('logoUpload');
-    const logoPreview = document.getElementById('logoPreview');
-    const generateQrMainButton = document.getElementById('generateQrMainButton');
-    const downloadSvgButton = document.getElementById('downloadSvgButton');
-    const downloadPngButton = document.getElementById('downloadPngButton');
-    const saveQrButton = document.getElementById('saveQrButton');
-    const dynamicQrCheckbox = document.getElementById('makeQrDynamic');
-    const qrCanvasContainer = document.getElementById('qrCanvasContainer');
-    const qrDataDisplay = document.getElementById('qrDataDisplay');
-    const yearSpan = document.getElementById('year');
-    const inputAreaTitle = document.getElementById('inputAreaTitle');
-    const qrDataUrlInput = document.getElementById('qrDataUrl');
-    const qrDataTextInput = document.getElementById('qrDataText');
-    const qrEmailToInput = document.getElementById('qrEmailTo');
-    const qrEmailSubjectInput = document.getElementById('qrEmailSubject');
-    const qrEmailBodyInput = document.getElementById('qrEmailBody');
-    const qrPhoneNumberInput = document.getElementById('qrPhoneNumber');
-    const qrSmsNumberInput = document.getElementById('qrSmsNumber');
-    const qrSmsMessageInput = document.getElementById('qrSmsMessage');
-    const qrWifiSsidInput = document.getElementById('qrWifiSsid');
-    const qrWifiPasswordInput = document.getElementById('qrWifiPassword');
-    const qrWifiEncryptionSelect = document.getElementById('qrWifiEncryption');
-    const qrWifiHiddenCheckbox = document.getElementById('qrWifiHidden');
-    const vcardFirstNameInput = document.getElementById('vcardFirstName');
-    const vcardLastNameInput = document.getElementById('vcardLastName');
-    const vcardFormattedNameInput = document.getElementById('vcardFormattedName');
-    const vcardPhoneMobileInput = document.getElementById('vcardPhoneMobile');
-    const vcardPhoneWorkInput = document.getElementById('vcardPhoneWork');
-    const vcardEmailInput = document.getElementById('vcardEmail');
-    const vcardWebsiteInput = document.getElementById('vcardWebsite');
-    const vcardOrganizationInput = document.getElementById('vcardOrganization');
-    const vcardJobTitleInput = document.getElementById('vcardJobTitle');
-    const vcardAdrStreetInput = document.getElementById('vcardAdrStreet');
-    const vcardAdrCityInput = document.getElementById('vcardAdrCity');
-    const vcardAdrRegionInput = document.getElementById('vcardAdrRegion');
-    const vcardAdrPostcodeInput = document.getElementById('vcardAdrPostcode');
-    const vcardAdrCountryInput = document.getElementById('vcardAdrCountry');
-    const vcardNoteInput = document.getElementById('vcardNote');
-    const qrLocationLatitudeInput = document.getElementById('qrLocationLatitude');
-    const qrLocationLongitudeInput = document.getElementById('qrLocationLongitude');
-    const qrLocationQueryInput = document.getElementById('qrLocationQuery');
-    const qrEventSummaryInput = document.getElementById('qrEventSummary');
-    const qrEventLocationInput = document.getElementById('qrEventLocation');
-    const qrEventDtStartInput = document.getElementById('qrEventDtStart');
-    const qrEventDtEndInput = document.getElementById('qrEventDtEnd');
-    const qrEventDescriptionInput = document.getElementById('qrEventDescription');
-    const qrTypeButtons = document.querySelectorAll('.qr-type-button');
-    const qrInputGroups = document.querySelectorAll('.qr-input-group');
-    const downloadModalOverlay = document.getElementById('download-modal-overlay');
-    const closeDownloadModalButton = document.getElementById('close-download-modal-button');
-    const qualityButtons = document.querySelectorAll('.quality-btn');
+    // ... (Saare const declarations) ...
     const pdfUploadInput = document.getElementById('pdfUpload');
-    const pdfUploadLabel = document.querySelector('.file-upload-label');
-    const pdfFileName = document.getElementById('pdfFileName');
-    const pdfUploadProgress = document.getElementById('pdfUploadProgress');
-
-    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-    let currentLogoBase64 = null;
-    let currentTool = 'url';
-    if (typeof QRCodeStyling === 'undefined') { console.error("QRCodeStyling library not loaded."); return; }
-
-    const qrCodeInstance = new QRCodeStyling({
-        width: 250, height: 250, type: 'svg',
-        data: "https://qodeo.pro", image: '',
-        dotsOptions: { color: "#000000", type: "square" },
-        backgroundOptions: { color: "#ffffff" },
-        imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
-        qrOptions: { errorCorrectionLevel: 'H' }
-    });
-    if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
+    const qrTypeButtons = document.querySelectorAll('.qr-type-button');
     
+    let currentTool = 'url';
+    const qrCodeInstance = new QRCodeStyling({ /* ... */ });
+    if(qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
+
     // === INITIALIZATION & ROUTING LOGIC ===
     const urlParams = new URLSearchParams(window.location.search);
     const toolFromUrl = urlParams.get('tool');
@@ -147,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 switchTool(toolFromUrl);
             } else {
                 alert("Please log in to use Pro features.");
-                if(loginModalOverlay) loginModalOverlay.classList.remove('hidden');
+                loginModalOverlay.classList.remove('hidden');
                 switchTool('url');
             }
         });
@@ -177,222 +110,108 @@ document.addEventListener('DOMContentLoaded', () => {
     // === EVENT LISTENERS ===
     qrTypeButtons.forEach(button => button.addEventListener('click', () => switchTool(button.dataset.type)));
     
-    if (pdfUploadLabel) pdfUploadLabel.addEventListener('click', () => pdfUploadInput.click());
-    if (pdfUploadInput) pdfUploadInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (file.type !== "application/pdf") { alert("Please select a PDF file only."); e.target.value = ""; return; }
-        if (file.size > 5 * 1024 * 1024) { alert("File is too large (Max 5MB)."); e.target.value = ""; return; }
-        pdfFileName.textContent = `Selected: ${file.name}`;
-        if (pdfUploadLabel) pdfUploadLabel.querySelector('span').textContent = "Change PDF File";
-    });
-
-    if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => {
-        const proTools = ['pdf'];
-        if (proTools.includes(currentTool)) {
-            if (!auth.currentUser) {
-                alert("Please log in to use this Pro feature.");
-                loginModalOverlay.classList.remove('hidden');
-                return;
-            }
-            if (currentTool === 'pdf') handlePdfUpload();
-        } else {
-            generateQRCodePreview(true);
-        }
-    });
+    if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => generateQRCodePreview(true));
     
-    [dotColorInput, backgroundColorInput, dotStyleSelect, dynamicQrCheckbox].forEach(input => {
-        if (input) input.addEventListener('change', () => generateQRCodePreview(false));
-    });
-    document.querySelectorAll('.qr-input-group:not(#pdfInputs) input, .qr-input-group:not(#pdfInputs) textarea, .qr-input-group:not(#pdfInputs) select').forEach(input => {
-        input.addEventListener('input', () => generateQRCodePreview(false));
-    });
-
-    if (logoUploadInput) logoUploadInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (!file) { currentLogoBase64 = null; if (logoPreview) logoPreview.style.display = 'none'; }
-        else {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                currentLogoBase64 = e.target.result;
-                if (logoPreview) { logoPreview.src = currentLogoBase64; logoPreview.style.display = 'block'; }
-            };
-            reader.readAsDataURL(file);
-        }
-        generateQRCodePreview(false);
-    });
+    // ... (other event listeners)
 
     // === DOWNLOAD & SAVE LOGIC ===
-    let downloadExtension = 'png';
-    function openDownloadModal(extension) {
-        const dataForDownload = getQrDataStringForInstance(true);
-        if (dataForDownload === null && currentTool !== 'pdf') { alert("Please fill required fields before downloading."); return; }
-        if (currentTool === 'pdf' && !qrDataDisplay.textContent.startsWith('http')) { alert("Please generate a PDF QR code first."); return; }
-        downloadExtension = extension;
-        if(downloadModalOverlay) downloadModalOverlay.classList.remove('hidden');
-    }
-    function closeDownloadModal() { if(downloadModalOverlay) downloadModalOverlay.classList.add('hidden'); }
-    if (downloadSvgButton) downloadSvgButton.addEventListener('click', () => openDownloadModal('svg'));
-    if (downloadPngButton) downloadPngButton.addEventListener('click', () => openDownloadModal('png'));
-    if (closeDownloadModalButton) closeDownloadModalButton.addEventListener('click', closeDownloadModal);
-    if (downloadModalOverlay) downloadModalOverlay.addEventListener('click', (event) => { if(event.target === downloadModalOverlay) closeDownloadModal(); });
-
-    if (qualityButtons) qualityButtons.forEach(button => button.addEventListener('click', () => {
-        const quality = button.dataset.quality;
-        const size = parseInt(button.dataset.size, 10);
-        if (quality === 'hd' && !auth.currentUser) {
-            closeDownloadModal();
-            alert("Please log in to download in HD quality.");
-            loginModalOverlay.classList.remove('hidden');
-            return;
-        }
-        closeDownloadModal();
-        initiateDownload(size, downloadExtension);
-    }));
-
-    function initiateDownload(size, extension) {
-        let dataForDownload = getQrDataStringForInstance(false);
-        if(currentTool === 'pdf') dataForDownload = qrDataDisplay.textContent;
-
-        if (size === 1024) alert(`Downloading HD ${extension.toUpperCase()} (${size}x${size}).`);
-        
-        const downloadInstance = new QRCodeStyling({
-            width: size, height: size, type: 'svg', data: dataForDownload, image: currentLogoBase64 || '',
-            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
-            backgroundOptions: { color: backgroundColorInput.value },
-            imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
-            qrOptions: { errorCorrectionLevel: 'H' }
-        });
-        downloadInstance.download({ name: `qodeo-qr${size === 1024 ? '-hd' : ''}`, extension: extension });
-    }
-
     if (saveQrButton) saveQrButton.addEventListener('click', async () => {
         if (!auth.currentUser) { alert("Please log in to save your QR Code."); loginModalOverlay.classList.remove('hidden'); return; }
-        let dataToSave = getQrDataStringForInstance(true);
-        if (currentTool === 'pdf') dataToSave = qrDataDisplay.textContent;
-        if (!dataToSave || dataToSave === "https://qodeo.pro") { alert("Please generate a QR code first before saving."); return; }
+        
+        const isDynamic = dynamicQrCheckbox.checked && currentTool === 'url';
+        let dataToSave;
+        let qrDataTypeForDb = currentTool;
+        let typeForDb = 'static';
+        
+        if (isDynamic) {
+            typeForDb = 'dynamic';
+            dataToSave = qrDataUrlInput.value;
+            if (!dataToSave) {
+                alert("Please enter a URL to save as a Dynamic QR.");
+                return;
+            }
+        } else if (currentTool === 'pdf') {
+            typeForDb = 'pro';
+            dataToSave = qrDataDisplay.textContent;
+            if (!dataToSave.startsWith('http')) {
+                 alert("Please generate the PDF QR first.");
+                 return;
+            }
+        } else {
+            dataToSave = getQrDataStringForInstance(true);
+        }
+
+        if (!dataToSave) { 
+            // getQrDataStringForInstance returns null on validation failure
+            return; 
+        }
         
         saveQrButton.disabled = true;
         saveQrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
         const qrRecord = {
-            userId: auth.currentUser.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            type: currentTool === 'pdf' ? 'pro' : (dynamicQrCheckbox.checked ? 'dynamic' : 'static'),
-            qrDataType: currentTool, targetData: dataToSave, scanCount: 0,
-            customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
+            userId: auth.currentUser.uid,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            type: typeForDb,
+            qrDataType: qrDataTypeForDb,
+            targetData: dataToSave, // For dynamic, this is the destination. For static, it's the content.
+            scanCount: 0,
+            customization: { /* ... */ }
         };
 
         try {
-            await db.collection("qrcodes").add(qrRecord);
+            const docRef = await db.collection("qrcodes").add(qrRecord);
+            
+            if (isDynamic) {
+                const dynamicUrl = `https://qodeo.vercel.app/qr/${docRef.id}`;
+                await finalizeQrGeneration(dynamicUrl, false);
+            }
+
             saveQrButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
-            setTimeout(() => {
-                saveQrButton.disabled = false;
-                saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
-            }, 2000);
+            setTimeout(resetSaveButton, 2000);
         } catch (error) {
             alert("Could not save QR Code.");
             resetSaveButton();
         }
     });
+    
+    // ... (other download logic)
 
     // === HELPER FUNCTIONS ===
-    function handlePdfUpload() {
-        const file = pdfUploadInput.files[0];
-        if (!file) { alert('Please select a PDF file.'); return; }
-        generateQrMainButton.disabled = true;
-        generateQrMainButton.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Uploading...';
-        
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', UPLOAD_PRESET);
-        formData.append('folder', `qodeo/${auth.currentUser.uid}`);
-
-        pdfUploadProgress.style.display = 'block';
-        const progressDiv = pdfUploadProgress.querySelector('.progress');
-        progressDiv.style.width = '50%';
-
-        fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, { method: 'POST', body: formData })
-        .then(response => response.json())
-        .then(async (data) => {
-            if (data.secure_url) {
-                progressDiv.style.width = '100%';
-                generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generating QR...';
-                await finalizeQrGeneration(data.secure_url, true);
-            } else { throw new Error(data.error.message || 'Upload failed'); }
-        })
-        .catch(error => {
-            alert("PDF upload failed: " + error.message);
-            resetGenerateButton();
-        });
-    }
     
     async function generateQRCodePreview(shouldValidate) {
-        const dataForQr = getQrDataStringForInstance(shouldValidate);
+        const isDynamic = dynamicQrCheckbox.checked && currentTool === 'url';
+        let dataForQr;
+
+        if (isDynamic) {
+            if (!auth.currentUser && shouldValidate) {
+                alert("Please log in to use the Dynamic QR feature.");
+                dynamicQrCheckbox.checked = false;
+                return;
+            }
+            // For preview, we show the actual URL so the user can test it.
+            // The magic happens when they save it.
+            dataForQr = qrDataUrlInput.value;
+            if (!dataForQr && shouldValidate) {
+                alert("Please enter a URL for the Dynamic QR.");
+                return;
+            }
+        } else {
+            // Normal static QR generation
+            if (currentTool === 'pdf') {
+                handlePdfUpload();
+                return; // Stop here, handlePdfUpload will call finalizeQrGeneration
+            }
+            dataForQr = getQrDataStringForInstance(shouldValidate);
+        }
+
         if (dataForQr) {
             await finalizeQrGeneration(dataForQr, shouldValidate);
         } else if (shouldValidate) {
+            // This case handles when getQrDataStringForInstance returns null
             resetGenerateButton();
         }
     }
     
-    async function finalizeQrGeneration(dataForQr, withAnimationAndSound = false) {
-        if (withAnimationAndSound) {
-            if (generateQrMainButton) generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-            if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
-            if (qrCanvasContainer) { qrCanvasContainer.innerHTML = ''; qrCanvasContainer.classList.add('generating'); }
-        }
-        
-        await qrCodeInstance.update({
-            data: dataForQr,
-            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
-            backgroundOptions: { color: backgroundColorInput.value },
-            image: currentLogoBase64 || '',
-        });
-
-        if (withAnimationAndSound || !qrCanvasContainer.querySelector('svg')) {
-           if (qrCanvasContainer) {
-               if(!withAnimationAndSound) qrCanvasContainer.innerHTML = '';
-               qrCodeInstance.append(qrCanvasContainer);
-           }
-        }
-        
-        if (qrDataDisplay) qrDataDisplay.textContent = dataForQr;
-        
-        if (withAnimationAndSound) {
-            setTimeout(() => {
-                if (qrCanvasContainer) qrCanvasContainer.classList.remove('generating');
-                resetGenerateButton();
-            }, 1500);
-        } else {
-            if(!generateQrMainButton.disabled) resetGenerateButton();
-        }
-    }
-
-    function resetGenerateButton() {
-        generateQrMainButton.disabled = false;
-        generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
-        if (pdfUploadProgress) {
-            setTimeout(() => {
-                pdfUploadProgress.style.display = 'none';
-                pdfUploadProgress.querySelector('.progress').style.width = '0%';
-            }, 2000);
-        }
-    }
-
-    function resetSaveButton() {
-        saveQrButton.disabled = false;
-        saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
-    }
-
-    function getQrDataStringForInstance(validate = false) {
-        let dataString = "";
-        const showAlert = (message) => { if (validate) alert(message); return null; };
-        switch (currentTool) {
-            case 'url': dataString = qrDataUrlInput.value; if(!dataString && validate) return showAlert("Please enter a URL."); break;
-            case 'text': dataString = qrDataTextInput.value; if(!dataString && validate) return showAlert("Please enter text."); break;
-            // ... (baaki saare cases jaisa ka taisa)
-            default: dataString = "https://qodeo.pro";
-        }
-        return dataString || "https://qodeo.pro";
-    }
+    // ... (finalizeQrGeneration, resetGenerateButton, getQrDataStringForInstance, and all other functions) ...
 });
