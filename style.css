@@ -356,15 +356,15 @@ input:checked + .slider:before {
     font-size: 1.1rem;
     font-weight: 700;
     text-decoration: none;
-    
+
     /* Richer, darker Golden Gradient */
     background: linear-gradient(145deg, #FBB03B, #FFD700);
     color: #4B3621; /* Dark Brown for contrast */
-    
+
     border-radius: 50px;
     border: 2px solid #fff; /* White border for a premium feel */
     box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 0 0 3px #FBB03B;
-    
+
     position: relative;
     overflow: hidden;
     z-index: 1;
@@ -395,7 +395,7 @@ input:checked + .slider:before {
         radial-gradient(circle at 90% 85%, #fff700 2px, transparent 3px),
         radial-gradient(circle at 50% 50%, #ffffff 2px, transparent 3px);
     background-size: 100px 100px;
-    
+
     /* Animation: make the sparks move and fade */
     animation: sparkle-flow 10s infinite linear;
     opacity: 0;
@@ -480,3 +480,4 @@ input:checked + .slider:before {
 .pro-feature-card.coming-soon i {
     color: var(--text-muted);
 }
+Ya rha mera style .css ap khud add kro lakin bhai dyaan sa karna 
