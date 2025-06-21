@@ -125,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const qualityButtons = document.querySelectorAll('.quality-btn');
 
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-    let currentLogoBase64 = null;
     let currentQrType = 'url';
     if (typeof QRCodeStyling === 'undefined') { console.error("QRCodeStyling library not loaded."); return; }
 
@@ -140,8 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
 
     function switchQrType(selectedType) { 
-        // NOTE: This function no longer needs to handle "pro" logic.
-        // It's a simple type switcher now.
         const dynamicToggleContainer = document.querySelector('.dynamic-qr-toggle-container');
         if (selectedType === 'url' && dynamicToggleContainer) {
             dynamicToggleContainer.style.display = 'flex';
@@ -240,7 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- EVENT LISTENERS ---
     if (qrTypeButtons) {
         qrTypeButtons.forEach(button => {
-            // Check if it's not the pro button before adding the switchQrType listener
             if (button.id !== 'pro-features-button') {
                 button.addEventListener('click', () => switchQrType(button.dataset.type));
             }
@@ -273,9 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =======================================================
     // === DOWNLOAD LOGIC WITH QUALITY MODAL (unchanged)   ===
-    // =======================================================
     let downloadExtension = 'png';
     function openDownloadModal(extension) { /* ...unchanged... */
         const dataForDownload = getQrDataStringForInstance(true);
