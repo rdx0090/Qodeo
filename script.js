@@ -18,7 +18,7 @@ const db = firebase.firestore();
 // ==============================================================
 document.addEventListener('DOMContentLoaded', () => {
 
-    // PART 1: AUTHENTICATION (unchanged)
+    // PART 1: AUTHENTICATION
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
     const userProfileDiv = document.getElementById('user-profile');
@@ -38,14 +38,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if(githubLoginButton) githubLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GithubAuthProvider()));
     if(logoutButton) logoutButton.addEventListener('click', () => auth.signOut());
 
+    // === UPDATED: Add class to body for CSS styling ===
     auth.onAuthStateChanged(user => {
         const dynamicQrCheckbox = document.getElementById('makeQrDynamic');
         if (user) {
+            document.body.classList.add('logged-in');
+            document.body.classList.remove('logged-out');
+
             if(loginModalOverlay) loginModalOverlay.classList.add('hidden');
             if(loginButton) loginButton.classList.add('hidden');
             if(userProfileDiv) userProfileDiv.classList.remove('hidden');
             if(userAvatarImg) userAvatarImg.src = user.photoURL || 'images/default-avatar.png';
         } else {
+            document.body.classList.add('logged-out');
+            document.body.classList.remove('logged-in');
+
             if(loginButton) loginButton.classList.remove('hidden');
             if(userProfileDiv) userProfileDiv.classList.add('hidden');
             if(userAvatarImg) userAvatarImg.src = '';
@@ -75,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrDataDisplay = document.getElementById('qrDataDisplay');
     const yearSpan = document.getElementById('year');
     const inputAreaTitle = document.getElementById('inputAreaTitle');
-    // ... all other input consts
     const qrDataUrlInput = document.getElementById('qrDataUrl');
     const qrDataTextInput = document.getElementById('qrDataText');
     const qrEmailToInput = document.getElementById('qrEmailTo');
@@ -114,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrTypeButtons = document.querySelectorAll('.qr-type-button');
     const qrInputGroups = document.querySelectorAll('.qr-input-group');
 
-    // === NEW: Download Modal Elements ===
     const downloadModalOverlay = document.getElementById('download-modal-overlay');
     const closeDownloadModalButton = document.getElementById('close-download-modal-button');
     const qualityButtons = document.querySelectorAll('.quality-btn');
@@ -134,7 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
 
-    function switchQrType(selectedType) { /* ...unchanged... */
+    function switchQrType(selectedType) { 
+        // NOTE: This function no longer needs to handle "pro" logic.
+        // It's a simple type switcher now.
         const dynamicToggleContainer = document.querySelector('.dynamic-qr-toggle-container');
         if (selectedType === 'url' && dynamicToggleContainer) {
             dynamicToggleContainer.style.display = 'flex';
@@ -231,7 +238,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- EVENT LISTENERS ---
-    if (qrTypeButtons) qrTypeButtons.forEach(button => button.addEventListener('click', () => switchQrType(button.dataset.type)));
+    if (qrTypeButtons) {
+        qrTypeButtons.forEach(button => {
+            // Check if it's not the pro button before adding the switchQrType listener
+            if (button.id !== 'pro-features-button') {
+                button.addEventListener('click', () => switchQrType(button.dataset.type));
+            }
+        });
+    }
+
     if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => generateQRCodePreview(true));
     [dotColorInput, backgroundColorInput, dotStyleSelect, dynamicQrCheckbox].forEach(input => {
         if (input) input.addEventListener('change', () => generateQRCodePreview(false));
@@ -259,12 +274,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =======================================================
-    // === NEW DOWNLOAD LOGIC WITH QUALITY MODAL           ===
+    // === DOWNLOAD LOGIC WITH QUALITY MODAL (unchanged)   ===
     // =======================================================
-
     let downloadExtension = 'png';
-    
-    function openDownloadModal(extension) {
+    function openDownloadModal(extension) { /* ...unchanged... */
         const dataForDownload = getQrDataStringForInstance(true);
         if (dataForDownload === null) {
             alert("Please fill in the required fields before choosing download quality.");
@@ -273,59 +286,46 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadExtension = extension;
         if(downloadModalOverlay) downloadModalOverlay.classList.remove('hidden');
     }
-
-    function closeDownloadModal() {
+    function closeDownloadModal() { /* ...unchanged... */
         if(downloadModalOverlay) downloadModalOverlay.classList.add('hidden');
     }
-    
     if (downloadSvgButton) downloadSvgButton.addEventListener('click', () => openDownloadModal('svg'));
     if (downloadPngButton) downloadPngButton.addEventListener('click', () => openDownloadModal('png'));
     if (closeDownloadModalButton) closeDownloadModalButton.addEventListener('click', closeDownloadModal);
     if (downloadModalOverlay) downloadModalOverlay.addEventListener('click', (event) => {
         if(event.target === downloadModalOverlay) closeDownloadModal();
     });
-
-    if (qualityButtons) {
+    if (qualityButtons) { /* ...unchanged... */
         qualityButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const quality = button.dataset.quality;
                 const size = parseInt(button.dataset.size, 10);
                 const currentUser = auth.currentUser;
-
                 if (quality === 'hd' && !currentUser) {
                     closeDownloadModal();
                     alert("Please log in to download in HD quality.");
                     if(loginModalOverlay) loginModalOverlay.classList.remove('hidden');
                     return;
                 }
-
                 closeDownloadModal();
                 initiateDownload(size, downloadExtension);
             });
         });
     }
-
-    function initiateDownload(size, extension) {
+    function initiateDownload(size, extension) { /* ...unchanged... */
         const dataForDownload = getQrDataStringForInstance(true);
         if (dataForDownload === null) return;
-        
         const isHD = (size === 1024);
         if (isHD) {
            alert(`Downloading HD ${extension.toUpperCase()} (${size}x${size}).`);
         }
-        
         const downloadInstance = new QRCodeStyling({
-            width: size,
-            height: size,
-            type: 'svg',
-            data: dataForDownload,
-            image: currentLogoBase64 || '',
+            width: size, height: size, type: 'svg', data: dataForDownload, image: currentLogoBase64 || '',
             dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
             backgroundOptions: { color: backgroundColorInput.value },
             imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
             qrOptions: { errorCorrectionLevel: 'H' }
         });
-        
         downloadInstance.download({ name: `qodeo-qr${isHD ? '-hd' : ''}`, extension: extension });
     }
 
