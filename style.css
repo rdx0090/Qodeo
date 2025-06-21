@@ -334,20 +334,54 @@ input:checked + .slider:before {
     margin-right: 5px;
 }
 
-/* ======================================================== */
-/* === FINAL PRO BUTTON & PRO PAGE STYLES (v4 - ULTIMATE) === */
-/* ======================================================== */
+/* === PDF UPLOAD & PRO BUTTON STYLES === */
+.file-upload-label {
+    border: 2px dashed var(--border-darker);
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    transition: all 0.2s ease;
+}
+.file-upload-label:hover {
+    border-color: var(--primary-color);
+    background-color: #eef5ff;
+}
+.file-upload-label i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+.file-name-display {
+    text-align: center;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 10px;
+}
+.upload-progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+.upload-progress-bar .progress {
+    width: 0%;
+    height: 100%;
+    background-color: var(--secondary-color);
+    transition: width 0.3s ease;
+}
 
-/* Container for the Pro Button to center it */
+/* === FINAL PRO BUTTON & PRO PAGE STYLES (v4 - ULTIMATE) === */
 .pro-button-container {
     text-align: center;
     margin-bottom: 30px;
     border-top: 1px solid var(--border-light);
     padding-top: 25px;
 }
-
-/* The main Pro Call-to-Action button */
-#pro-features-button-main {
+.button-pro-cta { /* ID ko class se target karna behtar hai */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -356,47 +390,31 @@ input:checked + .slider:before {
     font-size: 1.1rem;
     font-weight: 700;
     text-decoration: none;
-    
     background: linear-gradient(145deg, #FBB03B, #FFD700);
     color: #4B3621;
-    
     border-radius: 50px;
     border: 2px solid #fff;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 0 0 3px #FBB03B;
-    
     position: relative;
     overflow: hidden;
     z-index: 1;
-    
-    /* Attach the new zoom animation here */
     animation: pulse-zoom-pro 2.5s infinite ease-in-out;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
-#pro-features-button-main i {
-    font-size: 1.2em;
-    z-index: 2; /* Make sure icon is above the animation */
+.button-pro-cta i, .button-pro-cta span {
+    z-index: 2;
 }
-
-#pro-features-button-main span {
-    z-index: 2; /* Make sure text is above the animation */
-}
-
-/* Hover par animation ko thoda bada karenge */
-#pro-features-button-main:hover {
-    animation-play-state: paused; /* Hover par pulse-zoom animation ruk jayegi */
-    transform: scale(1.05); /* Aur sirf scale wala effect dikhega */
+.button-pro-cta:hover {
+    animation-play-state: paused;
+    transform: scale(1.05);
     box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 0 0 4px #FFD700;
 }
-
-/* === THE FIRECRACKER ANIMATION === */
-#pro-features-button-main::before, 
-#pro-features-button-main::after {
+.button-pro-cta::before, 
+.button-pro-cta::after {
     content: '';
     position: absolute;
     z-index: -1;
     top: -20px; left: -20px; right: -20px; bottom: -20px;
-    
     background-image: 
         radial-gradient(circle at 10% 20%, #ffffff 1px, transparent 1px),
         radial-gradient(circle at 80% 30%, #ffffff 2px, transparent 2px),
@@ -405,20 +423,15 @@ input:checked + .slider:before {
         radial-gradient(circle at 50% 50%, #ffffff 2px, transparent 2px),
         radial-gradient(circle at 5% 55%, #ffffff 1px, transparent 1px),
         radial-gradient(circle at 60% 70%, #fff700 1px, transparent 1px);
-    
     background-size: 100px 100px;
     opacity: 0;
 }
-
-/* Animation Layer 1 (Slow and steady sparks) */
-#pro-features-button-main::before {
+.button-pro-cta::before {
     animation: sparkle-flow-1 15s infinite linear;
     animation-delay: 1s;
 }
-
-/* Animation Layer 2 (Faster, smaller sparks) */
-#pro-features-button-main::after {
-    background-size: 50px 50px; /* Denser sparks */
+.button-pro-cta::after {
+    background-size: 50px 50px;
     animation: sparkle-flow-2 8s infinite linear;
     animation-delay: 1.5s;
 }
@@ -429,29 +442,19 @@ input:checked + .slider:before {
     90%  { opacity: 0.5; }
     100% { opacity: 0; transform: translate(-50px, -100px); }
 }
-
 @keyframes sparkle-flow-2 {
     0%   { opacity: 0; transform: translate(0, -50px); }
     15%  { opacity: 0.4; }
     85%  { opacity: 0.4; }
     100% { opacity: 0; transform: translate(50px, 100px); }
 }
-
-/* === Keyframes for the Pulse-Zoom Animation === */
 @keyframes pulse-zoom-pro {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.03); /* Halka sa zoom in */
-    }
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
 }
 
-
-/* -- pro-features.html ke liye styles -- */
+/* -- pro-features.html page styles -- */
 .pro-page-header {
     text-align: center;
     margin-bottom: 40px;
@@ -513,4 +516,3 @@ input:checked + .slider:before {
 .pro-feature-card.coming-soon i {
     color: var(--text-muted);
 }
-Ya rha mera style .css ap khud add kro lakin bhai dyaan sa karna 
