@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const auth = firebase.auth();
     
     // ==============================================================
-    // === PAGE LOGIC                                             ===
+    // === PAGE LOGIC (PRO.JS)                                    ===
     // ==============================================================
 
     const proFeatureCards = document.querySelectorAll('.pro-feature-card');
@@ -38,25 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if(googleLoginButton) googleLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GoogleAuthProvider()));
     if(githubLoginButton) githubLoginButton.addEventListener('click', () => signInWithProvider(new firebase.auth.GithubAuthProvider()));
 
-    // Main logic for pro feature cards
+    // === NEW AND FINAL LOGIC FOR PRO CARDS ===
     if (proFeatureCards) {
         proFeatureCards.forEach(card => {
-            // Check if it's not the "Coming Soon" card
             if (!card.classList.contains('coming-soon')) {
                 card.addEventListener('click', (event) => {
-                    event.preventDefault(); // Link ko follow karne se roko
-
+                    event.preventDefault(); // Stop default link behavior
                     const tool = card.dataset.tool;
                     const currentUser = auth.currentUser;
 
                     if (currentUser) {
-                        // Agar user logged in hai, to use tool par le jao (Future implementation)
-                        // Abhi ke liye ek alert dikha do
-                        const toolName = card.querySelector('h3').textContent;
-                        alert(`You have access! Taking you to the ${toolName} tool... (This feature is coming soon)`);
-                        // Example for future: window.location.href = `/tools/${tool}.html`;
+                        // User is logged in, redirect them to the homepage with the tool selected
+                        window.location.href = `index.html?tool=${tool}`;
                     } else {
-                        // Agar user logged in nahi hai, to login popup dikhao
+                        // User is not logged in, show the login popup
                         if(loginModalOverlay) loginModalOverlay.classList.remove('hidden');
                     }
                 });
@@ -64,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Header Authentication logic (copied from script.js)
+    // Header Authentication logic
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
     const userProfileDiv = document.getElementById('user-profile');
@@ -73,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     auth.onAuthStateChanged(user => {
         if (user) {
-            // User is signed in
             if(loginModalOverlay) loginModalOverlay.classList.add('hidden');
             if(loginButton) loginButton.style.display = 'none';
             if(userProfileDiv) {
@@ -82,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if(userAvatarImg) userAvatarImg.src = user.photoURL || 'images/default-avatar.png';
         } else {
-            // No user is signed in
             if(loginButton) loginButton.style.display = 'block';
             if(userProfileDiv) {
                 userProfileDiv.style.display = 'none';
