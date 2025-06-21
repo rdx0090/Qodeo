@@ -36,7 +36,7 @@
     <main class="site-main">
         <section class="qr-generator-section">
             <div class="container">
-                <!-- === UPDATED QR TYPE GRID === -->
+                <!-- === FREE QR TYPES GRID === -->
                 <div class="qr-type-selector-grid">
                     <button class="qr-type-button active" data-type="url" title="Website URL"><i class="fas fa-link"></i><span>URL</span></button>
                     <button class="qr-type-button" data-type="text" title="Plain Text"><i class="fas fa-font"></i><span>Text</span></button>
@@ -47,19 +47,21 @@
                     <button class="qr-type-button" data-type="vcard" title="Contact Card (vCard)"><i class="fas fa-address-card"></i><span>vCard</span></button>
                     <button class="qr-type-button" data-type="location" title="Geolocation"><i class="fas fa-map-marker-alt"></i><span>Location</span></button>
                     <button class="qr-type-button" data-type="event" title="Calendar Event"><i class="fas fa-calendar-alt"></i><span>Event</span></button>
-                    
-                    <!-- === THE ONE AND ONLY PRO BUTTON (FINAL PERFECTED VERSION) === -->
-                    <a href="pro-features.html" id="pro-features-button" class="qr-type-button" title="Explore Professional QR Features!">
-                        <i class="fas fa-sparkles"></i>
-                        <span>Explore Pro</span>
-                    </a>
-                    <!-- === PRO BUTTON ENDS HERE === -->
+                    <!-- Aap yahan aur free buttons add kar sakte hain -->
                 </div>
-                <!-- === END OF QR TYPE GRID === -->
+                <!-- === END OF FREE GRID === -->
+
+                <!-- === SEPARATE PRO BUTTON (NEW LAYOUT) === -->
+                <div class="pro-button-container">
+                    <a href="pro-features.html" id="pro-features-button-main" class="button-pro-cta" title="Explore Professional QR Features!">
+                        <i class="fas fa-rocket"></i>
+                        <span>Explore Pro Features</span>
+                    </a>
+                </div>
+                <!-- === END OF PRO BUTTON === -->
 
 
                 <div class="input-area-wrapper">
-                    <!-- ... baaki ka saara content jaisa ka taisa ... -->
                     <h2 id="inputAreaTitle">Enter your Website URL</h2>
                     <div id="urlInputs" class="qr-input-group active">
                         <input type="url" id="qrDataUrl" placeholder="https://www.example.com">
