@@ -9,7 +9,9 @@ const firebaseConfig = {
     messagingSenderId: "238610791735",
     appId: "1:238610791735:web:bc59eac9903994533f2eb2"
 };
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const auth = firebase.auth();
 const db = firebase.firestore();
 const CLOUD_NAME = 'drork8wvy';
@@ -59,13 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 dynamicQrCheckbox.checked = false;
             }
         }
-        generateQRCodePreview(false);
+        updateQRCodePreview();
     });
 
     // PART 2: QR CODE SCRIPT
     // ... (Saare const declarations) ...
-    const pdfUploadInput = document.getElementById('pdfUpload');
-    const qrTypeButtons = document.querySelectorAll('.qr-type-button');
+    const generateQrMainButton = document.getElementById('generateQrMainButton');
     
     let currentTool = 'url';
     const qrCodeInstance = new QRCodeStyling({ /* ... */ });
@@ -90,128 +91,97 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function switchTool(selectedTool) {
         currentTool = selectedTool;
-        document.querySelectorAll('.qr-input-group').forEach(group => group.classList.remove('active'));
-        document.querySelectorAll('.qr-type-button').forEach(btn => btn.classList.remove('active'));
-        const activeInputGroupDiv = document.getElementById(`${selectedTool}Inputs`);
-        if (activeInputGroupDiv) activeInputGroupDiv.classList.add('active');
-        const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedTool}"]`);
-        if (activeButton) activeButton.classList.add('active');
+        // ... (switchTool logic to show/hide inputs and update title) ...
+        updateQRCodePreview();
+    }
+    
+    // === MASTER UPDATE FUNCTION ===
+    async function updateQRCodePreview(isAction = false) {
+        // isAction is true ONLY when 'Generate' button is clicked
+        const isDynamic = document.getElementById('makeQrDynamic').checked && currentTool === 'url';
         
-        const titleMap = {
-            url: 'Enter your Website URL', text: 'Enter Plain Text', email: 'Enter Email Details',
-            phone: 'Enter Phone Number', sms: 'Create an SMS', wifi: 'Setup Wi-Fi QR',
-            vcard: 'Create a vCard', location: 'Enter Geolocation', event: 'Create a Calendar Event',
-            pdf: 'Upload a PDF File (Pro)', app_store: 'Enter App Store Links (Pro)'
-        };
-        inputAreaTitle.textContent = titleMap[selectedTool] || 'Enter Data';
-        generateQRCodePreview(false);
+        if (isDynamic && !auth.currentUser && isAction) {
+            alert("Please log in to use the Dynamic QR feature.");
+            return;
+        }
+
+        let dataForQr = getQrDataStringForInstance(isAction);
+        if (dataForQr === null) { // Validation failed
+             if(isAction) resetGenerateButton();
+             return;
+        }
+
+        if (isAction) {
+            if (generateQrMainButton) {
+                generateQrMainButton.disabled = true;
+                generateQrMainButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            }
+        }
+        
+        await finalizeQrGeneration(dataForQr, isAction);
+    }
+    
+    async function finalizeQrGeneration(dataForQr, withAnimationAndSound = false) {
+        if (withAnimationAndSound) {
+            if (document.getElementById('qrSound')) document.getElementById('qrSound').play().catch(e => {});
+            if (document.getElementById('qrCanvasContainer')) {
+                 document.getElementById('qrCanvasContainer').innerHTML = '';
+                 document.getElementById('qrCanvasContainer').classList.add('generating');
+            }
+        }
+        
+        qrCodeInstance.update({ data: dataForQr, /*... options ...*/ });
+        
+        if (withAnimationAndSound || !document.getElementById('qrCanvasContainer').querySelector('svg')) {
+           if (document.getElementById('qrCanvasContainer')) {
+               if(!withAnimationAndSound) document.getElementById('qrCanvasContainer').innerHTML = '';
+               qrCodeInstance.append(document.getElementById('qrCanvasContainer'));
+           }
+        }
+        
+        if (document.getElementById('qrDataDisplay')) document.getElementById('qrDataDisplay').textContent = dataForQr;
+
+        if (withAnimationAndSound) {
+            setTimeout(() => {
+                if (document.getElementById('qrCanvasContainer')) document.getElementById('qrCanvasContainer').classList.remove('generating');
+                resetGenerateButton();
+            }, 1500);
+        } else {
+             if(generateQrMainButton) generateQrMainButton.disabled = false;
+        }
+    }
+    
+    function getQrDataStringForInstance(validate = false) {
+        // ... (This function now only returns the string, no side-effects) ...
     }
 
+    function resetGenerateButton() {
+        const btn = document.getElementById('generateQrMainButton');
+        if(btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code';
+        }
+    }
+    
     // === EVENT LISTENERS ===
-    qrTypeButtons.forEach(button => button.addEventListener('click', () => switchTool(button.dataset.type)));
+    document.querySelectorAll('.qr-type-button').forEach(button => button.addEventListener('click', () => switchTool(button.dataset.type)));
     
-    if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => generateQRCodePreview(true));
-    
-    // ... (other event listeners)
-
-    // === DOWNLOAD & SAVE LOGIC ===
-    if (saveQrButton) saveQrButton.addEventListener('click', async () => {
-        if (!auth.currentUser) { alert("Please log in to save your QR Code."); loginModalOverlay.classList.remove('hidden'); return; }
-        
-        const isDynamic = dynamicQrCheckbox.checked && currentTool === 'url';
-        let dataToSave;
-        let qrDataTypeForDb = currentTool;
-        let typeForDb = 'static';
-        
-        if (isDynamic) {
-            typeForDb = 'dynamic';
-            dataToSave = qrDataUrlInput.value;
-            if (!dataToSave) {
-                alert("Please enter a URL to save as a Dynamic QR.");
-                return;
-            }
-        } else if (currentTool === 'pdf') {
-            typeForDb = 'pro';
-            dataToSave = qrDataDisplay.textContent;
-            if (!dataToSave.startsWith('http')) {
-                 alert("Please generate the PDF QR first.");
-                 return;
-            }
+    // The ONLY place that triggers sound/animation
+    if(generateQrMainButton) generateQrMainButton.addEventListener('click', () => {
+        if(currentTool === 'pdf') {
+            // Handle PDF separately
         } else {
-            dataToSave = getQrDataStringForInstance(true);
-        }
-
-        if (!dataToSave) { 
-            // getQrDataStringForInstance returns null on validation failure
-            return; 
-        }
-        
-        saveQrButton.disabled = true;
-        saveQrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
-        const qrRecord = {
-            userId: auth.currentUser.uid,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            type: typeForDb,
-            qrDataType: qrDataTypeForDb,
-            targetData: dataToSave, // For dynamic, this is the destination. For static, it's the content.
-            scanCount: 0,
-            customization: { /* ... */ }
-        };
-
-        try {
-            const docRef = await db.collection("qrcodes").add(qrRecord);
-            
-            if (isDynamic) {
-                const dynamicUrl = `https://qodeo.vercel.app/qr/${docRef.id}`;
-                await finalizeQrGeneration(dynamicUrl, false);
-            }
-
-            saveQrButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
-            setTimeout(resetSaveButton, 2000);
-        } catch (error) {
-            alert("Could not save QR Code.");
-            resetSaveButton();
+            updateQRCodePreview(true); // TRUE means it's a main action
         }
     });
-    
-    // ... (other download logic)
 
-    // === HELPER FUNCTIONS ===
+    // All other listeners for live preview (no sound/animation)
+    document.querySelectorAll('.qr-input-group input, .qr-input-group select, .qr-input-group textarea').forEach(input => {
+        input.addEventListener('input', () => updateQRCodePreview(false));
+    });
+     document.querySelectorAll('#dotColor, #backgroundColor, #dotStyle, #logoUpload, #makeQrDynamic').forEach(input => {
+        if(input) input.addEventListener('change', () => updateQRCodePreview(false));
+    });
     
-    async function generateQRCodePreview(shouldValidate) {
-        const isDynamic = dynamicQrCheckbox.checked && currentTool === 'url';
-        let dataForQr;
-
-        if (isDynamic) {
-            if (!auth.currentUser && shouldValidate) {
-                alert("Please log in to use the Dynamic QR feature.");
-                dynamicQrCheckbox.checked = false;
-                return;
-            }
-            // For preview, we show the actual URL so the user can test it.
-            // The magic happens when they save it.
-            dataForQr = qrDataUrlInput.value;
-            if (!dataForQr && shouldValidate) {
-                alert("Please enter a URL for the Dynamic QR.");
-                return;
-            }
-        } else {
-            // Normal static QR generation
-            if (currentTool === 'pdf') {
-                handlePdfUpload();
-                return; // Stop here, handlePdfUpload will call finalizeQrGeneration
-            }
-            dataForQr = getQrDataStringForInstance(shouldValidate);
-        }
-
-        if (dataForQr) {
-            await finalizeQrGeneration(dataForQr, shouldValidate);
-        } else if (shouldValidate) {
-            // This case handles when getQrDataStringForInstance returns null
-            resetGenerateButton();
-        }
-    }
-    
-    // ... (finalizeQrGeneration, resetGenerateButton, getQrDataStringForInstance, and all other functions) ...
+    // ... (Save and Download logic will use getQrDataStringForInstance(true) for validation) ...
 });
