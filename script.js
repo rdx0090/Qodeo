@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (userAvatarImg) userAvatarImg.src = '';
             if (dynamicQrCheckbox) {
                 dynamicQrCheckbox.checked = false;
-                generateQRCodePreview(false, 'url');
+                // Pehlay yahan generateQRCodePreview tha, uski ab zaroorat nahi.
             }
         }
     });
@@ -142,50 +142,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
 
-    // === INITIALIZATION LOGIC ===
     const urlParams = new URLSearchParams(window.location.search);
     const toolFromUrl = urlParams.get('tool');
 
     if (toolFromUrl) {
         auth.onAuthStateChanged(user => {
-            if (user) {
-                switchTool(toolFromUrl);
-            } else {
-                alert("Please log in to use Pro features.");
-                loginModalOverlay.classList.remove('hidden');
-                switchTool('url');
-            }
+            if (user) { switchTool(toolFromUrl); }
+            else { alert("Please log in to use Pro features."); loginModalOverlay.classList.remove('hidden'); switchTool('url'); }
         });
-    } else {
-        switchTool('url');
-    }
+    } else { switchTool('url'); }
 
     function switchTool(selectedTool) {
         currentTool = selectedTool;
         document.querySelectorAll('.qr-input-group').forEach(group => group.classList.remove('active'));
         document.querySelectorAll('.qr-type-button').forEach(btn => btn.classList.remove('active'));
-
         const activeInputGroupDiv = document.getElementById(`${selectedTool}Inputs`);
         if (activeInputGroupDiv) activeInputGroupDiv.classList.add('active');
-        
         const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedTool}"]`);
         if (activeButton) activeButton.classList.add('active');
-        
-        const titleMap = {
-            url: 'Enter your Website URL', text: 'Enter Plain Text', email: 'Enter Email Details',
-            phone: 'Enter Phone Number', sms: 'Create an SMS', wifi: 'Setup Wi-Fi QR',
-            vcard: 'Create a vCard', location: 'Enter Geolocation', event: 'Create a Calendar Event',
-            pdf: 'Upload a PDF File (Pro)', app_store: 'Enter App Store Links (Pro)'
-        };
+        const titleMap = { url: 'Enter your Website URL', text: 'Enter Plain Text', email: 'Enter Email Details', phone: 'Enter Phone Number', sms: 'Create an SMS', wifi: 'Setup Wi-Fi QR', vcard: 'Create a vCard', location: 'Enter Geolocation', event: 'Create a Calendar Event', pdf: 'Upload a PDF File (Pro)', app_store: 'Enter App Store Links (Pro)' };
         inputAreaTitle.textContent = titleMap[selectedTool] || 'Enter Data';
-        
         generateQRCodePreview(false, selectedTool);
     }
 
     // === EVENT LISTENERS ===
-    qrTypeButtons.forEach(button => {
-        button.addEventListener('click', () => switchTool(button.dataset.type));
-    });
+    qrTypeButtons.forEach(button => button.addEventListener('click', () => switchTool(button.dataset.type)));
+
+    // ===== TABDEELI #2: DYNAMIC QR CHECKBOX KA LOGIC YAHAN ADD KIYA GAYA HAI =====
+    if (dynamicQrCheckbox) {
+        dynamicQrCheckbox.addEventListener('change', (event) => {
+            if (event.target.checked && !auth.currentUser) {
+                event.target.checked = false;
+                alert("Please log in to create a Dynamic QR Code.");
+                if (loginModalOverlay) {
+                    loginModalOverlay.classList.remove('hidden');
+                }
+            } else {
+                 // Dynamic check/uncheck honay par bhi preview update karein
+                generateQRCodePreview(false, currentTool);
+            }
+        });
+    }
 
     if (pdfUploadLabel) pdfUploadLabel.addEventListener('click', () => pdfUploadInput.click());
     if (pdfUploadInput) pdfUploadInput.addEventListener('change', (e) => {
@@ -198,6 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => {
+        // ===== TABDEELI #1: SOUND PLAY KARNE KA CODE YAHAN ADD KIYA GAYA HAI =====
+        if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
+
         const proTools = ['pdf', 'app_store'];
         if (proTools.includes(currentTool)) {
             if (!auth.currentUser) {
@@ -210,8 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
             generateQRCodePreview(true, currentTool);
         }
     });
-
-    [dotColorInput, backgroundColorInput, dotStyleSelect, dynamicQrCheckbox].forEach(input => {
+    
+    // Dynamic QR checkbox ko is array se nikal dein kyunki uska alag handler hai
+    [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
         if (input) input.addEventListener('change', () => generateQRCodePreview(false, currentTool));
     });
     document.querySelectorAll('.qr-input-group input, .qr-input-group textarea, .qr-input-group select').forEach(input => {
@@ -223,16 +224,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!file) { currentLogoBase64 = null; if (logoPreview) logoPreview.style.display = 'none'; }
         else {
             const reader = new FileReader();
-            reader.onload = (e) => {
-                currentLogoBase64 = e.target.result;
-                if (logoPreview) { logoPreview.src = currentLogoBase64; logoPreview.style.display = 'block'; }
-            };
+            reader.onload = (e) => { currentLogoBase64 = e.target.result; if (logoPreview) { logoPreview.src = currentLogoBase64; logoPreview.style.display = 'block'; } };
             reader.readAsDataURL(file);
         }
         generateQRCodePreview(false, currentTool);
     });
 
-    // === DOWNLOAD & SAVE LOGIC ===
+    // === DOWNLOAD & SAVE LOGIC (is mein koi tabdeeli nahi) ===
     let downloadExtension = 'png';
     function openDownloadModal(extension) {
         const dataForDownload = getQrDataStringForInstance(true, currentTool);
@@ -263,7 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const dataForDownload = getQrDataStringForInstance(true, currentTool);
         if (dataForDownload === null) return;
         if (size === 1024) alert(`Downloading HD ${extension.toUpperCase()} (${size}x${size}).`);
-        
         const downloadInstance = new QRCodeStyling({
             width: size, height: size, type: 'svg', data: dataForDownload, image: currentLogoBase64 || '',
             dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
@@ -278,24 +275,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!auth.currentUser) { alert("Please log in to save your QR Code."); loginModalOverlay.classList.remove('hidden'); return; }
         const dataToSave = getQrDataStringForInstance(true, currentTool);
         if (dataToSave === null) { alert("Please ensure all required fields are filled correctly before saving."); return; }
-        
         saveQrButton.disabled = true;
         saveQrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
         const qrRecord = {
             userId: auth.currentUser.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             type: dynamicQrCheckbox.checked ? 'dynamic' : 'static',
             qrDataType: currentTool, targetData: dataToSave, scanCount: 0,
             customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
         };
-
         try {
             await db.collection("qrcodes").add(qrRecord);
             saveQrButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
-            setTimeout(() => {
-                saveQrButton.disabled = false;
-                saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
-            }, 2000);
+            setTimeout(() => { saveQrButton.disabled = false; saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>'; }, 2000);
         } catch (error) {
             console.error("Error saving QR Code: ", error);
             alert("Could not save QR Code. Please try again.");
@@ -304,24 +295,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
     // === HELPER FUNCTIONS ===
     function handlePdfUpload() {
         const file = pdfUploadInput.files[0];
         if (!file) { alert('Please select a PDF file.'); return; }
-
         generateQrMainButton.disabled = true;
         generateQrMainButton.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Uploading...';
-        
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
         formData.append('folder', `qodeo/${auth.currentUser.uid}`);
-
         pdfUploadProgress.style.display = 'block';
         const progressDiv = pdfUploadProgress.querySelector('.progress');
         progressDiv.style.width = '50%';
-
         fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, { method: 'POST', body: formData })
         .then(response => response.json())
         .then(async (data) => {
@@ -332,10 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveProQrToFirestore('pdf', data.secure_url, data.public_id);
             } else { throw new Error(data.error.message || 'Upload failed'); }
         })
-        .catch(error => {
-            alert("PDF upload failed: " + error.message);
-            resetGenerateButton();
-        });
+        .catch(error => { alert("PDF upload failed: " + error.message); resetGenerateButton(); });
     }
     
     async function saveProQrToFirestore(toolType, url, publicId) {
@@ -349,9 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             await db.collection("qrcodes").add(qrRecord);
             console.log("Pro QR saved to Firestore");
-        } catch (error) {
-            console.error("Error saving Pro QR to Firestore: ", error);
-        }
+        } catch (error) { console.error("Error saving Pro QR to Firestore: ", error); }
     }
 
     async function generateQRCodePreview(shouldValidate, tool) {
@@ -360,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     async function finalizeQrGeneration(dataForQr) {
-        if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
+        // ===== TABDEELI #1: SOUND PLAY KARNE KA CODE YAHAN SE HATA DIYA GAYA HAI =====
         if (qrCanvasContainer) { qrCanvasContainer.innerHTML = ''; qrCanvasContainer.classList.add('generating'); }
         
         await qrCodeInstance.update({
@@ -394,14 +375,22 @@ document.addEventListener('DOMContentLoaded', () => {
         let dataString = "";
         const showAlert = (message) => { if (validate) alert(message); return null; };
         
+        // Dynamic QR logic ko data string mein daalna
+        const isDynamic = dynamicQrCheckbox.checked && auth.currentUser;
+
         switch (tool) {
             case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
             case 'text': dataString = qrDataTextInput.value || "Qodeo QR Text"; break;
             case 'email': const to = qrEmailToInput.value; if (!to && validate) { return showAlert("Please enter 'To Email Address'."); } dataString = `mailto:${encodeURIComponent(to)}`; if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`; if (qrEmailBodyInput.value) dataString += `${dataString.includes('?') ? '&' : '?'}body=${encodeURIComponent(qrEmailBodyInput.value)}`; break;
             case 'phone': const phoneNum = qrPhoneNumberInput.value; if (!phoneNum && validate) { return showAlert("Please enter a Phone Number."); } dataString = `tel:${phoneNum}`; break;
-            // ... (rest of the cases)
+            // ... (baqi cases bhi isi tarah aayenge)
             default: dataString = "https://qodeo.pro";
         }
+        
+        // Agar dynamic hai, to humein ek alag URL banana hoga jo hamare server se guzre
+        // Filhal, isko simple rakhte hain, asal dynamic functionality ke liye backend logic chahiye hoga.
+        // Abhi ke liye, dynamic/static ka farq sirf save karte waqt hoga.
+        
         return dataString;
     }
 });
