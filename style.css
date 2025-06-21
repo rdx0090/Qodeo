@@ -232,16 +232,14 @@ input:checked + .slider:before {
     100% { top: 100%; opacity: 0; }
 }
 
-/* ========================================= */
-/* === DOWNLOAD QUALITY MODAL STYLES (NEW) === */
-/* ========================================= */
+/* === DOWNLOAD QUALITY MODAL STYLES === */
 #download-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Thoda dark overlay */
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 2000;
     display: flex;
     align-items: center;
@@ -250,7 +248,7 @@ input:checked + .slider:before {
 }
 #download-modal-content {
     background-color: white;
-    padding: 30px 40px; /* Thodi zyada padding */
+    padding: 30px 40px;
     border-radius: var(--border-radius-md);
     box-shadow: 0 5px 25px rgba(0,0,0,0.3);
     text-align: center;
@@ -304,12 +302,12 @@ input:checked + .slider:before {
     box-shadow: var(--shadow-md);
 }
 .quality-btn i {
-    font-size: 2.2rem; /* Thode bade icons */
+    font-size: 2.2rem;
     color: var(--primary-color);
     margin-bottom: 5px;
 }
 .quality-btn[data-quality="hd"] i {
-    color: #88d3ce; /* Save button ke gradient se milta julta */
+    color: #88d3ce;
 }
 .quality-btn[data-quality="hd"]:hover {
     border-color: #88d3ce;
@@ -327,11 +325,114 @@ input:checked + .slider:before {
     font-size: 0.85rem;
     color: var(--text-muted);
     padding: 10px;
-    background-color: #fffbe6; /* Halka peela background */
+    background-color: #fffbe6;
     border-radius: var(--border-radius-sm);
     border: 1px solid #ffeeba;
 }
 .hd-note i {
     color: #ffc107;
     margin-right: 5px;
+}
+
+/* ========================================= */
+/* === FINAL PRO BUTTON & PRO PAGE STYLES  === */
+/* ========================================= */
+#pro-features-button {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #FFD700, #FBB03B); 
+    border: 1px solid #E6A400;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-weight: 700;
+    color: #4B3621;
+    text-shadow: 0 1px 1px rgba(255, 223, 115, 0.5);
+}
+#pro-features-button i {
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+body:not(.logged-in) #pro-features-button {
+    filter: saturate(0.7);
+    opacity: 0.9;
+}
+#pro-features-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 20%;
+    height: 200%;
+    background: linear-gradient( to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0) 100% );
+    transform: rotate(25deg);
+    animation: golden-sweep 3s infinite linear;
+    animation-delay: 1.5s;
+}
+#pro-features-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+}
+@keyframes golden-sweep {
+    0% { left: -20%; }
+    100% { left: 120%; }
+}
+.pro-page-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+}
+.pro-page-header .fa-crown {
+    font-size: 3rem;
+    color: #ffc107;
+    margin-bottom: 15px;
+}
+.pro-page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+.pro-page-header p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+.pro-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.pro-feature-card {
+    background-color: var(--background-light);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    padding: 30px 25px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.pro-feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+.pro-feature-card i {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+.pro-feature-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+.pro-feature-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+.pro-feature-card.coming-soon {
+    background-color: var(--background-grey);
+    border-style: dashed;
+    color: var(--text-muted);
+}
+.pro-feature-card.coming-soon i {
+    color: var(--text-muted);
 }
