@@ -516,4 +516,55 @@ input:checked + .slider:before {
 .pro-feature-card.coming-soon i {
     color: var(--text-muted);
 }
-Bhai es ma add kar ka doo
+
+/* =========================================================
+   === NAYA, BEHTAR VISITOR COUNTER KA STYLE               ===
+   ========================================================= */
+
+.visitor-stats-section {
+    padding: 20px 0 40px 0; /* Upar neeche fasla */
+    background-color: var(--background-light); /* Aapke page jesa background */
+}
+
+.stats-box {
+    background: linear-gradient(135deg, #f5f7fa, #e9f0f7); /* Halka sa gradient background */
+    max-width: 320px; /* Box ki chaurai (width) */
+    margin: 0 auto; /* Yeh line isay CENTER mein layegi */
+    padding: 30px;
+    border-radius: var(--border-radius-md); /* Aapke design jese gol konay */
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Icon, number, aur text ke beech fasla */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-box:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+}
+
+.stats-box i {
+    font-size: 2.8rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.stats-box .count-number {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1;
+}
+
+.stats-box p {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
