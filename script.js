@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (userAvatarImg) userAvatarImg.src = '';
             if (dynamicQrCheckbox) {
                 dynamicQrCheckbox.checked = false;
-                // Pehlay yahan generateQRCodePreview tha, uski ab zaroorat nahi.
             }
         }
     });
@@ -168,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // === EVENT LISTENERS ===
     qrTypeButtons.forEach(button => button.addEventListener('click', () => switchTool(button.dataset.type)));
 
-    // ===== TABDEELI #2: DYNAMIC QR CHECKBOX KA LOGIC YAHAN ADD KIYA GAYA HAI =====
     if (dynamicQrCheckbox) {
         dynamicQrCheckbox.addEventListener('change', (event) => {
             if (event.target.checked && !auth.currentUser) {
@@ -178,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     loginModalOverlay.classList.remove('hidden');
                 }
             } else {
-                 // Dynamic check/uncheck honay par bhi preview update karein
                 generateQRCodePreview(false, currentTool);
             }
         });
@@ -195,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => {
-        // ===== TABDEELI #1: SOUND PLAY KARNE KA CODE YAHAN ADD KIYA GAYA HAI =====
         if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
 
         const proTools = ['pdf', 'app_store'];
@@ -210,8 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             generateQRCodePreview(true, currentTool);
         }
     });
-    
-    // Dynamic QR checkbox ko is array se nikal dein kyunki uska alag handler hai
+
     [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
         if (input) input.addEventListener('change', () => generateQRCodePreview(false, currentTool));
     });
@@ -230,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         generateQRCodePreview(false, currentTool);
     });
 
-    // === DOWNLOAD & SAVE LOGIC (is mein koi tabdeeli nahi) ===
+    // === DOWNLOAD & SAVE LOGIC ===
     let downloadExtension = 'png';
     function openDownloadModal(extension) {
         const dataForDownload = getQrDataStringForInstance(true, currentTool);
@@ -271,31 +266,95 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadInstance.download({ name: `qodeo-qr${size === 1024 ? '-hd' : ''}`, extension: extension });
     }
 
+    // =================================================================================
+    // === NAYA, THEEK SHUDA 'SAVE' BUTTON KA LOGIC ===
+    // =================================================================================
     if (saveQrButton) saveQrButton.addEventListener('click', async () => {
-        if (!auth.currentUser) { alert("Please log in to save your QR Code."); loginModalOverlay.classList.remove('hidden'); return; }
-        const dataToSave = getQrDataStringForInstance(true, currentTool);
-        if (dataToSave === null) { alert("Please ensure all required fields are filled correctly before saving."); return; }
+        // 1. Check if user is logged in
+        if (!auth.currentUser) {
+            alert("Please log in to save your QR Code.");
+            loginModalOverlay.classList.remove('hidden');
+            return;
+        }
+
+        const isDynamic = dynamicQrCheckbox.checked;
+
+        // 2. Get the original data (e.g., https://google.com) from the input field
+        const originalData = getQrDataStringForInstance(true, currentTool);
+        if (originalData === null) {
+            alert("Please ensure all required fields are filled correctly before saving.");
+            return;
+        }
+
+        // 3. Show "Saving..." status
         saveQrButton.disabled = true;
         saveQrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-        const qrRecord = {
-            userId: auth.currentUser.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            type: dynamicQrCheckbox.checked ? 'dynamic' : 'static',
-            qrDataType: currentTool, targetData: dataToSave, scanCount: 0,
-            customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
-        };
+
         try {
-            await db.collection("qrcodes").add(qrRecord);
+            if (isDynamic) {
+                // --- THIS IS THE NEW DYNAMIC QR CODE LOGIC ---
+
+                // a. Generate a new unique ID (slug)
+                const shortId = generateShortId();
+
+                // b. Save the record to the 'links' collection in Firestore
+                const dynamicLinkRef = db.collection('links').doc(shortId);
+                await dynamicLinkRef.set({
+                    userId: auth.currentUser.uid,
+                    originalUrl: originalData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    scanCount: 0,
+                    customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
+                });
+
+                // c. Create the new dynamic URL pointing to your Vercel function
+                const dynamicUrl = `https://qodeo.vercel.app/api/redirect?slug=${shortId}`;
+
+                // d. Regenerate the QR Code on the screen with this new dynamic URL
+                await finalizeQrGeneration(dynamicUrl);
+                alert(`Dynamic QR Code Created successfully!`);
+
+            } else {
+                // --- THIS IS THE OLD STATIC QR CODE LOGIC ---
+                const staticQrRecord = {
+                    userId: auth.currentUser.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    type: 'static',
+                    qrDataType: currentTool,
+                    targetData: originalData,
+                    customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
+                };
+                await db.collection("static_qrcodes").add(staticQrRecord);
+                alert('Static QR Code saved successfully!');
+            }
+
             saveQrButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
-            setTimeout(() => { saveQrButton.disabled = false; saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>'; }, 2000);
+
         } catch (error) {
             console.error("Error saving QR Code: ", error);
             alert("Could not save QR Code. Please try again.");
-            saveQrButton.disabled = false;
-            saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
+        } finally {
+            // 4. Reset the button after 2 seconds
+            setTimeout(() => {
+                saveQrButton.disabled = false;
+                saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
+            }, 2000);
         }
     });
 
+
     // === HELPER FUNCTIONS ===
+    
+    // NAYA HELPER FUNCTION JO UNIQUE ID BANATA HAI
+    function generateShortId(length = 7) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
     function handlePdfUpload() {
         const file = pdfUploadInput.files[0];
         if (!file) { alert('Please select a PDF file.'); return; }
@@ -320,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => { alert("PDF upload failed: " + error.message); resetGenerateButton(); });
     }
-    
+
     async function saveProQrToFirestore(toolType, url, publicId) {
         if (!auth.currentUser) return;
         const qrRecord = {
@@ -339,11 +398,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const dataForQr = getQrDataStringForInstance(shouldValidate, tool);
         if (dataForQr) await finalizeQrGeneration(dataForQr);
     }
-    
+
     async function finalizeQrGeneration(dataForQr) {
-        // ===== TABDEELI #1: SOUND PLAY KARNE KA CODE YAHAN SE HATA DIYA GAYA HAI =====
         if (qrCanvasContainer) { qrCanvasContainer.innerHTML = ''; qrCanvasContainer.classList.add('generating'); }
-        
+
         await qrCodeInstance.update({
             data: dataForQr,
             dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
@@ -353,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
         if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr;
-        
+
         setTimeout(() => {
             if (qrCanvasContainer) qrCanvasContainer.classList.remove('generating');
             resetGenerateButton();
@@ -374,9 +432,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function getQrDataStringForInstance(validate = false, tool = currentTool) {
         let dataString = "";
         const showAlert = (message) => { if (validate) alert(message); return null; };
-        
-        // Dynamic QR logic ko data string mein daalna
-        const isDynamic = dynamicQrCheckbox.checked && auth.currentUser;
 
         switch (tool) {
             case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
@@ -386,11 +441,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // ... (baqi cases bhi isi tarah aayenge)
             default: dataString = "https://qodeo.pro";
         }
-        
-        // Agar dynamic hai, to humein ek alag URL banana hoga jo hamare server se guzre
-        // Filhal, isko simple rakhte hain, asal dynamic functionality ke liye backend logic chahiye hoga.
-        // Abhi ke liye, dynamic/static ka farq sirf save karte waqt hoga.
-        
         return dataString;
     }
 });
