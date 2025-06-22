@@ -517,42 +517,63 @@ input:checked + .slider:before {
     color: var(--text-muted);
 }
 
+
 /* =========================================================
-   === NAYA, BEHTAR VISITOR COUNTER KA STYLE               ===
+   === NAYA, 24x7 ANIMATED VISITOR COUNTER KA STYLE        ===
    ========================================================= */
 
 .visitor-stats-section {
-    padding: 20px 0 40px 0; /* Upar neeche fasla */
-    background-color: var(--background-light); /* Aapke page jesa background */
+    padding: 20px 0 40px 0;
+    background-color: var(--background-light);
 }
 
 .stats-box {
-    background: linear-gradient(135deg, #f5f7fa, #e9f0f7); /* Halka sa gradient background */
-    max-width: 320px; /* Box ki chaurai (width) */
-    margin: 0 auto; /* Yeh line isay CENTER mein layegi */
+    /* Basic Box Styles */
+    background: #fdfdff; /* Thora sa off-white, premium look ke liye */
+    max-width: 320px;
+    margin: 0 auto;
     padding: 30px;
-    border-radius: var(--border-radius-md); /* Aapke design jese gol konay */
-    border: 1px solid var(--border-light);
-    box-shadow: var(--shadow-md);
+    border-radius: 14px; /* Thoray zyada gol konay */
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px; /* Icon, number, aur text ke beech fasla */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    gap: 10px;
+    position: relative; /* Animation ke liye bohat zaroori */
+    overflow: hidden; /* Animation ko box ke andar rakhne ke liye */
+    
+    /* Animation 1: Pulsing Glow (Dheere dheere chamakna) */
+    animation: pulseGlow 4s infinite ease-in-out;
 }
 
-.stats-box:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+/* Yeh pseudo-element border par chamakti hui light banayega */
+.stats-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: inherit; /* Box jese gol konay */
+    padding: 2px; /* Border ki motai */
+    
+    /* Animation 2: Flowing Gradient Border (Ghoomti hui light) */
+    background: linear-gradient(115deg, var(--secondary-color), var(--primary-color), var(--secondary-color));
+    background-size: 200% 200%;
+    animation: flowBorder 5s infinite linear;
+
+    /* Yeh magic hai jo sirf border ko dikhata hai */
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
 }
 
+
+/* Baqi styling bilkul waisi hi hai */
 .stats-box i {
     font-size: 2.8rem;
     color: var(--primary-color);
     margin-bottom: 5px;
+    z-index: 2; /* Taake icon border ke upar rahe */
 }
 
 .stats-box .count-number {
@@ -560,6 +581,7 @@ input:checked + .slider:before {
     font-weight: 700;
     color: var(--text-dark);
     line-height: 1;
+    z-index: 2;
 }
 
 .stats-box p {
@@ -567,4 +589,31 @@ input:checked + .slider:before {
     font-weight: 500;
     color: var(--text-muted);
     letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+
+/* Animations ke liye Keyframes */
+
+/* Pulsing Glow Animation */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.08);
+        transform: translateY(0);
+    }
+    50% {
+        box-shadow: 0 10px 25px rgba(0, 123, 255, 0.15);
+        transform: translateY(-5px);
+    }
+    100% {
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.08);
+        transform: translateY(0);
+    }
+}
+
+/* Flowing Border Animation */
+@keyframes flowBorder {
+    to {
+        background-position: -200% -200%;
+    }
 }
