@@ -70,14 +70,19 @@
         </div>
 
         <!-- ============================================================== -->
-        <!-- === NAYA PRO QR GENERATOR SECTION (SAB KE LIYE)            === -->
+        <!-- === PRO QR GENERATOR SECTION                                 === -->
         <!-- ============================================================== -->
         <section id="pro-generator-section" class="qr-generator-section" style="display: none; margin-top: 40px;">
             <div class="container">
                 <div class="input-area-wrapper">
-                    <h2 id="inputAreaTitle"></h2>
+
+                    <!-- NAYA, BEHTAR TITLE (ICON KE SAATH) -->
+                    <div class="pro-tool-title-wrapper">
+                        <i id="toolIcon" class="fas"></i>
+                        <h2 id="inputAreaTitle"></h2>
+                    </div>
                     
-                    <!-- App Store ke liye inputs (by default chupa hua) -->
+                    <!-- App Store ke liye inputs -->
                     <div id="app_storeInputs" class="qr-input-group" style="display: none;">
                         <div class="control-group">
                             <label for="apple-store-url">Apple App Store URL:</label>
@@ -89,7 +94,7 @@
                         </div>
                     </div>
 
-                    <!-- PDF ke liye inputs (by default chupa hua) -->
+                    <!-- PDF ke liye inputs -->
                     <div id="pdfInputs" class="qr-input-group" style="display: none;">
                         <label for="pdfUpload" class="file-upload-label">
                             <i class="fas fa-file-upload"></i>
@@ -102,15 +107,12 @@
                         </div>
                     </div>
 
-                    <!-- Yahan hum baad mein Audio, Gallery, etc. ke inputs daalenge -->
-
                 </div>
-                <!-- Main Generate Button -->
                 <button id="generateQrMainButton" class="button-generate"><i class="fas fa-qrcode"></i> Generate Pro QR</button>
             </div>
         </section>
 
-        <!-- Preview aur Options Section (bilkul index.html jesa) -->
+        <!-- Preview aur Options Section -->
         <section class="preview-and-options-section" style="display: none;" id="pro-preview-section">
             <div class="container">
                 <div class="preview-column">
