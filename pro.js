@@ -114,8 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    // NAYA AUR BEHTAR FUNCTION JO ICON AUR TITLE DONO SET KAREGA
+    
     function showGeneratorFor(tool) {
         proGeneratorSection.style.display = 'block';
         proPreviewSection.style.display = 'flex';
@@ -130,8 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeGroup) {
             activeGroup.style.display = 'flex';
             
+            // NAYE TOOL KI INFO YAHAN ADD HOGI
             const toolInfo = {
-                'pdf': { icon: 'fa-file-pdf', title: 'Create a PDF QR Code' },
+                'pdf': { icon: 'fa-file-pdf', title: 'Upload a PDF File' },
                 'app_store': { icon: 'fab fa-google-play', title: 'Create an App Store QR Code' },
                 'audio': { icon: 'fa-music', title: 'Create an Audio QR Code' },
                 'image_gallery': { icon: 'fa-images', title: 'Create an Image Gallery QR' }
@@ -140,15 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (toolInfo[tool]) {
                 toolIconElement.className = `fas ${toolInfo[tool].icon}`;
                 toolTitleElement.textContent = toolInfo[tool].title;
-                // Icon ka rang card ke rang se match karein
                 const cardIcon = document.querySelector(`.pro-feature-card[data-tool="${tool}"] i`);
                 if(cardIcon) toolIconElement.style.color = cardIcon.style.color;
             }
 
             titleWrapper.classList.remove('animate-title');
-            setTimeout(() => {
-                titleWrapper.classList.add('animate-title');
-            }, 10);
+            setTimeout(() => { titleWrapper.classList.add('animate-title'); }, 10);
 
             proGeneratorSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -157,10 +154,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (generateButton) {
         generateButton.addEventListener('click', () => {
             if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
-            if (currentTool === 'app_store') { handleAppStoreQR(); }
-            else if (currentTool === 'pdf') { handlePdfUpload(); }
+
+            // NAYE TOOL KA LOGIC YAHAN CALL HOGA
+            if (currentTool === 'app_store') {
+                handleAppStoreQR();
+            } else if (currentTool === 'pdf') {
+                handlePdfUpload();
+            } else if (currentTool === 'audio') {
+                handleAudioQR();
+            }
         });
     }
+
+    // === Tool-Specific Functions ===
 
     function handleAppStoreQR() {
         const appleUrl = document.getElementById('apple-store-url').value;
@@ -168,6 +174,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!appleUrl || !googleUrl) { alert("Please provide both Apple and Google store links."); return; }
         const finalQrData = `https://onelink.to/qodeo?af_ios_url=${encodeURIComponent(appleUrl)}&af_android_url=${encodeURIComponent(googleUrl)}`;
         finalizeQrGeneration(finalQrData);
+    }
+    
+    // NAYA FUNCTION: AUDIO QR KE LIYE
+    function handleAudioQR() {
+        const audioUrl = document.getElementById('audio-url').value;
+        if (!audioUrl) {
+            alert("Please provide a valid audio file URL.");
+            return;
+        }
+        try {
+            new URL(audioUrl);
+        } catch (_) {
+            alert("The URL format is invalid. Please enter a valid URL.");
+            return;
+        }
+        finalizeQrGeneration(audioUrl);
     }
 
     function handlePdfUpload() {
@@ -195,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => { alert("PDF upload failed: " + error.message); resetGenerateButton(); });
     }
     
+    // === QR Generation, Customization & Save Functions ===
     function finalizeQrGeneration(dataForQr) {
         qrCodeInstance.update({ 
             data: dataForQr,
