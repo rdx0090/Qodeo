@@ -70,13 +70,13 @@
         </div>
 
         <!-- ============================================================== -->
-        <!-- === PRO QR GENERATOR SECTION                                 === -->
+        <!-- === PRO QR GENERATOR SECTION (SAB KE LIYE)                 === -->
         <!-- ============================================================== -->
         <section id="pro-generator-section" class="qr-generator-section" style="display: none; margin-top: 40px;">
             <div class="container">
                 <div class="input-area-wrapper">
 
-                    <!-- NAYA, BEHTAR TITLE (ICON KE SAATH) -->
+                    <!-- Animated Title -->
                     <div class="pro-tool-title-wrapper">
                         <i id="toolIcon" class="fas"></i>
                         <h2 id="inputAreaTitle"></h2>
@@ -104,6 +104,14 @@
                         <p id="pdfFileName" class="file-name-display"></p>
                         <div id="pdfUploadProgress" class="upload-progress-bar" style="display: none;">
                             <div class="progress"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- AUDIO KE LIYE NAYE INPUTS -->
+                    <div id="audioInputs" class="qr-input-group" style="display: none;">
+                        <div class="control-group">
+                            <label for="audio-url">Audio File URL (MP3, WAV, etc.):</label>
+                            <input type="url" id="audio-url" placeholder="https://example.com/mysong.mp3">
                         </div>
                     </div>
 
