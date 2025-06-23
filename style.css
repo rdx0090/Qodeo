@@ -35,7 +35,7 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 .qr-type-button.active i { color: white; }
 .qr-type-button:active { transform: scale(1); }
 .input-area-wrapper { margin-top: 25px; margin-bottom: 25px; }
-.input-area-wrapper #inputAreaTitle { font-size: 1.4rem; font-weight: 600; color: var(--text-dark); margin-bottom: 18px; text-align: center; }
+/* Purani #inputAreaTitle ki styling hata di hai, nayi neeche hai */
 .qr-input-group { display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.3s ease-out; }
 .qr-input-group.active { display: flex; }
 .qr-input-group input[type="url"], .qr-input-group input[type="text"], .qr-input-group input[type="email"], .qr-input-group input[type="tel"], .qr-input-group input[type="password"], 
@@ -517,7 +517,6 @@ input:checked + .slider:before {
     color: var(--text-muted);
 }
 
-
 /* =========================================================
    === NAYA, 24x7 ANIMATED VISITOR COUNTER KA STYLE        ===
    ========================================================= */
@@ -541,7 +540,7 @@ input:checked + .slider:before {
     gap: 10px;
     position: relative; /* Animation ke liye bohat zaroori */
     overflow: hidden; /* Animation ko box ke andar rakhne ke liye */
-    
+
     /* Animation 1: Pulsing Glow (Dheere dheere chamakna) */
     animation: pulseGlow 4s infinite ease-in-out;
 }
@@ -553,7 +552,7 @@ input:checked + .slider:before {
     top: 0; left: 0; right: 0; bottom: 0;
     border-radius: inherit; /* Box jese gol konay */
     padding: 2px; /* Border ki motai */
-    
+
     /* Animation 2: Flowing Gradient Border (Ghoomti hui light) */
     background: linear-gradient(115deg, var(--secondary-color), var(--primary-color), var(--secondary-color));
     background-size: 200% 200%;
@@ -617,3 +616,6 @@ input:checked + .slider:before {
         background-position: -200% -200%;
     }
 }
+
+
+Bhai ya rha mera final style.css file app es ma add kar ka doo muja sa kuch galti ho jayega
