@@ -670,3 +670,29 @@ input:checked + .slider:before {
         transform: translateX(0);
     }
 }
+
+/* =========================================================
+   === IMAGE GALLERY PREVIEW STYLING (NAYA CODE)         ===
+   ========================================================= */
+
+#image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: var(--border-radius-sm);
+    min-height: 80px; /* Taake shuru mein thori jaga ho */
+    border: 1px solid var(--border-light);
+}
+
+#image-preview-container img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    animation: fadeIn 0.5s ease;
+}
