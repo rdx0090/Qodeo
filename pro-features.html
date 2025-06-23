@@ -43,73 +43,103 @@
             <div class="dashboard-grid pro-grid">
                 <!-- 1. PDF QR -->
                 <a href="#" class="pro-feature-card" data-tool="pdf">
-                    <i class="fas fa-file-pdf"></i>
+                    <i class="fas fa-file-pdf" style="color: #E74C3C;"></i>
                     <h3>PDF QR Code</h3>
                     <p>Share documents, menus, or brochures by uploading a PDF file.</p>
                 </a>
                 <!-- 2. App Store QR -->
                 <a href="#" class="pro-feature-card" data-tool="app_store">
-                    <i class="fab fa-google-play"></i>
+                    <i class="fab fa-google-play" style="color: #4CAF50;"></i>
                     <h3>App Store QR</h3>
                     <p>One QR for both Apple App Store & Google Play Store.</p>
                 </a>
                 <!-- 3. Audio QR -->
                 <a href="#" class="pro-feature-card" data-tool="audio">
-                    <i class="fas fa-music"></i>
+                    <i class="fas fa-music" style="color: #9B59B6;"></i>
                     <h3>Audio QR</h3>
                     <p>Link directly to an MP3 file, a song, or a podcast episode.</p>
                 </a>
                 <!-- 4. Image Gallery QR -->
                 <a href="#" class="pro-feature-card" data-tool="image_gallery">
-                    <i class="fas fa-images"></i>
+                    <i class="fas fa-images" style="color: #3498DB;"></i>
                     <h3>Image Gallery</h3>
                     <p>Create a stunning image gallery for your products or portfolio.</p>
                 </a>
-                 <!-- 5. Social Media Links -->
-                <a href="#" class="pro-feature-card" data-tool="social_links">
-                    <i class="fas fa-share-alt"></i>
-                    <h3>Social Links</h3>
-                    <p>A single, beautiful page for all your social media profiles.</p>
-                </a>
-                <!-- 6. Custom Colors & Gradients -->
-                <a href="#" class="pro-feature-card" data-tool="gradients">
-                    <i class="fas fa-palette"></i>
-                    <h3>Color Gradients</h3>
-                    <p>Make your QR code stand out with beautiful color gradients.</p>
-                </a>
-                <!-- 7. Custom Marker Shapes -->
-                <a href="#" class="pro-feature-card" data-tool="markers">
-                    <i class="fas fa-vector-square"></i>
-                    <h3>Custom Markers</h3>
-                    <p>Change the shape of the corner markers for a unique look.</p>
-                </a>
-                <!-- 8. QR Code Analytics -->
-                <a href="#" class="pro-feature-card" data-tool="analytics">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Scan Analytics</h3>
-                    <p>Track how many people scan your QR codes, where and when.</p>
-                </a>
-                <!-- 9. Password Protection -->
-                <a href="#" class="pro-feature-card" data-tool="password">
-                    <i class="fas fa-key"></i>
-                    <h3>Password Protection</h3>
-                    <p>Secure your QR code's content with a password.</p>
-                </a>
-                <!-- 10. Bulk Creation -->
-                <a href="#" class="pro-feature-card" data-tool="bulk_creation">
-                    <i class="fas fa-layer-group"></i>
-                    <h3>Bulk Creation</h3>
-                    <p>Generate multiple QR codes at once from a data file.</p>
-                </a>
+                 <!-- Baqi cards yahan aayenge... -->
             </div>
         </div>
+
+        <!-- ============================================================== -->
+        <!-- === NAYA PRO QR GENERATOR SECTION (SAB KE LIYE)            === -->
+        <!-- ============================================================== -->
+        <section id="pro-generator-section" class="qr-generator-section" style="display: none; margin-top: 40px;">
+            <div class="container">
+                <div class="input-area-wrapper">
+                    <h2 id="inputAreaTitle"></h2>
+                    
+                    <!-- App Store ke liye inputs (by default chupa hua) -->
+                    <div id="app_storeInputs" class="qr-input-group" style="display: none;">
+                        <div class="control-group">
+                            <label for="apple-store-url">Apple App Store URL:</label>
+                            <input type="url" id="apple-store-url" placeholder="https://apps.apple.com/...">
+                        </div>
+                        <div class="control-group">
+                            <label for="google-store-url">Google Play Store URL:</label>
+                            <input type="url" id="google-store-url" placeholder="https://play.google.com/store/apps/...">
+                        </div>
+                    </div>
+
+                    <!-- PDF ke liye inputs (by default chupa hua) -->
+                    <div id="pdfInputs" class="qr-input-group" style="display: none;">
+                        <label for="pdfUpload" class="file-upload-label">
+                            <i class="fas fa-file-upload"></i>
+                            <span>Choose a PDF file (Max 5MB)</span>
+                        </label>
+                        <input type="file" id="pdfUpload" accept=".pdf" style="display: none;">
+                        <p id="pdfFileName" class="file-name-display"></p>
+                        <div id="pdfUploadProgress" class="upload-progress-bar" style="display: none;">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+
+                    <!-- Yahan hum baad mein Audio, Gallery, etc. ke inputs daalenge -->
+
+                </div>
+                <!-- Main Generate Button -->
+                <button id="generateQrMainButton" class="button-generate"><i class="fas fa-qrcode"></i> Generate Pro QR</button>
+            </div>
+        </section>
+
+        <!-- Preview aur Options Section (bilkul index.html jesa) -->
+        <section class="preview-and-options-section" style="display: none;" id="pro-preview-section">
+            <div class="container">
+                <div class="preview-column">
+                    <h3>Your Pro QR Code</h3>
+                    <div id="qrCanvasContainer"></div>
+                    <div id="qrDataDisplay" class="qr-data-text"></div>
+                    <div class="actions">
+                        <button id="downloadSvgButton">Download SVG</button>
+                        <button id="saveQrButton" class="button-save"><i class="fas fa-cloud-arrow-up"></i><span>Save</span></button>
+                        <button id="downloadPngButton">Download PNG</button>
+                    </div>
+                </div>
+                <div class="options-column">
+                    <h3>Customize Design</h3>
+                    <div class="control-group"><label for="dotColor"><i class="fas fa-palette icon-label"></i> Dot Color:</label><input type="color" id="dotColor" value="#000000"></div>
+                    <div class="control-group"><label for="backgroundColor"><i class="fas fa-fill-drip icon-label"></i> Background Color:</label><input type="color" id="backgroundColor" value="#ffffff"></div>
+                    <div class="control-group"><label for="dotStyle"><i class="fas fa-shapes icon-label"></i> Dot Style:</label><select id="dotStyle"><option value="square">Square</option><option value="rounded">Rounded</option><option value="dots">Dots</option></select></div>
+                    <div class="control-group"><label for="logoUpload"><i class="fas fa-image icon-label"></i> Upload Logo:</label><input type="file" id="logoUpload" accept="image/*"><img id="logoPreview" src="#" alt="Logo Preview" style="display: none;"/></div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="site-footer">
         <div class="container"><p>© <span id="year"></span> Qodeo. All Rights Reserved.</p></div>
     </footer>
-    
-    <!-- Login Modal (Ise yahan bhi daalna zaroori hai) -->
+
+    <!-- Login Modal -->
     <div id="login-modal-overlay" class="hidden">
         <div id="login-modal-content">
             <h3>Join Qodeo to Use Pro Tools</h3>
@@ -118,13 +148,14 @@
             <button id="close-modal-button">×</button>
         </div>
     </div>
+    
+    <audio id="qrSound" src="sounds/qr-generate.mp3" preload="auto"></audio>
 
     <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    
-    <!-- Yahan hum alag 'pro.js' file use kar rahe hain -->
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
     <script src="pro.js"></script> 
 </body>
 </html>
