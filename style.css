@@ -35,7 +35,6 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 .qr-type-button.active i { color: white; }
 .qr-type-button:active { transform: scale(1); }
 .input-area-wrapper { margin-top: 25px; margin-bottom: 25px; }
-/* Purani #inputAreaTitle ki styling hata di hai, nayi neeche hai */
 .qr-input-group { display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.3s ease-out; }
 .qr-input-group.active { display: flex; }
 .qr-input-group input[type="url"], .qr-input-group input[type="text"], .qr-input-group input[type="email"], .qr-input-group input[type="tel"], .qr-input-group input[type="password"], 
@@ -517,8 +516,9 @@ input:checked + .slider:before {
     color: var(--text-muted);
 }
 
+
 /* =========================================================
-   === NAYA, 24x7 ANIMATED VISITOR COUNTER KA STYLE        ===
+   === VISITOR COUNTER KA STYLE                          ===
    ========================================================= */
 
 .visitor-stats-section {
@@ -527,38 +527,30 @@ input:checked + .slider:before {
 }
 
 .stats-box {
-    /* Basic Box Styles */
-    background: #fdfdff; /* Thora sa off-white, premium look ke liye */
+    background: #fdfdff;
     max-width: 320px;
     margin: 0 auto;
     padding: 30px;
-    border-radius: 14px; /* Thoray zyada gol konay */
+    border-radius: 14px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    position: relative; /* Animation ke liye bohat zaroori */
-    overflow: hidden; /* Animation ko box ke andar rakhne ke liye */
-
-    /* Animation 1: Pulsing Glow (Dheere dheere chamakna) */
+    position: relative;
+    overflow: hidden;
     animation: pulseGlow 4s infinite ease-in-out;
 }
 
-/* Yeh pseudo-element border par chamakti hui light banayega */
 .stats-box::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    border-radius: inherit; /* Box jese gol konay */
-    padding: 2px; /* Border ki motai */
-
-    /* Animation 2: Flowing Gradient Border (Ghoomti hui light) */
+    border-radius: inherit;
+    padding: 2px;
     background: linear-gradient(115deg, var(--secondary-color), var(--primary-color), var(--secondary-color));
     background-size: 200% 200%;
     animation: flowBorder 5s infinite linear;
-
-    /* Yeh magic hai jo sirf border ko dikhata hai */
     -webkit-mask: 
         linear-gradient(#fff 0 0) content-box, 
         linear-gradient(#fff 0 0);
@@ -566,13 +558,11 @@ input:checked + .slider:before {
             mask-composite: exclude;
 }
 
-
-/* Baqi styling bilkul waisi hi hai */
 .stats-box i {
     font-size: 2.8rem;
     color: var(--primary-color);
     margin-bottom: 5px;
-    z-index: 2; /* Taake icon border ke upar rahe */
+    z-index: 2;
 }
 
 .stats-box .count-number {
@@ -591,10 +581,6 @@ input:checked + .slider:before {
     z-index: 2;
 }
 
-
-/* Animations ke liye Keyframes */
-
-/* Pulsing Glow Animation */
 @keyframes pulseGlow {
     0% {
         box-shadow: 0 5px 15px rgba(0, 123, 255, 0.08);
@@ -610,12 +596,77 @@ input:checked + .slider:before {
     }
 }
 
-/* Flowing Border Animation */
 @keyframes flowBorder {
     to {
         background-position: -200% -200%;
     }
 }
 
+/* =========================================================
+   === PRO TOOL TITLE STYLING WITH ANIMATION             ===
+   ========================================================= */
 
-Bhai ya rha mera final style.css file app es ma add kar ka doo muja sa kuch galti ho jayega
+.pro-tool-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Icon aur text ke beech fasla */
+    margin-bottom: 25px; /* Title ke neeche fasla */
+}
+
+/* Jab animation ki class add ho */
+.pro-tool-title-wrapper.animate-title #toolIcon {
+    /* Bounce wali animation */
+    animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.pro-tool-title-wrapper.animate-title #inputAreaTitle {
+    /* Text ke liye fade-in animation */
+    animation: fadeInText 0.8s ease-out 0.2s backwards;
+}
+
+/* Asal Icon ki styling */
+#toolIcon {
+    font-size: 2.5rem; /* Icon ka size bara kiya */
+    color: var(--primary-color); /* Default rang */
+    transition: color 0.3s ease; /* Rang badalne par animation */
+}
+
+/* Title ki styling */
+#inputAreaTitle {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0; /* Extra margin hata di */
+    padding: 0;
+    border: none; /* Extra border hata di */
+}
+
+
+/* Keyframes (Animation ke rules) */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.5) rotate(-30deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1) rotate(10deg);
+    }
+    80% {
+        transform: scale(0.95) rotate(-5deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
