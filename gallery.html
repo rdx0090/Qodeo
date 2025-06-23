@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        /* Basic Styling for the Gallery Page */
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; background-color: #f0f2f5; }
+        .gallery-container { padding: 15px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s ease; }
+        .gallery-item img:hover { transform: scale(1.05); }
+        /* Lightbox (fullscreen view) styling */
+        .lightbox { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); justify-content: center; align-items: center; }
+        .lightbox img { max-width: 90%; max-height: 90%; box-shadow: 0 0 25px rgba(0,0,0,0.5); }
+        .lightbox .close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="gallery-container">
+        <div id="galleryGrid" class="gallery-grid">
+            <!-- Images yahan JavaScript se add hongi -->
+        </div>
+    </div>
+
+    <!-- Lightbox for fullscreen image view -->
+    <div id="lightbox" class="lightbox">
+        <span class="close">×</span>
+        <img class="lightbox-content" id="lightboxImg">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const closeBtn = document.querySelector('.lightbox .close');
+            
+            // URL se image links haasil karein
+            const urlParams = new URLSearchParams(window.location.search);
+            const imagesParam = urlParams.get('images');
+            
+            if (imagesParam) {
+                // Image URLs ko array mein convert karein
+                const imageUrls = imagesParam.split(',');
+                
+                imageUrls.forEach(url => {
+                    const decodedUrl = decodeURIComponent(url);
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    const img = document.createElement('img');
+                    img.src = decodedUrl;
+                    img.alt = 'Gallery Image';
+                    img.loading = 'lazy';
+
+                    // Click karke lightbox kholne ka logic
+                    img.addEventListener('click', () => {
+                        lightbox.style.display = 'flex';
+                        lightboxImg.src = decodedUrl;
+                    });
+                    
+                    galleryItem.appendChild(img);
+                    galleryGrid.appendChild(galleryItem);
+                });
+            }
+
+            // Lightbox band karne ka logic
+            closeBtn.addEventListener('click', () => lightbox.style.display = 'none');
+            lightbox.addEventListener('click', (e) => {
+                if(e.target === lightbox) lightbox.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
