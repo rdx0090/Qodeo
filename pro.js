@@ -23,13 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==============================================================
     // === PAGE ELEMENT SELECTORS                                 ===
     // ==============================================================
-    // General Page Elements
     const yearSpan = document.getElementById('year');
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     const proFeatureCards = document.querySelectorAll('.pro-feature-card');
     const qrSound = document.getElementById('qrSound');
 
-    // Header & Login Elements
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
     const userProfileDiv = document.getElementById('user-profile');
@@ -39,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const googleLoginButton = document.getElementById('google-login-button');
     const githubLoginButton = document.getElementById('github-login-button');
 
-    // Generator & Preview Sections
     const proGeneratorSection = document.getElementById('pro-generator-section');
     const proPreviewSection = document.getElementById('pro-preview-section');
     const inputTitle = document.getElementById('inputAreaTitle');
@@ -48,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrCanvasContainer = document.getElementById('qrCanvasContainer');
     const qrDataDisplay = document.getElementById('qrDataDisplay');
 
-    // Customization Inputs
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
     const dotStyleSelect = document.getElementById('dotStyle');
@@ -56,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoPreview = document.getElementById('logoPreview');
     let currentLogoBase64 = null;
 
-    // Tool Specific Inputs
     const pdfUploadInput = document.getElementById('pdfUpload');
     const pdfUploadLabel = document.querySelector('.file-upload-label');
     const pdfFileName = document.getElementById('pdfFileName');
@@ -89,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 userProfileDiv.style.display = 'none';
                 userProfileDiv.classList.add('hidden');
             }
-            // Agar user logout ho jaye aur generator khula ho, to usay chupa do
             if(proGeneratorSection) proGeneratorSection.style.display = 'none';
             if(proPreviewSection) proPreviewSection.style.display = 'none';
         }
@@ -100,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==============================================================
     let currentTool = null;
 
-    // QR Code Instance Setup
     const qrCodeInstance = new QRCodeStyling({
         width: 250, height: 250, type: 'svg',
         data: "https://qodeo.pro",
@@ -110,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     if(qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
 
-    // Jab kisi Pro Feature Card par click ho
     proFeatureCards.forEach(card => {
         card.addEventListener('click', (event) => {
             event.preventDefault();
@@ -123,54 +115,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // NAYA AUR BEHTAR FUNCTION JO ICON AUR TITLE DONO SET KAREGA
     function showGeneratorFor(tool) {
         proGeneratorSection.style.display = 'block';
-        proPreviewSection.style.display = 'flex'; // Use flex for proper alignment
+        proPreviewSection.style.display = 'flex';
 
-        // Sab input groups ko chupa do
+        const toolIconElement = document.getElementById('toolIcon');
+        const toolTitleElement = document.getElementById('inputAreaTitle');
+        const titleWrapper = document.querySelector('.pro-tool-title-wrapper');
+
         document.querySelectorAll('.qr-input-group').forEach(group => group.style.display = 'none');
         
-        // Sirf zaroori wala dikhao
         const activeGroup = document.getElementById(tool + 'Inputs');
         if (activeGroup) {
             activeGroup.style.display = 'flex';
-            const toolName = tool.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-            inputTitle.textContent = `Create a ${toolName} QR Code`;
-            // Page ko generator tak scroll karo
-            proGeneratorSection.scrollIntoView({ behavior: 'smooth' });
+            
+            const toolInfo = {
+                'pdf': { icon: 'fa-file-pdf', title: 'Create a PDF QR Code' },
+                'app_store': { icon: 'fab fa-google-play', title: 'Create an App Store QR Code' },
+                'audio': { icon: 'fa-music', title: 'Create an Audio QR Code' },
+                'image_gallery': { icon: 'fa-images', title: 'Create an Image Gallery QR' }
+            };
+
+            if (toolInfo[tool]) {
+                toolIconElement.className = `fas ${toolInfo[tool].icon}`;
+                toolTitleElement.textContent = toolInfo[tool].title;
+                // Icon ka rang card ke rang se match karein
+                const cardIcon = document.querySelector(`.pro-feature-card[data-tool="${tool}"] i`);
+                if(cardIcon) toolIconElement.style.color = cardIcon.style.color;
+            }
+
+            titleWrapper.classList.remove('animate-title');
+            setTimeout(() => {
+                titleWrapper.classList.add('animate-title');
+            }, 10);
+
+            proGeneratorSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
 
-    // Main "Generate" button ka logic
     if (generateButton) {
         generateButton.addEventListener('click', () => {
             if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
-
-            if (currentTool === 'app_store') {
-                handleAppStoreQR();
-            } else if (currentTool === 'pdf') {
-                handlePdfUpload();
-            }
-            // Yahan baqi tools ke liye 'else if' aayega
+            if (currentTool === 'app_store') { handleAppStoreQR(); }
+            else if (currentTool === 'pdf') { handlePdfUpload(); }
         });
     }
 
-    // === Tool-Specific Functions ===
-
-    // App Store QR ke liye function
     function handleAppStoreQR() {
         const appleUrl = document.getElementById('apple-store-url').value;
         const googleUrl = document.getElementById('google-store-url').value;
-        if (!appleUrl || !googleUrl) {
-            alert("Please provide both Apple and Google store links.");
-            return;
-        }
-        // onelink.to ka smart link
+        if (!appleUrl || !googleUrl) { alert("Please provide both Apple and Google store links."); return; }
         const finalQrData = `https://onelink.to/qodeo?af_ios_url=${encodeURIComponent(appleUrl)}&af_android_url=${encodeURIComponent(googleUrl)}`;
         finalizeQrGeneration(finalQrData);
     }
 
-    // PDF QR ke liye function
     function handlePdfUpload() {
         const file = pdfUploadInput.files[0];
         if (!file) { alert('Please select a PDF file.'); return; }
@@ -181,11 +180,9 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
         formData.append('folder', `qodeo/${auth.currentUser.uid}`);
-
         pdfUploadProgress.style.display = 'block';
         const progressDiv = pdfUploadProgress.querySelector('.progress');
         progressDiv.style.width = '50%';
-
         fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, { method: 'POST', body: formData })
         .then(response => response.json())
         .then(async (data) => {
@@ -195,13 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 finalizeQrGeneration(data.secure_url);
             } else { throw new Error(data.error.message || 'Upload failed'); }
         })
-        .catch(error => {
-            alert("PDF upload failed: " + error.message);
-            resetGenerateButton();
-        });
+        .catch(error => { alert("PDF upload failed: " + error.message); resetGenerateButton(); });
     }
     
-    // === QR Generation, Customization & Save Functions ===
     function finalizeQrGeneration(dataForQr) {
         qrCodeInstance.update({ 
             data: dataForQr,
@@ -216,10 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetGenerateButton() {
         generateButton.disabled = false;
         generateButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate Pro QR';
-        if (pdfUploadProgress) { /* ... progress bar reset logic ... */ }
+        if (pdfUploadProgress) { setTimeout(() => { pdfUploadProgress.style.display = 'none'; pdfUploadProgress.querySelector('.progress').style.width = '0%';}, 2000); }
     }
 
-    // Customization inputs ke liye event listeners
     [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
         if(input) input.addEventListener('change', () => qrCodeInstance.update({ 
             dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
@@ -243,10 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saveQrButton) {
         saveQrButton.addEventListener('click', async () => {
             const qrData = qrCodeInstance._options.data;
-            if (!qrData || qrData === "https://qodeo.pro") {
-                alert("Please generate a QR code first before saving.");
-                return;
-            }
+            if (!qrData || qrData === "https://qodeo.pro") { alert("Please generate a QR code first before saving."); return; }
             const publicId = (currentTool === 'pdf') ? qrData.split('/').pop().split('.')[0] : null;
             await saveProQrToFirestore(currentTool, qrData, publicId);
         });
@@ -265,20 +254,15 @@ document.addEventListener('DOMContentLoaded', () => {
             targetData: url,
             cloudinaryPublicId: publicId || null,
             scanCount: 0,
-            customization: { 
-                dotColor: dotColorInput.value, 
-                backgroundColor: backgroundColorInput.value, 
-                dotStyle: dotStyleSelect.value, 
-                logo: currentLogoBase64 
-            }
+            customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
         };
 
         try {
             await db.collection("pro_qrcodes").add(qrRecord);
-            alert('Pro QR Code saved successfully to your dashboard!');
+            alert('Pro QR Code saved successfully!');
             saveQrButton.querySelector('span').textContent = 'Saved!';
         } catch (error) {
-            console.error("Error saving Pro QR to Firestore: ", error);
+            console.error("Error saving Pro QR: ", error);
             alert('Could not save the QR Code.');
         } finally {
             setTimeout(() => {
