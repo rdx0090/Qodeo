@@ -107,12 +107,22 @@
                         </div>
                     </div>
                     
-                    <!-- AUDIO KE LIYE NAYE INPUTS -->
+                    <!-- Audio ke liye inputs -->
                     <div id="audioInputs" class="qr-input-group" style="display: none;">
                         <div class="control-group">
                             <label for="audio-url">Audio File URL (MP3, WAV, etc.):</label>
                             <input type="url" id="audio-url" placeholder="https://example.com/mysong.mp3">
                         </div>
+                    </div>
+
+                    <!-- IMAGE GALLERY KE LIYE NAYE INPUTS -->
+                    <div id="image_galleryInputs" class="qr-input-group" style="display: none;">
+                        <label for="galleryUpload" class="file-upload-label">
+                            <i class="fas fa-images"></i>
+                            <span>Choose Images (Max 10, 2MB each)</span>
+                        </label>
+                        <input type="file" id="galleryUpload" accept="image/jpeg, image/png, image/gif" multiple style="display: none;">
+                        <div id="image-preview-container"></div>
                     </div>
 
                 </div>
