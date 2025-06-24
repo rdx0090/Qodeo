@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Digital Business Card</title>
+    <!-- Aapki site ke fonts aur icons, taake design same rahe -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Aapke favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico"> 
+
+    <style>
+        /* === DIGITAL CARD KA STYLE === */
+        :root {
+            --primary-color: #007bff;
+            --text-dark: #212529;
+            --text-light: #495057;
+            --background-grey: #f8f9fa;
+            --font-main: 'Inter', sans-serif;
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--background-grey);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20px;
+            min-height: 100vh;
+        }
+        .card-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 15px;
+        }
+        .vcard-wrapper {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            opacity: 0; /* Shuru mein hide hoga */
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .vcard-wrapper.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card-header {
+            position: relative;
+            height: 150px;
+        }
+        .cover-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: #e9ecef;
+        }
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            object-fit: cover;
+            position: absolute;
+            bottom: -60px; /* Aadha neeche */
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .card-body {
+            padding: 80px 25px 25px 25px; /* Upar se zyada padding taake profile photo ke liye jaga banay */
+            text-align: center;
+        }
+        .card-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+        .card-headline {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin: 5px 0 15px 0;
+            font-weight: 500;
+        }
+        .card-bio {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .action-btn i {
+            font-size: 1.1em;
+        }
+        .save-contact-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        .save-contact-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+        }
+        .secondary-actions {
+            display: flex;
+            gap: 15px;
+        }
+        .secondary-btn {
+            flex: 1;
+            background-color: #e9ecef;
+            color: var(--text-dark);
+        }
+        .secondary-btn:hover {
+            background-color: #dee2e6;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .social-link {
+            font-size: 1.8rem;
+            color: #adb5bd;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .social-link:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        .card-footer {
+            background-color: var(--background-grey);
+            padding: 15px;
+            text-align: center;
+        }
+        .card-footer a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .loader, .error-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            padding: 50px 20px;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        <!-- Loading State -->
+        <div id="loader" class="loader">
+            <i class="fas fa-spinner fa-spin"></i> Loading Card...
+        </div>
+
+        <!-- Error State -->
+        <div id="error-message" class="error-message hidden">
+            <i class="fas fa-exclamation-triangle"></i> Sorry, this card could not be found.
+        </div>
+        
+        <!-- The Actual vCard -->
+        <div id="vcard-wrapper" class="vcard-wrapper">
+            <header class="card-header">
+                <img id="cover-photo" src="" alt="Cover Photo" class="cover-photo">
+                <img id="profile-photo" src="" alt="Profile Photo" class="profile-photo">
+            </header>
+            <main class="card-body">
+                <h1 id="card-name"></h1>
+                <h2 id="card-headline"></h2>
+                <p id="card-bio"></p>
+
+                <div class="action-buttons">
+                    <a id="save-contact-btn" href="#" class="action-btn save-contact-btn">
+                        <i class="fas fa-user-plus"></i> Save to Contacts
+                    </a>
+                    <div class="secondary-actions">
+                        <a id="phone-btn" href="#" class="action-btn secondary-btn hidden"><i class="fas fa-phone"></i> Call</a>
+                        <a id="email-btn" href="#" class="action-btn secondary-btn hidden"><i class="fas fa-envelope"></i> Email</a>
+                    </div>
+                </div>
+
+                <div id="social-links" class="social-links">
+                    <!-- Social Icons yahan JavaScript se add honge -->
+                </div>
+            </main>
+            <footer class="card-footer">
+                <a href="https://qodeo.vercel.app" target="_blank">Powered by Qodeo</a>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Hamari custom JavaScript file -->
+    <script src="card.js"></script>
+
+</body>
+</html>
