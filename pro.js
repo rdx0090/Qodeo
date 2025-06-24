@@ -17,9 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const auth = firebase.auth();
     const db = firebase.firestore();
-    const storage = firebase.storage(); // Firebase Storage ko bhi initialize karein
-    const CLOUD_NAME = 'drork8wvy'; // Aapka Cloudinary Name
-    const UPLOAD_PRESET = 'qodeo_uploads'; // Aapka Cloudinary Preset
+    const CLOUD_NAME = 'drork8wvy';
+    const UPLOAD_PRESET = 'qodeo_uploads';
 
     // ==============================================================
     // === PAGE ELEMENT SELECTORS                                 ===
@@ -68,10 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const vcardCoverUpload = document.getElementById('vcardCoverUpload');
     const vcardProfilePreview = document.getElementById('vcardProfilePreview');
     const vcardCoverPreview = document.getElementById('vcardCoverPreview');
-    // =============================================================
 
     // ==============================================================
-    // === AUTHENTICATION LOGIC (Koi Tabdeeli Nahi)               ===
+    // === AUTHENTICATION LOGIC                                   ===
     // ==============================================================
     if(logoutButton) logoutButton.addEventListener('click', () => auth.signOut());
     if(closeModalButton) closeModalButton.addEventListener('click', () => loginModalOverlay.classList.add('hidden'));
@@ -109,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const qrCodeInstance = new QRCodeStyling({
         width: 250, height: 250, type: 'svg',
-        data: "https://qodeo.app", // Aapki Website ka link
+        data: "https://qodeo.app",
         dotsOptions: { color: "#000000", type: "square" },
         backgroundOptions: { color: "#ffffff" },
         imageOptions: { crossOrigin: 'anonymous', margin: 10 }
@@ -142,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeGroup) {
             activeGroup.style.display = 'flex';
 
-            // === NAYE TOOL KI INFO ADD KI GAYI HAI ===
             const toolInfo = {
                 'pdf': { icon: 'fa-file-pdf', title: 'Upload a PDF File' },
                 'app_store': { icon: 'fab fa-google-play', title: 'Create an App Store QR' },
@@ -150,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 'image_gallery': { icon: 'fa-images', title: 'Create an Image Gallery' },
                 'vcard_plus': { icon: 'fa-id-card-alt', title: 'Create Your Digital Business Card' }
             };
-            // ==========================================
 
             if (toolInfo[tool]) {
                 toolIconElement.className = `fas ${toolInfo[tool].icon}`;
@@ -170,27 +166,79 @@ document.addEventListener('DOMContentLoaded', () => {
         generateButton.addEventListener('click', () => {
             if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
 
-            // === NAYE TOOL KA HANDLER ADD KIYA GAYA HAI ===
             if (currentTool === 'app_store') { handleAppStoreQR(); } 
             else if (currentTool === 'pdf') { handlePdfUpload(); } 
             else if (currentTool === 'audio') { handleAudioQR(); } 
             else if (currentTool === 'image_gallery') { handleImageGalleryQR(); }
-            else if (currentTool === 'vcard_plus') { handleVCardPlusQR(); } // Naya Handler
-            // ===============================================
+            else if (currentTool === 'vcard_plus') { handleVCardPlusQR(); }
         });
     }
 
-    // ==============================================================
-    // === TOOL-SPECIFIC FUNCTIONS (NAYA FEATURE ADDED)           ===
-    // ==============================================================
+    // === Tool-Specific Functions ===
 
-    function handleAppStoreQR() { /* ... (Koi Tabdeeli Nahi) ... */ }
-    function handleAudioQR() { /* ... (Koi Tabdeeli Nahi) ... */ }
-    function handlePdfUpload() { /* ... (Koi Tabdeeli Nahi) ... */ }
-    function handleImageGalleryQR() { /* ... (Koi Tabdeeli Nahi) ... */ }
+    function handleAppStoreQR() {
+        const appleUrl = document.getElementById('apple-store-url').value;
+        const googleUrl = document.getElementById('google-store-url').value;
+        if (!appleUrl || !googleUrl) { alert("Please provide both Apple and Google store links."); return; }
+        const finalQrData = `https://onelink.to/qodeo?af_ios_url=${encodeURIComponent(appleUrl)}&af_android_url=${encodeURIComponent(googleUrl)}`;
+        finalizeQrGeneration(finalQrData);
+    }
 
+    function handleAudioQR() {
+        const audioUrl = document.getElementById('audio-url').value;
+        if (!audioUrl) { alert("Please provide a valid audio file URL."); return; }
+        try { new URL(audioUrl); } catch (_) { alert("The URL format is invalid."); return; }
+        finalizeQrGeneration(audioUrl);
+    }
 
-    // === NAYA FUNCTION: DIGITAL BUSINESS CARD KE LIYE ===
+    function handlePdfUpload() {
+        // ... (Aapka original PDF upload ka logic yahan hoga)
+        alert("PDF Upload function is not fully implemented in this example.");
+    }
+
+    function handleImageGalleryQR() {
+        const files = galleryUploadInput.files;
+        if (files.length === 0) { alert("Please select at least one image."); return; }
+        if (files.length > 10) { alert("You can upload a maximum of 10 images."); return; }
+
+        generateButton.disabled = true;
+        generateButton.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Uploading 0%...';
+
+        const uploadPromises = Array.from(files).map(file => {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', UPLOAD_PRESET);
+            formData.append('folder', `qodeo/${auth.currentUser.uid}/galleries`);
+
+            return fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                method: 'POST', body: formData
+            }).then(response => response.json());
+        });
+
+        let uploadedCount = 0;
+        uploadPromises.forEach(p => p.then(() => {
+            uploadedCount++;
+            const percentage = Math.round((uploadedCount / files.length) * 100);
+            generateButton.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Uploading ${percentage}%...`;
+        }));
+
+        Promise.all(uploadPromises)
+            .then(results => {
+                const imageUrls = results.map(result => result.secure_url ? encodeURIComponent(result.secure_url) : null).filter(Boolean);
+                if (imageUrls.length !== files.length) { throw new Error("Some images failed to upload."); }
+
+                const galleryBaseUrl = 'https://qodeo.vercel.app/gallery.html'; 
+                const finalQrData = `${galleryBaseUrl}?images=${imageUrls.join(',')}`;
+
+                generateButton.innerHTML = '<i class="fas fa-qrcode"></i> Generating QR...';
+                finalizeQrGeneration(finalQrData);
+            })
+            .catch(error => {
+                alert("Error uploading images: " + error.message);
+                resetGenerateButton();
+            });
+    }
+
     async function handleVCardPlusQR() {
         const name = document.getElementById('vcardName').value.trim();
         const headline = document.getElementById('vcardHeadline').value.trim();
@@ -198,38 +246,25 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Please fill in your Name and Headline.");
             return;
         }
-
         const profileFile = vcardProfileUpload.files[0];
         const coverFile = vcardCoverUpload.files[0];
-
         if (!profileFile) {
             alert("Profile Picture is required.");
             return;
         }
-
         generateButton.disabled = true;
         generateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
-
         try {
-            // Step 1: Images upload karein
-            const uploadPromises = [];
-            uploadPromises.push(uploadImageToCloudinary(profileFile, 'profile_pictures'));
-            if (coverFile) {
-                uploadPromises.push(uploadImageToCloudinary(coverFile, 'cover_photos'));
-            }
-
             generateButton.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Uploading Images...';
-            const uploadResults = await Promise.all(uploadPromises);
-
-            const profilePicUrl = uploadResults[0].secure_url;
-            const coverPicUrl = coverFile ? uploadResults[1].secure_url : null;
-
-            // Step 2: Form ka sara data इकट्ठा karein
+            const profilePicUrl = await uploadImageToCloudinary(profileFile, 'profile_pictures');
+            let coverPicUrl = null;
+            if (coverFile) {
+                coverPicUrl = await uploadImageToCloudinary(coverFile, 'cover_photos');
+            }
             const cardData = {
                 userId: auth.currentUser.uid,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                name: name,
-                headline: headline,
+                name, headline,
                 bio: document.getElementById('vcardBio').value.trim(),
                 phone: document.getElementById('vcardPhone').value.trim(),
                 email: document.getElementById('vcardEmail').value.trim(),
@@ -244,16 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     facebook: document.getElementById('vcardFacebook').value.trim(),
                 }
             };
-
-            // Step 3: Data ko Firestore mein save karein
             generateButton.innerHTML = '<i class="fas fa-save"></i> Saving Card...';
             const docRef = await db.collection("business_cards").add(cardData);
-
-            // Step 4: QR Code ke liye final URL banayein
             const cardUrl = `https://qodeo.vercel.app/card.html?id=${docRef.id}`;
             finalizeQrGeneration(cardUrl);
             alert("Digital Business Card created successfully!");
-
         } catch (error) {
             console.error("Error creating Digital Business Card: ", error);
             alert("An error occurred. Please try again. " + error.message);
@@ -261,32 +291,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Helper function to upload image to Cloudinary
     function uploadImageToCloudinary(file, folderName) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
         formData.append('folder', `qodeo/${auth.currentUser.uid}/${folderName}`);
-
         return fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-            method: 'POST',
-            body: formData
+            method: 'POST', body: formData
         }).then(response => {
-            if (!response.ok) {
-                throw new Error(`Image upload failed: ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`Image upload failed: ${response.statusText}`);
             return response.json();
-        });
+        }).then(result => result.secure_url);
     }
-    // ==============================================================
-
+    
     // === Event Listeners for File Inputs ===
-    if (pdfUploadLabel) pdfUploadLabel.addEventListener('click', () => pdfUploadInput.click());
-    if (galleryUploadLabel) galleryUploadLabel.addEventListener('click', () => galleryUploadInput.click());
+    if (pdfUploadInput) pdfUploadInput.addEventListener('change', () => { /* Logic for PDF file name display */ });
+    if (galleryUploadInput) galleryUploadInput.addEventListener('change', () => {
+        imagePreviewContainer.innerHTML = '';
+        if(galleryUploadInput.files.length > 10) {
+            alert("You can only select up to 10 images.");
+            galleryUploadInput.value = ""; return;
+        }
+        Array.from(galleryUploadInput.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                imagePreviewContainer.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        });
+    });
 
-    if (galleryUploadInput && imagePreviewContainer) { /* ... (Koi Tabdeeli Nahi) ... */ }
-
-    // === NAYE EVENT LISTENERS: VCARD IMAGE PREVIEW KE LIYE ===
     if(vcardProfileUpload) vcardProfileUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if(file && vcardProfilePreview) {
@@ -295,7 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.readAsDataURL(file);
         }
     });
-
     if(vcardCoverUpload) vcardCoverUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if(file && vcardCoverPreview) {
@@ -304,8 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.readAsDataURL(file);
         }
     });
-    // ========================================================
-
 
     // === QR Generation, Customization & Save Functions ===
     function finalizeQrGeneration(dataForQr) {
@@ -322,7 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetGenerateButton() {
         generateButton.disabled = false;
         generateButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate Pro QR';
-        // ... (progress bar reset logic yahan add karein agar zaroorat ho) ...
     }
 
     [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
@@ -332,9 +364,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }));
     });
 
-    if (logoUploadInput) { /* ... (Koi Tabdeeli Nahi) ... */ }
+    if (logoUploadInput) logoUploadInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) { currentLogoBase64 = null; if (logoPreview) logoPreview.style.display = 'none'; }
+        else {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                currentLogoBase64 = e.target.result;
+                qrCodeInstance.update({ image: currentLogoBase64 });
+                if (logoPreview) { logoPreview.src = currentLogoBase64; logoPreview.style.display = 'block'; }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
-    if (saveQrButton) { /* ... (Yahan tabdeeli ki zaroorat par sakti hai vcard ke liye, فی الحال wese hi rakhein) ... */ }
-    
-    async function saveProQrToFirestore(toolType, url, publicId) { /* ... (Koi Tabdeeli Nahi) ... */ }
+    if (saveQrButton) {
+        saveQrButton.addEventListener('click', async () => {
+            const qrData = qrCodeInstance._options.data;
+            if (!qrData || qrData === "https://qodeo.app") { alert("Please generate a QR code first before saving."); return; }
+            let publicId = null;
+            if (currentTool === 'pdf') {
+                try { publicId = qrData.split('/qodeo/')[1].split('.')[0]; } catch(e) {}
+            }
+            await saveProQrToFirestore(currentTool, qrData, publicId);
+        });
+    }
+
+    async function saveProQrToFirestore(toolType, url, publicId) {
+        if (!auth.currentUser) return;
+        saveQrButton.disabled = true;
+        saveQrButton.querySelector('span').textContent = 'Saving...';
+        const qrRecord = {
+            userId: auth.currentUser.uid,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            type: 'pro',
+            qrDataType: toolType,
+            targetData: url,
+            cloudinaryPublicId: publicId || null,
+            scanCount: 0,
+            customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
+        };
+        try {
+            await db.collection("pro_qrcodes").add(qrRecord);
+            alert('Pro QR Code saved successfully!');
+            saveQrButton.querySelector('span').textContent = 'Saved!';
+        } catch (error) {
+            console.error("Error saving Pro QR: ", error);
+            alert('Could not save the QR Code.');
+        } finally {
+            setTimeout(() => {
+                saveQrButton.disabled = false;
+                saveQrButton.querySelector('span').textContent = 'Save';
+            }, 2000);
+        }
+    }
 });
