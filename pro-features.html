@@ -65,6 +65,12 @@
                     <h3>Image Gallery</h3>
                     <p>Create a stunning image gallery for your products or portfolio.</p>
                 </a>
+                <!-- 5. Digital Business Card (NAYA FEATURE) -->
+                <a href="#" class="pro-feature-card" data-tool="vcard_plus">
+                    <i class="fas fa-id-card-alt" style="color: #6e45e2;"></i>
+                    <h3>Digital Business Card</h3>
+                    <p>Create a beautiful, interactive digital vCard with your photo, links, and more.</p>
+                </a>
                  <!-- Baqi cards yahan aayenge... -->
             </div>
         </div>
@@ -81,7 +87,7 @@
                         <i id="toolIcon" class="fas"></i>
                         <h2 id="inputAreaTitle"></h2>
                     </div>
-                    
+
                     <!-- App Store ke liye inputs -->
                     <div id="app_storeInputs" class="qr-input-group" style="display: none;">
                         <div class="control-group">
@@ -106,7 +112,7 @@
                             <div class="progress"></div>
                         </div>
                     </div>
-                    
+
                     <!-- Audio ke liye inputs -->
                     <div id="audioInputs" class="qr-input-group" style="display: none;">
                         <div class="control-group">
@@ -124,6 +130,53 @@
                         <input type="file" id="galleryUpload" accept="image/jpeg, image/png, image/gif" multiple style="display: none;">
                         <div id="image-preview-container"></div>
                     </div>
+                    
+                    <!-- === DIGITAL BUSINESS CARD KE LIYE NAYE INPUTS (NAYA FEATURE) === -->
+                    <div id="vcard_plusInputs" class="qr-input-group" style="display: none;">
+                        
+                        <div class="vcard-section-title">Profile & Appearance</div>
+                        <div class="form-row">
+                             <div class="control-group half-width">
+                                <label>Profile Picture:</label>
+                                <input type="file" id="vcardProfileUpload" accept="image/*" style="display:none;">
+                                <button onclick="document.getElementById('vcardProfileUpload').click()" class="button-upload-small">Choose Photo</button>
+                                <img id="vcardProfilePreview" class="image-preview-small" src="" alt="Profile Preview">
+                            </div>
+                            <div class="control-group half-width">
+                                <label>Cover Photo (Optional):</label>
+                                <input type="file" id="vcardCoverUpload" accept="image/*" style="display:none;">
+                                <button onclick="document.getElementById('vcardCoverUpload').click()" class="button-upload-small">Choose Cover</button>
+                                <img id="vcardCoverPreview" class="image-preview-small" src="" alt="Cover Preview">
+                            </div>
+                        </div>
+
+                        <div class="vcard-section-title">Basic Information</div>
+                        <div class="form-row">
+                            <div class="control-group half-width"><input type="text" id="vcardName" placeholder="Your Name (e.g., Ali Ahmed)"></div>
+                            <div class="control-group half-width"><input type="text" id="vcardHeadline" placeholder="Headline (e.g., Web Developer)"></div>
+                        </div>
+                        <div class="control-group">
+                            <textarea id="vcardBio" placeholder="Short Bio (A little bit about yourself)" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="vcard-section-title">Contact Details</div>
+                         <div class="form-row">
+                            <div class="control-group half-width"><input type="tel" id="vcardPhone" placeholder="Phone Number"></div>
+                            <div class="control-group half-width"><input type="email" id="vcardEmail" placeholder="Email Address"></div>
+                        </div>
+                        <div class="control-group">
+                            <input type="url" id="vcardWebsite" placeholder="Website URL (e.g., https://qodeo.app)">
+                        </div>
+
+                        <div class="vcard-section-title">Social Media Links (Optional)</div>
+                        <div class="control-group social-input"><i class="fab fa-linkedin"></i><input type="url" id="vcardLinkedin" placeholder="LinkedIn Profile URL"></div>
+                        <div class="control-group social-input"><i class="fab fa-github"></i><input type="url" id="vcardGithub" placeholder="GitHub Profile URL"></div>
+                        <div class="control-group social-input"><i class="fab fa-instagram"></i><input type="url" id="vcardInstagram" placeholder="Instagram Profile URL"></div>
+                        <div class="control-group social-input"><i class="fab fa-twitter"></i><input type="url" id="vcardTwitter" placeholder="Twitter (X) Profile URL"></div>
+                        <div class="control-group social-input"><i class="fab fa-facebook"></i><input type="url" id="vcardFacebook" placeholder="Facebook Profile URL"></div>
+
+                    </div>
+                    <!-- ============================================================== -->
 
                 </div>
                 <button id="generateQrMainButton" class="button-generate"><i class="fas fa-qrcode"></i> Generate Pro QR</button>
@@ -168,7 +221,7 @@
             <button id="close-modal-button">×</button>
         </div>
     </div>
-    
+
     <audio id="qrSound" src="sounds/qr-generate.mp3" preload="auto"></audio>
 
     <!-- Scripts -->
