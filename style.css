@@ -19,8 +19,32 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 #logoLink { display: flex; align-items: baseline; text-decoration: none; cursor: pointer; transition: transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
 #logoLink:hover {transform: scale(1.02); } #logoLink:active {transform: scale(0.99);}
 #headerIcon { height: 28px; width: auto; margin-right: 8px; align-self: center; }
-#logoText { font-size: 1.7rem; font-weight: 700; color: var(--primary-color); letter-spacing: -0.5px; margin-right: 8px; line-height: 1; }
-.header-tagline {display: inline-block; font-size: 0.75rem; font-weight: 400; color: var(--tagline-color); white-space: nowrap; line-height: 1; vertical-align: baseline; animation: pulseZoomTagline 3s infinite ease-in-out; transform-origin: center left; }
+
+/* === LOGO KE LIYE TABDEELI YAHAN HAI === */
+#logoText { 
+    font-size: 1.7rem; 
+    font-weight: 700; 
+    color: var(--primary-color); 
+    letter-spacing: -0.5px; 
+    /* Right margin hata diya takay text jurra rahay */
+    line-height: 1; 
+}
+/* Purana tagline hide kar diya */
+.header-tagline {
+    display: none !important;
+}
+/* Naye "-Make QR" text ke liye style */
+#makeQrText {
+    font-family: var(--font-main);
+    font-size: 1.7rem; /* Size Qodeo ke barabar */
+    font-weight: 700; /* Font Mota (Bold) */
+    color: var(--text-dark); /* Rang Dark Grey/Black */
+    letter-spacing: -0.5px; /* Spacing Qodeo jesi */
+    margin-left: 4px; /* Thora sa fasla */
+    line-height: 1;
+}
+/* ======================================= */
+
 @media (max-width: 480px) { .header-tagline {display: none;} #logoText {margin-right: 0;} }
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
 .qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
@@ -83,7 +107,20 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 .scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-color); }
 .site-footer { text-align: center; padding: 25px 0; background-color: var(--background-grey); color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light); font-size: 0.85rem; }
-@media (max-width: 767px) { /* .header-tagline { display: none; } */ #logoText { font-size: 1.5rem; } #headerIcon { height: 26px; margin-right: 6px;} .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; } .qr-type-button { padding: 8px 6px; font-size: 0.7rem; min-height: 55px; } .qr-type-button i { font-size: 1.3rem; margin-bottom: 4px; } .input-area-wrapper #inputAreaTitle { font-size: 1.2rem; margin-bottom: 12px;} .button-generate { padding: 10px 18px; font-size: 0.95rem; } .preview-column, .options-column { padding: 15px; } .preview-column h3, .options-column h3 { font-size: 1.05rem; } #qrCanvasContainer { max-width: 200px; } }
+@media (max-width: 767px) { 
+    #logoText, #makeQrText { /* Naya Text bhi chota hojayega */
+        font-size: 1.5rem; 
+    } 
+    #headerIcon { height: 26px; margin-right: 6px;} 
+    .qr-type-selector-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; } 
+    .qr-type-button { padding: 8px 6px; font-size: 0.7rem; min-height: 55px; } 
+    .qr-type-button i { font-size: 1.3rem; margin-bottom: 4px; } 
+    .input-area-wrapper #inputAreaTitle { font-size: 1.2rem; margin-bottom: 12px;} 
+    .button-generate { padding: 10px 18px; font-size: 0.95rem; } 
+    .preview-column, .options-column { padding: 15px; } 
+    .preview-column h3, .options-column h3 { font-size: 1.05rem; } 
+    #qrCanvasContainer { max-width: 200px; } 
+}
 @media (min-width: 768px) and (max-width: 991px) { .preview-and-options-section .container { flex-direction: column; } .preview-column, .options-column { flex-basis: auto; } }
 @keyframes pulseZoomTagline { 0% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.03); opacity: 1; } 100% { transform: scale(1); opacity: 0.85; } }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
