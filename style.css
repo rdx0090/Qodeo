@@ -12,15 +12,51 @@
     --border-radius-md: 8px; --border-radius-sm: 6px;
     --header-height: 65px; --container-padding: 15px;
 }
-body {font-family: var(--font-main); line-height: 1.65; background-color: var(--background-light); color: var(--text-dark); font-size: 15px; display: flex; flex-direction: column; min-height: 100vh; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
+
+/* === KEYFRAMES FOR THE ANIMATED GRADIENT === */
+@keyframes animateGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body {
+    font-family: var(--font-main); 
+    line-height: 1.65; 
+    color: var(--text-dark); 
+    font-size: 15px; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+    -webkit-font-smoothing: antialiased; 
+    -moz-osx-font-smoothing: grayscale;
+
+    /* === NAYA ATTRACTIVE BACKGROUND === */
+    background: linear-gradient(135deg, #e0f7fa, #d1c4e9, #f8bbd0, #c8e6c9);
+    background-size: 400% 400%;
+    animation: animateGradient 15s ease infinite;
+}
+
 .container { width: 100%; max-width: 1140px; margin: 0 auto; padding-left: var(--container-padding); padding-right: var(--container-padding); }
-.site-header {background-color: var(--background-light); height: var(--header-height); display: flex; align-items: center; border-bottom: 1px solid var(--border-light); position: sticky; top: 0; z-index: 1000;}
+
+/* Header ka background thora transparent kiya hai takay modern lage */
+.site-header {
+    background-color: rgba(255, 255, 255, 0.85); /* Thora sa transparent */
+    backdrop-filter: saturate(180%) blur(10px); /* Modern blur effect (frosted glass) */
+    height: var(--header-height); 
+    display: flex; 
+    align-items: center; 
+    border-bottom: 1px solid var(--border-light); 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
+}
 .header-container { display: flex; justify-content: space-between; align-items: center; }
 #logoLink { display: flex; align-items: baseline; text-decoration: none; cursor: pointer; transition: transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
 #logoLink:hover {transform: scale(1.02); } #logoLink:active {transform: scale(0.99);}
 #headerIcon { height: 28px; width: auto; margin-right: 8px; align-self: center; }
 
-/* === LOGO KE LIYE TABDEELI YAHAN HAI === */
+/* === LOGO KE LIYE STYLE (Koi Tabdeeli Nahi) === */
 #logoText { 
     font-size: 1.7rem; 
     font-weight: 700; 
@@ -42,7 +78,7 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 
 @media (max-width: 480px) { .header-tagline {display: none;} #logoText {margin-right: 0;} }
 .site-main { flex-grow: 1; padding-top: 30px; padding-bottom: 40px; }
-.qr-generator-section { background-color: var(--background-grey); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
+.qr-generator-section { background-color: var(--background-light); padding-top: 30px; padding-bottom: 30px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
 .qr-type-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
 .qr-type-button { background-color: var(--background-light); border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); padding: 10px 8px; font-size: 0.75rem; font-weight: 500; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s cubic-bezier(0.68, -0.55, 0.27, 1.55); min-height: 65px; text-decoration: none; }
@@ -101,7 +137,15 @@ body {font-family: var(--font-main); line-height: 1.65; background-color: var(--
 .scannability-tips ul { list-style-type: disc; list-style-position: inside; padding-left: 5px; color: var(--text-muted); }
 .scannability-tips ul li { margin-bottom: 5px; } 
 .scannability-tips ul li::marker { color: var(--primary-color); }
-.site-footer { text-align: center; padding: 25px 0; background-color: var(--background-grey); color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-light); font-size: 0.85rem; }
+.site-footer { 
+    text-align: center; 
+    padding: 25px 0; 
+    background-color: transparent; /* Footer ko transparent kiya */
+    color: var(--text-muted); 
+    margin-top: auto; 
+    border-top: 1px solid rgba(0,0,0,0.05); /* Border halka kiya */
+    font-size: 0.85rem; 
+}
 @media (max-width: 767px) { 
     #logoText, #makeQrText {
         font-size: 1.5rem; 
@@ -555,11 +599,12 @@ input:checked + .slider:before {
 
 .visitor-stats-section {
     padding: 20px 0 40px 0;
-    background-color: var(--background-light);
+    background-color: transparent; /* Transparent kiya takay main background dikhe */
 }
 
 .stats-box {
-    background: #fdfdff;
+    background: rgba(255, 255, 255, 0.85); /* Thora sa transparent */
+    backdrop-filter: blur(5px);
     max-width: 320px;
     margin: 0 auto;
     padding: 30px;
