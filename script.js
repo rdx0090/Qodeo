@@ -492,3 +492,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// =========================================================
+// === NAYA INTERACTIVE AURORA BACKGROUND EFFECT           ===
+// =========================================================
+document.body.addEventListener('mousemove', (event) => {
+    const { clientX, clientY } = event;
+    // Use requestAnimationFrame for smoother performance
+    window.requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--mouse-x', `${clientX}px`);
+        document.documentElement.style.setProperty('--mouse-y', `${clientY}px`);
+    });
+});
