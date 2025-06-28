@@ -1,11 +1,11 @@
-/* === Qodeo ULTIMATE DARK THEME v1.0 === */
+/* === Qodeo ULTIMATE DARK THEME v1.1 === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 :root {
     --primary-color: #3b82f6; 
     --secondary-color: #14b8a6; 
     --background-dark: #030712;
-    --content-bg: rgba(16, 19, 32, 0.65); /* Thora aur halka sheesha */
+    --content-bg: rgba(16, 19, 32, 0.65); 
     --text-light: #e5e7eb; 
     --text-muted: #9ca3af;
     --border-color: rgba(255, 255, 255, 0.1);
@@ -31,7 +31,6 @@ body {
     overflow-x: hidden;
 }
 
-/* === NAYA, NEXT-LEVEL AURORA BACKGROUND === */
 body::before {
     content: '';
     position: fixed;
@@ -69,7 +68,7 @@ body::before {
 #makeQrText { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.5px; margin-left: 4px; line-height: 1; }
 .site-main { flex-grow: 1; padding-top: 40px; padding-bottom: 50px; }
 
-.qr-generator-section, .pro-page-header, .pro-feature-card, .preview-column, .options-column, .stats-box {
+.qr-generator-section, .pro-page-header, .pro-feature-card, .preview-column, .options-column {
     background: var(--content-bg);
     border: 1px solid var(--border-color);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
@@ -139,8 +138,6 @@ body::before {
 .pro-page-header .fa-crown { color: #facc15; }
 .pro-feature-card:hover { border-color: var(--primary-color); color: var(--primary-color); }
 .pro-feature-card:hover i { color: var(--primary-color); }
-.stats-box { background: var(--content-bg); border-radius: 14px; }
-.stats-box .count-number, .stats-box p { color: var(--text-light); }
 .social-input input { background-color: rgba(255,255,255,0.05) !important; color: var(--text-light); }
 .social-input i { color: var(--text-muted); }
 .button-upload-small { background-color: rgba(255,255,255,0.1); color: var(--text-light); border-color: var(--border-color); }
@@ -157,4 +154,62 @@ body::before {
 .toggle-label { color: var(--text-light); }
 .slider { background-color: rgba(255,255,255,0.2); }
 input:checked + .slider { background-color: var(--primary-color); }
-.options-column .control-group input[type="color"] { background: none; border: none; padding: 0; }
+.options-column .control-group input[type="color"] { background: none; border: none; padding: 0; width: 40px; }
+#download-modal-overlay { /* Purana Code */ }
+#download-modal-content { /* Purana Code */ }
+.file-upload-label { /* Purana Code */ }
+.upload-progress-bar { /* Purana Code */ }
+
+/* === PRO FEATURES BUTTON KA SPECIAL DESIGN WAPIS LAYA GAYA HAI === */
+.pro-button-container {
+    text-align: center;
+    margin: 25px 0;
+    padding-top: 25px;
+    border-top: 1px solid var(--border-color);
+}
+.button-pro-cta {
+    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 12px 28px; font-size: 1.1rem; font-weight: 700; text-decoration: none;
+    background: linear-gradient(145deg, #FBB03B, #FFD700);
+    color: #4B3621;
+    border-radius: 50px; border: 2px solid #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 0 0 3px #FBB03B;
+    position: relative; overflow: hidden; z-index: 1;
+    animation: pulse-zoom-pro 2.5s infinite ease-in-out;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.button-pro-cta:hover { animation-play-state: paused; transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 0 0 4px #FFD700; }
+@keyframes pulse-zoom-pro { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+
+
+/* === VISITOR COUNTER KA SPECIAL DESIGN WAPIS LAYA GAYA HAI === */
+.visitor-stats-section { padding: 40px 0; background-color: transparent; }
+.stats-box {
+    background: var(--content-bg);
+    max-width: 320px;
+    margin: 0 auto;
+    padding: 30px;
+    border: none; /* Border hata di, kyunke neeche animated border hai */
+    border-radius: 14px;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    position: relative; overflow: hidden;
+    animation: pulseGlow 4s infinite ease-in-out;
+}
+.stats-box::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(115deg, var(--secondary-color), var(--primary-color), var(--secondary-color));
+    background-size: 200% 200%;
+    animation: flowBorder 5s infinite linear;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+}
+.stats-box i { font-size: 2.8rem; color: var(--primary-color); margin-bottom: 5px; z-index: 2; }
+.stats-box .count-number { font-size: 2.8rem; font-weight: 700; color: var(--text-light); line-height: 1; z-index: 2; }
+.stats-box p { font-size: 1rem; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; z-index: 2; }
+@keyframes pulseGlow { 0% { box-shadow: 0 5px 15px rgba(59, 130, 246, 0.1); transform: translateY(0); } 50% { box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2); transform: translateY(-5px); } 100% { box-shadow: 0 5px 15px rgba(59, 130, 246, 0.1); transform: translateY(0); } }
+@keyframes flowBorder { to { background-position: -200% -200%; } }
