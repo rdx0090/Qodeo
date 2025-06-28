@@ -5,7 +5,7 @@
     --primary-color: #3b82f6; 
     --secondary-color: #14b8a6; 
     --background-dark: #030712;
-    --content-bg: rgba(16, 19, 32, 0.7);
+    --content-bg: rgba(16, 19, 32, 0.65); /* Thora aur halka sheesha */
     --text-light: #e5e7eb; 
     --text-muted: #9ca3af;
     --border-color: rgba(255, 255, 255, 0.1);
@@ -65,10 +65,8 @@ body::before {
 #logoLink { display: flex; align-items: baseline; text-decoration: none; cursor: pointer; transition: transform 0.15s; }
 #logoLink:hover {transform: scale(1.02); }
 #headerIcon { height: 28px; width: auto; margin-right: 8px; align-self: center; }
-
 #logoText { font-size: 1.7rem; font-weight: 700; color: var(--primary-color); letter-spacing: -0.5px; line-height: 1; }
 #makeQrText { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.5px; margin-left: 4px; line-height: 1; }
-
 .site-main { flex-grow: 1; padding-top: 40px; padding-bottom: 50px; }
 
 .qr-generator-section, .pro-page-header, .pro-feature-card, .preview-column, .options-column, .stats-box {
@@ -105,8 +103,11 @@ body::before {
 .button-generate:hover { background-color: #10a391; transform: scale(1.03); }
 .preview-and-options-section .container { display: flex; flex-wrap: wrap; gap: 30px; }
 .preview-column, .options-column { padding: 25px; border-radius: var(--border-radius-md); }
+.preview-column { flex: 1 1 300px; display: flex; flex-direction: column; align-items: center; }
+.options-column { flex: 1 1 400px; }
 .preview-column h3, .options-column h3 { color: var(--text-light); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-#qrCanvasContainer { background-color: #fff; border-radius: 8px; padding: 10px; }
+#qrCanvasContainer { background-color: #fff; border-radius: 8px; padding: 10px; width: 100%; max-width: 250px; aspect-ratio: 1 / 1; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+#qrCanvasContainer > canvas, #qrCanvasContainer > svg, #qrCanvasContainer > img { display: block; width: 100% !important; height: 100% !important; object-fit: contain; }
 .site-footer { text-align: center; padding: 25px 0; background-color: transparent; color: var(--text-muted); margin-top: auto; border-top: 1px solid var(--border-color); font-size: 0.85rem; }
 .scannability-tips { margin-top: 20px; padding: 15px; background-color: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); font-size: 0.85rem; width: 100%; }
 .scannability-tips h4 { color: var(--text-light); }
@@ -134,7 +135,7 @@ body::before {
 #login-modal-content h3 { color: var(--text-light); }
 #google-login-button, #github-login-button { background-color: rgba(255,255,255,0.1); color: var(--text-light); border: 1px solid var(--border-color); }
 #google-login-button:hover, #github-login-button:hover { background-color: rgba(255,255,255,0.2); border-color: var(--primary-color); }
-.pro-page-header { background: transparent; border-bottom: 1px solid var(--border-color); box-shadow: none; padding: 25px; margin-bottom: 40px; }
+.pro-page-header { background: transparent; border: none; box-shadow: none; padding: 25px; margin-bottom: 40px; }
 .pro-page-header .fa-crown { color: #facc15; }
 .pro-feature-card:hover { border-color: var(--primary-color); color: var(--primary-color); }
 .pro-feature-card:hover i { color: var(--primary-color); }
@@ -150,3 +151,10 @@ body::before {
 .actions button:hover { background-color: rgba(255,255,255,0.2); border-color: var(--primary-color); }
 .button-save { background: linear-gradient(135deg, #3b82f6, #14b8a6); color: white; }
 .button-save:hover { box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
+#close-modal-button { color: var(--text-muted); }
+#close-modal-button:hover { color: var(--text-light); }
+.dynamic-qr-toggle-container { background-color: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); }
+.toggle-label { color: var(--text-light); }
+.slider { background-color: rgba(255,255,255,0.2); }
+input:checked + .slider { background-color: var(--primary-color); }
+.options-column .control-group input[type="color"] { background: none; border: none; padding: 0; }
