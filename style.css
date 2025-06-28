@@ -1,14 +1,24 @@
-/* === Qodeo ULTIMATE DARK THEME v1.1 === */
+/* === Qodeo ULTIMATE DARK THEME v1.2 (FINAL & CORRECTED) === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
+    /* Nayi Dark Theme ke colors */
     --primary-color: #3b82f6; 
     --secondary-color: #14b8a6; 
     --background-dark: #030712;
-    --content-bg: rgba(16, 19, 32, 0.65); 
+    --content-bg: rgba(16, 19, 32, 0.65);
     --text-light: #e5e7eb; 
     --text-muted: #9ca3af;
     --border-color: rgba(255, 255, 255, 0.1);
+    
+    /* Purane variables (backup ke liye) */
+    --old-primary-color: #007bff;
+    --old-secondary-color: #00b894;
+    --old-text-dark: #212529;
+    --old-border-light: #dee2e6;
+    --old-background-grey: #f8f9fa;
+    
     --font-main: 'Inter', sans-serif;
     --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
     --border-radius-md: 12px; 
@@ -155,59 +165,13 @@ body::before {
 .slider { background-color: rgba(255,255,255,0.2); }
 input:checked + .slider { background-color: var(--primary-color); }
 .options-column .control-group input[type="color"] { background: none; border: none; padding: 0; width: 40px; }
-#download-modal-overlay { /* Purana Code */ }
-#download-modal-content { /* Purana Code */ }
-.file-upload-label { /* Purana Code */ }
-.upload-progress-bar { /* Purana Code */ }
-
-/* === PRO FEATURES BUTTON KA SPECIAL DESIGN WAPIS LAYA GAYA HAI === */
-.pro-button-container {
-    text-align: center;
-    margin: 25px 0;
-    padding-top: 25px;
-    border-top: 1px solid var(--border-color);
-}
-.button-pro-cta {
-    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-    padding: 12px 28px; font-size: 1.1rem; font-weight: 700; text-decoration: none;
-    background: linear-gradient(145deg, #FBB03B, #FFD700);
-    color: #4B3621;
-    border-radius: 50px; border: 2px solid #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 0 0 3px #FBB03B;
-    position: relative; overflow: hidden; z-index: 1;
-    animation: pulse-zoom-pro 2.5s infinite ease-in-out;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+.pro-button-container { text-align: center; margin: 25px 0; padding-top: 25px; border-top: 1px solid var(--border-color); }
+.button-pro-cta { display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 28px; font-size: 1.1rem; font-weight: 700; text-decoration: none; background: linear-gradient(145deg, #FBB03B, #FFD700); color: #4B3621; border-radius: 50px; border: 2px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 0 0 3px #FBB03B; position: relative; overflow: hidden; z-index: 1; animation: pulse-zoom-pro 2.5s infinite ease-in-out; transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .button-pro-cta:hover { animation-play-state: paused; transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 0 0 4px #FFD700; }
 @keyframes pulse-zoom-pro { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
-
-
-/* === VISITOR COUNTER KA SPECIAL DESIGN WAPIS LAYA GAYA HAI === */
 .visitor-stats-section { padding: 40px 0; background-color: transparent; }
-.stats-box {
-    background: var(--content-bg);
-    max-width: 320px;
-    margin: 0 auto;
-    padding: 30px;
-    border: none; /* Border hata di, kyunke neeche animated border hai */
-    border-radius: 14px;
-    text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    position: relative; overflow: hidden;
-    animation: pulseGlow 4s infinite ease-in-out;
-}
-.stats-box::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    border-radius: inherit;
-    padding: 2px;
-    background: linear-gradient(115deg, var(--secondary-color), var(--primary-color), var(--secondary-color));
-    background-size: 200% 200%;
-    animation: flowBorder 5s infinite linear;
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-            mask-composite: exclude;
-}
+.stats-box { background: var(--content-bg); max-width: 320px; margin: 0 auto; padding: 30px; border: none; border-radius: 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; overflow: hidden; animation: pulseGlow 4s infinite ease-in-out; }
+.stats-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: inherit; padding: 2px; background: linear-gradient(115deg, var(--secondary-color), var(--primary-color), var(--secondary-color)); background-size: 200% 200%; animation: flowBorder 5s infinite linear; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
 .stats-box i { font-size: 2.8rem; color: var(--primary-color); margin-bottom: 5px; z-index: 2; }
 .stats-box .count-number { font-size: 2.8rem; font-weight: 700; color: var(--text-light); line-height: 1; z-index: 2; }
 .stats-box p { font-size: 1rem; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; z-index: 2; }
