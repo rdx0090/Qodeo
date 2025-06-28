@@ -1,24 +1,15 @@
-/* === Qodeo ULTIMATE DARK THEME v1.2 (FINAL & CORRECTED) === */
+/* === Qodeo ULTIMATE DARK THEME v1.3 (FINAL & CORRECTED) === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    /* Nayi Dark Theme ke colors */
     --primary-color: #3b82f6; 
     --secondary-color: #14b8a6; 
     --background-dark: #030712;
-    --content-bg: rgba(16, 19, 32, 0.65);
+    --content-bg: rgba(16, 19, 32, 0.7);
     --text-light: #e5e7eb; 
     --text-muted: #9ca3af;
     --border-color: rgba(255, 255, 255, 0.1);
-    
-    /* Purane variables (backup ke liye) */
-    --old-primary-color: #007bff;
-    --old-secondary-color: #00b894;
-    --old-text-dark: #212529;
-    --old-border-light: #dee2e6;
-    --old-background-grey: #f8f9fa;
-    
     --font-main: 'Inter', sans-serif;
     --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
     --border-radius-md: 12px; 
@@ -78,14 +69,14 @@ body::before {
 #makeQrText { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.5px; margin-left: 4px; line-height: 1; }
 .site-main { flex-grow: 1; padding-top: 40px; padding-bottom: 50px; }
 
-.qr-generator-section, .pro-page-header, .pro-feature-card, .preview-column, .options-column {
+.qr-generator-section {
     background: var(--content-bg);
     border: 1px solid var(--border-color);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius-md);
+    padding: 30px; margin-bottom: 30px; 
 }
 
-.qr-generator-section { padding: 30px; margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
 .qr-type-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
 .qr-type-button { background-color: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); padding: 10px 8px; font-weight: 500; color: var(--text-muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: all 0.2s ease; min-height: 65px; text-decoration: none; }
@@ -111,7 +102,7 @@ body::before {
 .button-generate { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 300px; margin: 25px auto 0; padding: 14px 25px; font-size: 1.1rem; font-weight: 600; color: white; background-color: var(--secondary-color); border: none; border-radius: 50px; cursor: pointer; transition: all 0.2s ease; box-shadow: var(--shadow-md); }
 .button-generate:hover { background-color: #10a391; transform: scale(1.03); }
 .preview-and-options-section .container { display: flex; flex-wrap: wrap; gap: 30px; }
-.preview-column, .options-column { padding: 25px; border-radius: var(--border-radius-md); }
+.preview-column, .options-column { padding: 25px; border-radius: var(--border-radius-md); background: var(--content-bg); border: 1px solid var(--border-color); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); }
 .preview-column { flex: 1 1 300px; display: flex; flex-direction: column; align-items: center; }
 .options-column { flex: 1 1 400px; }
 .preview-column h3, .options-column h3 { color: var(--text-light); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
@@ -125,9 +116,6 @@ body::before {
 .form-row .control-group { flex-grow: 1; margin-bottom: 0; }
 .half-width { flex-basis: calc(50% - 7.5px); }
 .third-width { flex-basis: calc(33.333% - 10px); }
-.checkbox-group { display: flex; align-items: center; gap: 8px; }
-.checkbox-group input[type="checkbox"] { width: auto; margin-right: 5px; accent-color: var(--primary-color);}
-.checkbox-group label { margin-bottom: 0; font-weight: normal; font-size: 0.9rem; color: var(--text-light); }
 @media (max-width: 576px) { .form-row { flex-direction: column; gap: 15px; } .form-row .control-group { flex-basis: 100%; margin-bottom: 0; } }
 @media (max-width: 767px) { #logoText, #makeQrText { font-size: 1.5rem; } }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -144,31 +132,55 @@ body::before {
 #login-modal-content h3 { color: var(--text-light); }
 #google-login-button, #github-login-button { background-color: rgba(255,255,255,0.1); color: var(--text-light); border: 1px solid var(--border-color); }
 #google-login-button:hover, #github-login-button:hover { background-color: rgba(255,255,255,0.2); border-color: var(--primary-color); }
+#close-modal-button { color: var(--text-muted); }
+#close-modal-button:hover { color: var(--text-light); }
+
+/* === DYNAMIC QR TOGGLE KA NAYA AUR BEHTAR DESIGN === */
+.dynamic-qr-toggle-container { 
+    background-color: rgba(59, 130, 246, 0.1); 
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    padding: 10px 15px;
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.toggle-label { color: var(--text-light); }
+.toggle-label i { color: #facc15; }
+.switch { position: relative; display: inline-block; width: 50px; height: 28px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .4s; }
+.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; }
+input:checked + .slider { background-color: var(--primary-color); }
+input:checked + .slider:before { transform: translateX(22px); }
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
+
+/* === PRO FEATURES PAGE KA BEHTAR DESIGN === */
 .pro-page-header { background: transparent; border: none; box-shadow: none; padding: 25px; margin-bottom: 40px; }
 .pro-page-header .fa-crown { color: #facc15; }
-.pro-feature-card:hover { border-color: var(--primary-color); color: var(--primary-color); }
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.pro-feature-card { background: var(--content-bg); border: 1px solid var(--border-color); padding: 30px 25px; text-align: center; text-decoration: none; color: var(--text-light); transition: all 0.2s ease; }
+.pro-feature-card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+.pro-feature-card h3 { margin-top: 15px; color: var(--text-light); }
+.pro-feature-card p { color: var(--text-muted); }
+.pro-feature-card i { font-size: 2.5rem; color: var(--text-light); transition: all 0.2s ease;}
 .pro-feature-card:hover i { color: var(--primary-color); }
-.social-input input { background-color: rgba(255,255,255,0.05) !important; color: var(--text-light); }
-.social-input i { color: var(--text-muted); }
-.button-upload-small { background-color: rgba(255,255,255,0.1); color: var(--text-light); border-color: var(--border-color); }
-.button-upload-small:hover { background-color: rgba(255,255,255,0.2); border-color: var(--primary-color); }
+
 .qr-data-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; margin-bottom: 15px; word-break: break-all; text-align: center; max-width: 100%; }
 .actions { display: flex; justify-content: center; width: 100%; gap: 10px; }
 .actions button { background-color: rgba(255,255,255,0.1); color: var(--text-light); border: 1px solid var(--border-color); flex-grow: 1; flex-basis: 0; padding: 10px 12px; font-size: 0.85rem; border-radius: var(--border-radius-sm); font-weight: 500; letter-spacing: 0.2px; cursor: pointer; transition: all 0.2s ease; }
 .actions button:hover { background-color: rgba(255,255,255,0.2); border-color: var(--primary-color); }
 .button-save { background: linear-gradient(135deg, #3b82f6, #14b8a6); color: white; }
 .button-save:hover { box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
-#close-modal-button { color: var(--text-muted); }
-#close-modal-button:hover { color: var(--text-light); }
-.dynamic-qr-toggle-container { background-color: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); }
-.toggle-label { color: var(--text-light); }
-.slider { background-color: rgba(255,255,255,0.2); }
-input:checked + .slider { background-color: var(--primary-color); }
-.options-column .control-group input[type="color"] { background: none; border: none; padding: 0; width: 40px; }
+
+/* === PRO FEATURES BUTTON KA SPECIAL DESIGN === */
 .pro-button-container { text-align: center; margin: 25px 0; padding-top: 25px; border-top: 1px solid var(--border-color); }
 .button-pro-cta { display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 28px; font-size: 1.1rem; font-weight: 700; text-decoration: none; background: linear-gradient(145deg, #FBB03B, #FFD700); color: #4B3621; border-radius: 50px; border: 2px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1), 0 0 0 3px #FBB03B; position: relative; overflow: hidden; z-index: 1; animation: pulse-zoom-pro 2.5s infinite ease-in-out; transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .button-pro-cta:hover { animation-play-state: paused; transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 0 0 4px #FFD700; }
 @keyframes pulse-zoom-pro { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+
+/* === VISITOR COUNTER KA SPECIAL DESIGN === */
 .visitor-stats-section { padding: 40px 0; background-color: transparent; }
 .stats-box { background: var(--content-bg); max-width: 320px; margin: 0 auto; padding: 30px; border: none; border-radius: 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; overflow: hidden; animation: pulseGlow 4s infinite ease-in-out; }
 .stats-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: inherit; padding: 2px; background: linear-gradient(115deg, var(--secondary-color), var(--primary-color), var(--secondary-color)); background-size: 200% 200%; animation: flowBorder 5s infinite linear; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
