@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             generateQRCodePreview(true, currentTool);
         });
     }
-    
+
     [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
         if (input) input.addEventListener('change', () => generateQRCodePreview(false, currentTool));
     });
@@ -223,13 +223,81 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadInstance.download({ name: `qodeo-qr-${size}`, extension: extension });
     }
 
-    if (saveQrButton) { /* ... Save logic ... */ }
+    // =========================================================
+    // === NAYA SAVE BUTTON KA LOGIC (YAHAN ADD KIYA GAYA HAI) ===
+    // =========================================================
+    if (saveQrButton) {
+        saveQrButton.addEventListener('click', () => {
+            const user = auth.currentUser;
+
+            // Step 1: Check karo ke user login hai ya nahi
+            if (!user) {
+                alert("Please log in to save your QR Code.");
+                if (loginModalOverlay) loginModalOverlay.classList.remove('hidden');
+                return; // Yahan function ko rok do
+            }
+
+            // Step 2: QR Code save karne se pehle zaroori fields check karo
+            const qrDataToSave = getQrDataStringForInstance(true, currentTool);
+            if (!qrDataToSave) {
+                // Agar data valid nahi hai (user ne field khali chori hai), to function rok do.
+                // Alert pehle hi getQrDataStringForInstance() mein show ho jayega.
+                return; 
+            }
+
+            // Step 3: Button ko "Saving..." state mein daalo
+            saveQrButton.disabled = true;
+            saveQrButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i><span>Saving...</span>`;
+
+            // Step 4: Firestore mein save karne ke liye object tayyar karo
+            const qrObject = {
+                userId: user.uid,
+                type: currentTool,
+                isDynamic: dynamicQrCheckbox.checked,
+                data: qrDataToSave,
+                design: {
+                    dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
+                    backgroundOptions: { color: backgroundColorInput.value },
+                },
+                logo: currentLogoBase64, // Logo ka base64 data bhi save kar rahe hain
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                scans: 0,
+                name: `${currentTool.toUpperCase()} QR - ${new Date().toLocaleDateString()}` // QR ko ek naam de do
+            };
+
+            // Step 5: Firestore mein data save karo
+            db.collection("qrcodes").add(qrObject)
+                .then((docRef) => {
+                    console.log("QR Code saved with ID:", docRef.id);
+                    saveQrButton.innerHTML = `<i class="fas fa-check"></i><span>Saved!</span>`;
+                    // Yahan button ko disable hi rakhein taake user baar baar save na kare.
+                    // Jab user naya QR generate karega, tab button reset ho jayega.
+                })
+                .catch((error) => {
+                    console.error("Error saving QR Code:", error);
+                    alert("An error occurred while saving. Please try again.");
+                    resetSaveButtonState(); // Agar error aaye to button ko wapas theek kar do
+                });
+        });
+    }
+
+    // Function to reset save button state
+    function resetSaveButtonState() {
+        if (saveQrButton) {
+            saveQrButton.disabled = false;
+            saveQrButton.innerHTML = `<i class="fas fa-cloud-arrow-up"></i><span>Save</span>`;
+        }
+    }
+
 
     async function generateQRCodePreview(shouldValidate, tool) {
         const dataForQr = getQrDataStringForInstance(shouldValidate, tool);
-        if (dataForQr) await finalizeQrGeneration(dataForQr);
+        if (dataForQr) {
+            await finalizeQrGeneration(dataForQr);
+            resetSaveButtonState(); // Har baar naya QR banne par save button ko reset karo
+        }
     }
-    
+
     async function finalizeQrGeneration(dataForQr) {
         if (qrCanvasContainer) { qrCanvasContainer.innerHTML = ''; qrCanvasContainer.classList.add('generating'); }
         await qrCodeInstance.update({
@@ -242,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr;
         setTimeout(() => { if (qrCanvasContainer) qrCanvasContainer.classList.remove('generating'); }, 1500);
     }
-    
+
     function getQrDataStringForInstance(validate = false, tool = currentTool) {
         let dataString = "";
         const showAlert = (message) => { if (validate) alert(message); return null; };
@@ -273,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sessionStorage.setItem('hasVisited', 'true');
                 });
         }
-        
+
         visitorRef.onSnapshot(doc => {
             if (doc.exists) {
                 visitorCountElement.textContent = doc.data().total.toLocaleString();
@@ -300,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rect = button.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
+
                 button.style.setProperty('--spotlight-x', `${x}px`);
                 button.style.setProperty('--spotlight-y', `${y}px`);
             });
