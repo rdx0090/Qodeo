@@ -5,7 +5,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyDNFQRtlvEJsvbmabHoLYduBfqRcPdgFpw",
     authDomain: "qodeo-qr.firebaseapp.com",
     projectId: "qodeo-qr",
-    storageBucket: "qodeo-qr.appspot.com", // Firebase Storage ke liye zaroori
+    storageBucket: "qodeo-qr.appspot.com",
     messagingSenderId: "238610791735",
     appId: "1:238610791735:web:bc59eac9903994533f2eb2"
 };
@@ -16,7 +16,7 @@ const CLOUD_NAME = 'drork8wvy';
 const UPLOAD_PRESET = 'qodeo_uploads';
 
 // ==============================================================
-// === MAIN APPLICATION CODE (HOMEPAGE)                       ===
+// === EK HI MAIN DOMContentLoaded EVENT LISTENER             ===
 // ==============================================================
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -117,10 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadModalOverlay = document.getElementById('download-modal-overlay');
     const closeDownloadModalButton = document.getElementById('close-download-modal-button');
     const qualityButtons = document.querySelectorAll('.quality-btn');
-    const pdfUploadInput = document.getElementById('pdfUpload');
-    const pdfUploadLabel = document.querySelector('.file-upload-label');
-    const pdfFileName = document.getElementById('pdfFileName');
-    const pdfUploadProgress = document.getElementById('pdfUploadProgress');
 
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let currentLogoBase64 = null;
@@ -129,23 +125,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const qrCodeInstance = new QRCodeStyling({
         width: 250, height: 250, type: 'svg',
-        data: "https://qodeo.pro", image: '',
+        data: "https://qodeo.app", image: '',
         dotsOptions: { color: "#000000", type: "square" },
         backgroundOptions: { color: "#ffffff" },
         imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
         qrOptions: { errorCorrectionLevel: 'H' }
     });
     if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const toolFromUrl = urlParams.get('tool');
-
-    if (toolFromUrl) {
-        auth.onAuthStateChanged(user => {
-            if (user) { switchTool(toolFromUrl); }
-            else { alert("Please log in to use Pro features."); loginModalOverlay.classList.remove('hidden'); switchTool('url'); }
-        });
-    } else { switchTool('url'); }
 
     function switchTool(selectedTool) {
         currentTool = selectedTool;
@@ -155,12 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeInputGroupDiv) activeInputGroupDiv.classList.add('active');
         const activeButton = document.querySelector(`.qr-type-button[data-type="${selectedTool}"]`);
         if (activeButton) activeButton.classList.add('active');
-        const titleMap = { url: 'Enter your Website URL', text: 'Enter Plain Text', email: 'Enter Email Details', phone: 'Enter Phone Number', sms: 'Create an SMS', wifi: 'Setup Wi-Fi QR', vcard: 'Create a vCard', location: 'Enter Geolocation', event: 'Create a Calendar Event', pdf: 'Upload a PDF File (Pro)', app_store: 'Enter App Store Links (Pro)' };
+        const titleMap = { url: 'Enter your Website URL', text: 'Enter Plain Text', email: 'Enter Email Details', phone: 'Enter Phone Number', sms: 'Create an SMS', wifi: 'Setup Wi-Fi QR', vcard: 'Create a vCard', location: 'Enter Geolocation', event: 'Create a Calendar Event' };
         inputAreaTitle.textContent = titleMap[selectedTool] || 'Enter Data';
         generateQRCodePreview(false, selectedTool);
     }
-
     qrTypeButtons.forEach(button => button.addEventListener('click', () => switchTool(button.dataset.type)));
+    switchTool('url'); // Default tool
 
     if (dynamicQrCheckbox) {
         dynamicQrCheckbox.addEventListener('change', (event) => {
@@ -168,36 +154,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 event.target.checked = false;
                 alert("Please log in to create a Dynamic QR Code.");
                 if (loginModalOverlay) { loginModalOverlay.classList.remove('hidden'); }
-            } else { generateQRCodePreview(false, currentTool); }
+            }
         });
     }
 
-    if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => {
-        if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
-        const proTools = ['pdf', 'app_store'];
-        if (proTools.includes(currentTool)) {
-            if (!auth.currentUser) { alert("Please log in to use this Pro feature."); loginModalOverlay.classList.remove('hidden'); return; }
-            if (currentTool === 'pdf') handlePdfUpload();
-        } else { generateQRCodePreview(true, currentTool); }
-    });
-
+    if (generateQrMainButton) {
+        generateQrMainButton.addEventListener('click', () => {
+            if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
+            generateQRCodePreview(true, currentTool);
+        });
+    }
+    
     [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
         if (input) input.addEventListener('change', () => generateQRCodePreview(false, currentTool));
     });
     document.querySelectorAll('.qr-input-group input, .qr-input-group textarea, .qr-input-group select').forEach(input => {
         input.addEventListener('input', () => generateQRCodePreview(false, currentTool));
     });
-
-    if (logoUploadInput) logoUploadInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (!file) { currentLogoBase64 = null; if (logoPreview) logoPreview.style.display = 'none'; }
-        else {
-            const reader = new FileReader();
-            reader.onload = (e) => { currentLogoBase64 = e.target.result; if (logoPreview) { logoPreview.src = currentLogoBase64; logoPreview.style.display = 'block'; } };
-            reader.readAsDataURL(file);
-        }
-        generateQRCodePreview(false, currentTool);
-    });
+    if (logoUploadInput) {
+        logoUploadInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) { currentLogoBase64 = null; if (logoPreview) logoPreview.style.display = 'none'; }
+            else {
+                const reader = new FileReader();
+                reader.onload = (e) => { currentLogoBase64 = e.target.result; if (logoPreview) { logoPreview.src = currentLogoBase64; logoPreview.style.display = 'block'; } };
+                reader.readAsDataURL(file);
+            }
+            setTimeout(() => generateQRCodePreview(false, currentTool), 100); // Delay for image to load
+        });
+    }
 
     let downloadExtension = 'png';
     function openDownloadModal(extension) {
@@ -238,34 +223,67 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadInstance.download({ name: `qodeo-qr-${size}`, extension: extension });
     }
 
-    if (saveQrButton) saveQrButton.addEventListener('click', async () => { /* ... Aapka Save logic ... */ });
-    async function generateQRCodePreview(shouldValidate, tool) { const dataForQr = getQrDataStringForInstance(shouldValidate, tool); if (dataForQr) await finalizeQrGeneration(dataForQr); }
-    async function finalizeQrGeneration(dataForQr) { if (qrCanvasContainer) { qrCanvasContainer.innerHTML = ''; qrCanvasContainer.classList.add('generating'); } await qrCodeInstance.update({ data: dataForQr, dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value }, backgroundOptions: { color: backgroundColorInput.value }, image: currentLogoBase64 || '', }); if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer); if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr; setTimeout(() => { if (qrCanvasContainer) qrCanvasContainer.classList.remove('generating'); }, 1500); }
+    if (saveQrButton) { /* ... Save logic ... */ }
+
+    async function generateQRCodePreview(shouldValidate, tool) {
+        const dataForQr = getQrDataStringForInstance(shouldValidate, tool);
+        if (dataForQr) await finalizeQrGeneration(dataForQr);
+    }
+    
+    async function finalizeQrGeneration(dataForQr) {
+        if (qrCanvasContainer) { qrCanvasContainer.innerHTML = ''; qrCanvasContainer.classList.add('generating'); }
+        await qrCodeInstance.update({
+            data: dataForQr,
+            dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
+            backgroundOptions: { color: backgroundColorInput.value },
+            image: currentLogoBase64 || '',
+        });
+        if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer);
+        if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr;
+        setTimeout(() => { if (qrCanvasContainer) qrCanvasContainer.classList.remove('generating'); }, 1500);
+    }
     
     function getQrDataStringForInstance(validate = false, tool = currentTool) {
         let dataString = "";
         const showAlert = (message) => { if (validate) alert(message); return null; };
         switch (tool) {
-            case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
+            case 'url': dataString = qrDataUrlInput.value || "https://qodeo.app"; break;
             case 'text': dataString = qrDataTextInput.value || "Qodeo QR Text"; break;
             case 'email': const to = qrEmailToInput.value; if (!to && validate) { return showAlert("Please enter 'To Email Address'."); } dataString = `mailto:${encodeURIComponent(to)}`; if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`; if (qrEmailBodyInput.value) dataString += `${dataString.includes('?') ? '&' : '?'}body=${encodeURIComponent(qrEmailBodyInput.value)}`; break;
             case 'phone': const phoneNum = qrPhoneNumberInput.value; if (!phoneNum && validate) { return showAlert("Please enter a Phone Number."); } dataString = `tel:${phoneNum}`; break;
             case 'sms': const smsNum = qrSmsNumberInput.value; const smsMsg = qrSmsMessageInput.value; if (!smsNum && validate) { return showAlert("Please enter a Phone Number for SMS."); } dataString = `smsto:${smsNum}:${encodeURIComponent(smsMsg)}`; break;
-            // ... baqi saare cases yahan add honge
-            default: dataString = "https://qodeo.pro";
+            case 'wifi': const ssid = qrWifiSsidInput.value; const pass = qrWifiPasswordInput.value; const enc = qrWifiEncryptionSelect.value; const hidden = qrWifiHiddenCheckbox.checked; if (!ssid && validate) { return showAlert("Please enter the Wi-Fi Network Name (SSID)."); } dataString = `WIFI:T:${enc};S:${ssid};P:${pass};H:${hidden};`; break;
+            case 'vcard': const fn = vcardFormattedNameInput.value; if (!fn && validate) { return showAlert("Display Name is required for vCard."); } dataString = `BEGIN:VCARD\nVERSION:3.0\nN:${vcardLastNameInput.value};${vcardFirstNameInput.value}\nFN:${fn}\nORG:${vcardOrganizationInput.value}\nTITLE:${vcardJobTitleInput.value}\nTEL;TYPE=WORK,VOICE:${vcardPhoneWorkInput.value}\nTEL;TYPE=CELL,VOICE:${vcardPhoneMobileInput.value}\nEMAIL:${vcardEmailInput.value}\nURL:${vcardWebsiteInput.value}\nADR;TYPE=WORK:;;${vcardAdrStreetInput.value};${vcardAdrCityInput.value};${vcardAdrRegionInput.value};${vcardAdrPostcodeInput.value};${vcardAdrCountryInput.value}\nNOTE:${vcardNoteInput.value}\nEND:VCARD`; break;
+            case 'location': const lat = qrLocationLatitudeInput.value; const lon = qrLocationLongitudeInput.value; if ((!lat || !lon) && validate) { return showAlert("Latitude and Longitude are required."); } dataString = `geo:${lat},${lon}?q=${encodeURIComponent(qrLocationQueryInput.value || `${lat},${lon}`)}`; break;
+            case 'event': const summary = qrEventSummaryInput.value; const start = qrEventDtStartInput.value; const end = qrEventDtEndInput.value; if (!summary || !start || !end) { if(validate) return showAlert("Event Title, Start, and End times are required."); else return null; } const formatDateTime = (dt) => dt.replace(/[-:]/g, '').replace('T', 'T'); dataString = `BEGIN:VEVENT\nSUMMARY:${summary}\nDTSTART:${formatDateTime(start)}\nDTEND:${formatDateTime(end)}\nLOCATION:${qrEventLocationInput.value}\nDESCRIPTION:${qrEventDescriptionInput.value}\nEND:VEVENT`; break;
+            default: dataString = "https://qodeo.app";
         }
         return dataString;
     }
-});
 
-// === VISITOR COUNTER KA LOGIC ===
-document.addEventListener('DOMContentLoaded', () => {
-    // ... Aapka Visitor counter ka logic ...
-});
+    // PART 3: VISITOR COUNTER LOGIC
+    const visitorCountElement = document.getElementById('visitor-count');
+    if (visitorCountElement) {
+        const visitorRef = db.collection('stats').doc('visitors');
+        const increment = firebase.firestore.FieldValue.increment(1);
 
-// === INTERACTIVE EFFECTS KA LOGIC ===
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Aurora background effect
+        if (!sessionStorage.getItem('hasVisited')) {
+            visitorRef.set({ total: increment }, { merge: true })
+                .then(() => {
+                    sessionStorage.setItem('hasVisited', 'true');
+                });
+        }
+        
+        visitorRef.onSnapshot(doc => {
+            if (doc.exists) {
+                visitorCountElement.textContent = doc.data().total.toLocaleString();
+            }
+        }, err => {
+            console.error("Error fetching visitor count: ", err);
+        });
+    }
+
+    // PART 4: INTERACTIVE EFFECTS
     document.body.addEventListener('mousemove', (event) => {
         const { clientX, clientY } = event;
         window.requestAnimationFrame(() => {
@@ -274,7 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 2. Magnetic spotlight for QR type buttons
     const grid = document.querySelector('.qr-type-selector-grid');
     if (grid) {
         grid.addEventListener('mousemove', e => {
