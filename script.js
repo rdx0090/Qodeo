@@ -12,8 +12,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-
-// Cloudinary Details (Aapne provide ki thi)
 const CLOUD_NAME = 'drork8wvy';
 const UPLOAD_PRESET = 'qodeo_uploads';
 
@@ -21,7 +19,6 @@ const UPLOAD_PRESET = 'qodeo_uploads';
 // === MAIN APPLICATION CODE (HOMEPAGE)                       ===
 // ==============================================================
 document.addEventListener('DOMContentLoaded', () => {
-
     // PART 1: AUTHENTICATION
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
@@ -63,9 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // =================================================================
     // PART 2: QR CODE SCRIPT
-    // =================================================================
     const qrSound = document.getElementById('qrSound');
     const dotColorInput = document.getElementById('dotColor');
     const backgroundColorInput = document.getElementById('backgroundColor');
@@ -164,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         generateQRCodePreview(false, selectedTool);
     }
 
-    // === EVENT LISTENERS ===
     qrTypeButtons.forEach(button => button.addEventListener('click', () => switchTool(button.dataset.type)));
 
     if (dynamicQrCheckbox) {
@@ -181,19 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (pdfUploadLabel) pdfUploadLabel.addEventListener('click', () => pdfUploadInput.click());
-    if (pdfUploadInput) pdfUploadInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (file.type !== "application/pdf") { alert("Please select a PDF file only."); e.target.value = ""; return; }
-        if (file.size > 5 * 1024 * 1024) { alert("File is too large (Max 5MB)."); e.target.value = ""; return; }
-        pdfFileName.textContent = `Selected: ${file.name}`;
-        if (pdfUploadLabel) pdfUploadLabel.querySelector('span').textContent = "Change PDF File";
-    });
-
     if (generateQrMainButton) generateQrMainButton.addEventListener('click', () => {
         if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
-
         const proTools = ['pdf', 'app_store'];
         if (proTools.includes(currentTool)) {
             if (!auth.currentUser) {
@@ -225,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
         generateQRCodePreview(false, currentTool);
     });
 
-    // === DOWNLOAD & SAVE LOGIC ===
     let downloadExtension = 'png';
     function openDownloadModal(extension) {
         const dataForDownload = getQrDataStringForInstance(true, currentTool);
@@ -255,144 +237,64 @@ document.addEventListener('DOMContentLoaded', () => {
     function initiateDownload(size, extension) {
         const dataForDownload = getQrDataStringForInstance(true, currentTool);
         if (dataForDownload === null) return;
-        if (size === 1024) alert(`Downloading HD ${extension.toUpperCase()} (${size}x${size}).`);
         const downloadInstance = new QRCodeStyling({
-            width: size, height: size, type: 'svg', data: dataForDownload, image: currentLogoBase64 || '',
+            width: size, height: size, type: extension, data: dataForDownload, image: currentLogoBase64 || '',
             dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value },
             backgroundOptions: { color: backgroundColorInput.value },
             imageOptions: { crossOrigin: 'anonymous', margin: 10, imageSize: 0.35, hideBackgroundDots: true },
             qrOptions: { errorCorrectionLevel: 'H' }
         });
-        downloadInstance.download({ name: `qodeo-qr${size === 1024 ? '-hd' : ''}`, extension: extension });
+        downloadInstance.download({ name: `qodeo-qr-${size}`, extension: extension });
     }
 
-    if (saveQrButton) saveQrButton.addEventListener('click', async () => {
-        if (!auth.currentUser) { alert("Please log in to save your QR Code."); loginModalOverlay.classList.remove('hidden'); return; }
-        const isDynamic = dynamicQrCheckbox.checked;
-        const originalData = getQrDataStringForInstance(true, currentTool);
-        if (originalData === null) { alert("Please ensure all required fields are filled correctly before saving."); return; }
-        saveQrButton.disabled = true;
-        saveQrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-        try {
-            if (isDynamic) {
-                const shortId = generateShortId();
-                const dynamicLinkRef = db.collection('links').doc(shortId);
-                await dynamicLinkRef.set({
-                    userId: auth.currentUser.uid,
-                    originalUrl: originalData,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    scanCount: 0,
-                    customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
-                });
-                const dynamicUrl = `https://qodeo.vercel.app/api/redirect?slug=${shortId}`;
-                await finalizeQrGeneration(dynamicUrl);
-                alert(`Dynamic QR Code Created successfully!`);
-            } else {
-                const staticQrRecord = {
-                    userId: auth.currentUser.uid,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    type: 'static',
-                    qrDataType: currentTool,
-                    targetData: originalData,
-                    customization: { dotColor: dotColorInput.value, backgroundColor: backgroundColorInput.value, dotStyle: dotStyleSelect.value, logo: currentLogoBase64 }
-                };
-                await db.collection("static_qrcodes").add(staticQrRecord);
-                alert('Static QR Code saved successfully!');
-            }
-            saveQrButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
-        } catch (error) {
-            console.error("Error saving QR Code: ", error);
-            alert("Could not save QR Code. Please try again.");
-        } finally {
-            setTimeout(() => {
-                saveQrButton.disabled = false;
-                saveQrButton.innerHTML = '<i class="fas fa-cloud-arrow-up"></i><span>Save</span>';
-            }, 2000);
-        }
-    });
-
-    function generateShortId(length = 7) { const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; let result = ''; for (let i = 0; i < length; i++) { result += chars.charAt(Math.floor(Math.random() * chars.length)); } return result; }
-    function handlePdfUpload() { /* ... (Aapka PDF upload ka logic) ... */ }
-    async function saveProQrToFirestore(toolType, url, publicId) { /* ... (Aapka Pro QR save karne ka logic) ... */ }
+    if (saveQrButton) saveQrButton.addEventListener('click', async () => { /* ... Save logic ... */ });
     async function generateQRCodePreview(shouldValidate, tool) { const dataForQr = getQrDataStringForInstance(shouldValidate, tool); if (dataForQr) await finalizeQrGeneration(dataForQr); }
-    async function finalizeQrGeneration(dataForQr) { if (qrCanvasContainer) { qrCanvasContainer.innerHTML = ''; qrCanvasContainer.classList.add('generating'); } await qrCodeInstance.update({ data: dataForQr, dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value }, backgroundOptions: { color: backgroundColorInput.value }, image: currentLogoBase64 || '', }); if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer); if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr; setTimeout(() => { if (qrCanvasContainer) qrCanvasContainer.classList.remove('generating'); resetGenerateButton(); }, 1500); }
-    function resetGenerateButton() { generateQrMainButton.disabled = false; generateQrMainButton.innerHTML = '<i class="fas fa-qrcode"></i> Generate QR Code'; if (pdfUploadProgress) { setTimeout(() => { pdfUploadProgress.style.display = 'none'; pdfUploadProgress.querySelector('.progress').style.width = '0%'; }, 2000); } }
-    function getQrDataStringForInstance(validate = false, tool = currentTool) {
-        let dataString = "";
-        const showAlert = (message) => { if (validate) alert(message); return null; };
-        switch (tool) {
-            case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
-            case 'text': dataString = qrDataTextInput.value || "Qodeo QR Text"; break;
-            case 'email': const to = qrEmailToInput.value; if (!to && validate) { return showAlert("Please enter 'To Email Address'."); } dataString = `mailto:${encodeURIComponent(to)}`; if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`; if (qrEmailBodyInput.value) dataString += `${dataString.includes('?') ? '&' : '?'}body=${encodeURIComponent(qrEmailBodyInput.value)}`; break;
-            case 'phone': const phoneNum = qrPhoneNumberInput.value; if (!phoneNum && validate) { return showAlert("Please enter a Phone Number."); } dataString = `tel:${phoneNum}`; break;
-            default: dataString = "https://qodeo.pro";
-        }
-        return dataString;
-    }
+    async function finalizeQrGeneration(dataForQr) { /* ... Finalize logic ... */ }
+    function getQrDataStringForInstance(validate = false, tool = currentTool) { /* ... Get data logic ... */ }
 });
 
+// === NAYA VISITOR COUNTER KA LOGIC ===
 document.addEventListener('DOMContentLoaded', () => {
     const visitorCountElement = document.getElementById('visitor-count');
     if (visitorCountElement) {
         const visitorRef = db.collection('stats').doc('visitors');
-        function launchConfetti() {
-             if (typeof confetti === 'undefined') { console.log("Confetti library not loaded."); return; }
-            const duration = 2 * 1000;
-            const animationEnd = Date.now() + duration;
-            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
-            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-            const interval = setInterval(function() {
-                const timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) { return clearInterval(interval); }
-                const particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
-        }
-        function animateCount(element, finalCount) {
-            let currentCount = 0;
-            const duration = 1500;
-            const stepTime = Math.max(1, Math.floor(duration / (finalCount || 1)));
-            const timer = setInterval(() => {
-                currentCount++;
-                element.textContent = currentCount.toLocaleString();
-                if (currentCount >= finalCount) { clearInterval(timer); element.textContent = finalCount.toLocaleString(); }
-            }, stepTime);
-        }
         const increment = firebase.firestore.FieldValue.increment(1);
         if (!sessionStorage.getItem('hasVisited')) {
-            visitorRef.set({ total: increment }, { merge: true }).then(() => visitorRef.get()).then(doc => { if (doc.exists) { animateCount(visitorCountElement, doc.data().total); launchConfetti(); } sessionStorage.setItem('hasVisited', 'true'); }).catch(error => console.error("Could not update visitor count:", error));
-        } else {
-            visitorRef.get().then(doc => { if (doc.exists) { visitorCountElement.textContent = doc.data().total.toLocaleString(); } });
+            visitorRef.set({ total: increment }, { merge: true })
+                .then(() => { sessionStorage.setItem('hasVisited', 'true'); });
         }
+        visitorRef.onSnapshot(doc => {
+            if (doc.exists) {
+                visitorCountElement.textContent = doc.data().total.toLocaleString();
+            }
+        });
     }
 });
 
-// =========================================================
-// === INTERACTIVE AURORA BACKGROUND EFFECT                ===
-// =========================================================
-document.body.addEventListener('mousemove', (event) => {
-    const { clientX, clientY } = event;
-    window.requestAnimationFrame(() => {
-        document.documentElement.style.setProperty('--mouse-x', `${clientX}px`);
-        document.documentElement.style.setProperty('--mouse-y', `${clientY}px`);
-    });
-});
-
-// =========================================================
-// === 'MAGNETIC' QR TYPE BUTTONS EFFECT KA NAYA LOGIC     ===
-// =========================================================
-const grid = document.querySelector('.qr-type-selector-grid');
-if (grid) {
-    grid.addEventListener('mousemove', e => {
-        const buttons = grid.querySelectorAll('.qr-type-button');
-        buttons.forEach(button => {
-            const rect = button.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            button.style.setProperty('--spotlight-x', `${x}px`);
-            button.style.setProperty('--spotlight-y', `${y}px`);
+// === INTERACTIVE EFFECTS ===
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Aurora background effect
+    document.body.addEventListener('mousemove', (event) => {
+        const { clientX, clientY } = event;
+        window.requestAnimationFrame(() => {
+            document.documentElement.style.setProperty('--mouse-x', `${clientX}px`);
+            document.documentElement.style.setProperty('--mouse-y', `${clientY}px`);
         });
     });
-}
+
+    // 2. Magnetic spotlight for QR type buttons
+    const grid = document.querySelector('.qr-type-selector-grid');
+    if (grid) {
+        grid.addEventListener('mousemove', e => {
+            const buttons = grid.querySelectorAll('.qr-type-button');
+            buttons.forEach(button => {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                button.style.setProperty('--spotlight-x', `${x}px`);
+                button.style.setProperty('--spotlight-y', `${y}px`);
+            });
+        });
+    }
+});
