@@ -1,4 +1,4 @@
-/* === Qodeo ULTIMATE DARK THEME v1.8 (FINAL & CORRECTED) === */
+/* === Qodeo ULTIMATE DARK THEME v1.9 (FINAL & CORRECTED) === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -187,12 +187,10 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 /* === PRO FEATURES PAGE KA BEHTAR DESIGN (THEEK KIYA GAYA) === */
 .pro-page-header { background: transparent; border: none; box-shadow: none; padding: 25px; margin-bottom: 40px; text-align: center; }
-.pro-page-header .fa-crown { color: #facc15; font-size: 3rem; margin-bottom: 15px; }
+.pro-page-header .fa-crown { color: #facc15; font-size: 3rem; margin-bottom: 15px; animation: pulseGlow 3s infinite ease-in-out; }
 .pro-page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
 .pro-page-header p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-
-/* === PRO FEATURE CARD KA NAYA, ANIMATED DESIGN === */
 .pro-feature-card {
     background: var(--content-bg);
     border-radius: var(--border-radius-md);
@@ -200,7 +198,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     text-align: center;
     text-decoration: none;
     color: var(--text-light);
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     border: 1px solid var(--border-color);
@@ -208,22 +206,39 @@ input:checked + .slider:before { transform: translateX(22px); }
 .pro-feature-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%; /* Shuru mein hide hoga */
-    width: 100%;
-    height: 4px; /* Line ki motai */
-    background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), transparent);
-    transition: left 0.5s ease;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(transparent, rgba(59, 130, 246, 0.8), transparent 30%);
+    animation: rotate 4s linear infinite;
 }
-.pro-feature-card:hover::before {
-    left: 100%; /* Hover par line right side se nikal jayegi */
+.pro-feature-card::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: var(--content-bg);
+    border-radius: var(--border-radius-md);
+    z-index: 1;
+}
+.pro-feature-card > * {
+    position: relative;
+    z-index: 2;
 }
 .pro-feature-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    border-color: var(--primary-color);
+}
+.pro-feature-card:hover i {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+@keyframes rotate {
+    100% { transform: rotate(360deg); }
 }
 .pro-feature-card i { font-size: 2.5rem; color: var(--text-light); transition: all 0.2s ease; margin-bottom: 15px; }
-.pro-feature-card:hover i { color: var(--primary-color); transform: scale(1.1); }
 .pro-feature-card h3 { color: var(--text-light); }
 .pro-feature-card p { color: var(--text-muted); }
