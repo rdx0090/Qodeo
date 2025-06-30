@@ -1,4 +1,4 @@
-/* === Qodeo ULTIMATE DARK THEME v1.9 (FINAL & CORRECTED) === */
+/* === Qodeo ULTIMATE DARK THEME v2.0 (FINAL & RAINBOW ANIMATION) === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -48,9 +48,7 @@ body::before {
 }
 
 @keyframes animate-border-glow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    100% { transform: rotate(360deg); }
 }
 
 .container { width: 100%; max-width: 1140px; margin: 0 auto; padding-left: var(--container-padding); padding-right: var(--container-padding); }
@@ -73,14 +71,12 @@ body::before {
 #logoText { font-size: 1.7rem; font-weight: 700; color: var(--primary-color); letter-spacing: -0.5px; line-height: 1; }
 #makeQrText { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.5px; margin-left: 4px; line-height: 1; }
 .site-main { flex-grow: 1; padding-top: 40px; padding-bottom: 50px; }
-
 .qr-generator-section, .preview-column, .options-column {
     background: var(--content-bg);
     border: 1px solid var(--border-color);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius-md);
 }
-
 .qr-generator-section { padding: 30px; margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
 .qr-type-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
@@ -191,6 +187,8 @@ input:checked + .slider:before { transform: translateX(22px); }
 .pro-page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
 .pro-page-header p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+
+/* === PRO FEATURE CARD KA NAYA, 24x7 ANIMATED DESIGN === */
 .pro-feature-card {
     background: var(--content-bg);
     border-radius: var(--border-radius-md);
@@ -201,7 +199,7 @@ input:checked + .slider:before { transform: translateX(22px); }
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-color); /* Halka sa border rakha hai */
 }
 .pro-feature-card::before {
     content: '';
@@ -210,34 +208,34 @@ input:checked + .slider:before { transform: translateX(22px); }
     left: -50%;
     width: 200%;
     height: 200%;
-    background: conic-gradient(transparent, rgba(59, 130, 246, 0.8), transparent 30%);
-    animation: rotate 4s linear infinite;
+    /* === YAHAN RANG BADALNE WALA GRADIENT ADD KIYA HAI === */
+    background: conic-gradient(
+        from 180deg at 50% 50%,
+        #ff2a2a, #f78f28, #f3f94c, #4df94d, #429af6, #be42f6, #ff2a2a
+    );
+    animation: animate-border-glow 4s linear infinite;
 }
 .pro-feature-card::after {
     content: '';
     position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
+    top: 3px; /* Border ki motai */
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
     background: var(--content-bg);
     border-radius: var(--border-radius-md);
     z-index: 1;
 }
 .pro-feature-card > * {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* Content ko animation ke upar rakha */
 }
 .pro-feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 .pro-feature-card:hover i {
     color: var(--primary-color);
-    transform: scale(1.1);
-}
-@keyframes rotate {
-    100% { transform: rotate(360deg); }
 }
 .pro-feature-card i { font-size: 2.5rem; color: var(--text-light); transition: all 0.2s ease; margin-bottom: 15px; }
 .pro-feature-card h3 { color: var(--text-light); }
