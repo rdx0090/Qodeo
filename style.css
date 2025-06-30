@@ -1,4 +1,4 @@
-/* === Qodeo ULTIMATE DARK THEME v2.2 (FINAL & MAGNETIC BUTTONS) === */
+/* === Qodeo ULTIMATE DARK THEME v2.3 (FINAL & MAGNETIC BUTTONS) === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -71,12 +71,14 @@ body::before {
 #logoText { font-size: 1.7rem; font-weight: 700; color: var(--primary-color); letter-spacing: -0.5px; line-height: 1; }
 #makeQrText { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.5px; margin-left: 4px; line-height: 1; }
 .site-main { flex-grow: 1; padding-top: 40px; padding-bottom: 50px; }
+
 .qr-generator-section, .preview-column, .options-column {
     background: var(--content-bg);
     border: 1px solid var(--border-color);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius-md);
 }
+
 .qr-generator-section { padding: 30px; margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
 .qr-type-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
