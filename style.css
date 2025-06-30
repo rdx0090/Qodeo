@@ -1,4 +1,4 @@
-/* === Qodeo ULTIMATE DARK THEME v1.6 (FINAL & CORRECTED) === */
+/* === Qodeo ULTIMATE DARK THEME v1.7 (FINAL & CORRECTED) === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -73,12 +73,14 @@ body::before {
 #logoText { font-size: 1.7rem; font-weight: 700; color: var(--primary-color); letter-spacing: -0.5px; line-height: 1; }
 #makeQrText { font-family: var(--font-main); font-size: 1.7rem; font-weight: 700; color: var(--text-light); letter-spacing: -0.5px; margin-left: 4px; line-height: 1; }
 .site-main { flex-grow: 1; padding-top: 40px; padding-bottom: 50px; }
+
 .qr-generator-section, .preview-column, .options-column {
     background: var(--content-bg);
     border: 1px solid var(--border-color);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     border-radius: var(--border-radius-md);
 }
+
 .qr-generator-section { padding: 30px; margin-bottom: 30px; }
 .qr-generator-section .container { max-width: 800px; }
 .qr-type-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
@@ -189,8 +191,6 @@ input:checked + .slider:before { transform: translateX(22px); }
 .pro-page-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
 .pro-page-header p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-
-/* === PRO FEATURE CARD KA NAYA, ANIMATED DESIGN === */
 .pro-feature-card {
     background: var(--content-bg);
     border-radius: var(--border-radius-md);
@@ -199,8 +199,8 @@ input:checked + .slider:before { transform: translateX(22px); }
     text-decoration: none;
     color: var(--text-light);
     transition: all 0.2s ease;
-    position: relative; /* Zaroori hai animated line ke liye */
-    overflow: hidden; /* Zaroori hai animated line ke liye */
+    position: relative;
+    overflow: hidden;
     border: 1px solid var(--border-color);
 }
 .pro-feature-card::before {
@@ -208,16 +208,16 @@ input:checked + .slider:before { transform: translateX(22px); }
     position: absolute;
     top: 0;
     left: 0;
-    width: 4px; /* Line ki motai */
+    width: 4px;
     height: 100%;
     background: linear-gradient(180deg, var(--primary-color), var(--secondary-color), var(--primary-color));
     background-size: 100% 300%;
     animation: animate-border-glow 3s linear infinite;
     transition: transform 0.3s ease;
-    transform: translateY(-100%); /* Shuru mein hide hogi */
+    transform: translateY(-100%);
 }
 .pro-feature-card:hover::before {
-    transform: translateY(0); /* Hover par line neeche aayegi */
+    transform: translateY(0);
 }
 .pro-feature-card:hover {
     transform: translateY(-5px);
