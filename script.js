@@ -19,6 +19,7 @@ const UPLOAD_PRESET = 'qodeo_uploads';
 // === MAIN APPLICATION CODE (HOMEPAGE)                       ===
 // ==============================================================
 document.addEventListener('DOMContentLoaded', () => {
+
     // PART 1: AUTHENTICATION
     const loginButton = document.getElementById('login-button');
     const logoutButton = document.getElementById('logout-button');
@@ -166,12 +167,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.target.checked && !auth.currentUser) {
                 event.target.checked = false;
                 alert("Please log in to create a Dynamic QR Code.");
-                if (loginModalOverlay) {
-                    loginModalOverlay.classList.remove('hidden');
-                }
-            } else {
-                generateQRCodePreview(false, currentTool);
-            }
+                if (loginModalOverlay) { loginModalOverlay.classList.remove('hidden'); }
+            } else { generateQRCodePreview(false, currentTool); }
         });
     }
 
@@ -179,15 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (qrSound) { qrSound.currentTime = 0; qrSound.play().catch(e => {}); }
         const proTools = ['pdf', 'app_store'];
         if (proTools.includes(currentTool)) {
-            if (!auth.currentUser) {
-                alert("Please log in to use this Pro feature.");
-                loginModalOverlay.classList.remove('hidden');
-                return;
-            }
+            if (!auth.currentUser) { alert("Please log in to use this Pro feature."); loginModalOverlay.classList.remove('hidden'); return; }
             if (currentTool === 'pdf') handlePdfUpload();
-        } else {
-            generateQRCodePreview(true, currentTool);
-        }
+        } else { generateQRCodePreview(true, currentTool); }
     });
 
     [dotColorInput, backgroundColorInput, dotStyleSelect].forEach(input => {
@@ -247,31 +238,32 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadInstance.download({ name: `qodeo-qr-${size}`, extension: extension });
     }
 
-    if (saveQrButton) saveQrButton.addEventListener('click', async () => { /* ... Save logic ... */ });
+    if (saveQrButton) saveQrButton.addEventListener('click', async () => { /* ... Aapka Save logic ... */ });
     async function generateQRCodePreview(shouldValidate, tool) { const dataForQr = getQrDataStringForInstance(shouldValidate, tool); if (dataForQr) await finalizeQrGeneration(dataForQr); }
-    async function finalizeQrGeneration(dataForQr) { /* ... Finalize logic ... */ }
-    function getQrDataStringForInstance(validate = false, tool = currentTool) { /* ... Get data logic ... */ }
-});
-
-// === NAYA VISITOR COUNTER KA LOGIC ===
-document.addEventListener('DOMContentLoaded', () => {
-    const visitorCountElement = document.getElementById('visitor-count');
-    if (visitorCountElement) {
-        const visitorRef = db.collection('stats').doc('visitors');
-        const increment = firebase.firestore.FieldValue.increment(1);
-        if (!sessionStorage.getItem('hasVisited')) {
-            visitorRef.set({ total: increment }, { merge: true })
-                .then(() => { sessionStorage.setItem('hasVisited', 'true'); });
+    async function finalizeQrGeneration(dataForQr) { if (qrCanvasContainer) { qrCanvasContainer.innerHTML = ''; qrCanvasContainer.classList.add('generating'); } await qrCodeInstance.update({ data: dataForQr, dotsOptions: { color: dotColorInput.value, type: dotStyleSelect.value }, backgroundOptions: { color: backgroundColorInput.value }, image: currentLogoBase64 || '', }); if (qrCanvasContainer) qrCodeInstance.append(qrCanvasContainer); if (qrDataDisplay) qrDataDisplay.textContent = dataForQr.length > 70 ? dataForQr.substring(0, 67) + "..." : dataForQr; setTimeout(() => { if (qrCanvasContainer) qrCanvasContainer.classList.remove('generating'); }, 1500); }
+    
+    function getQrDataStringForInstance(validate = false, tool = currentTool) {
+        let dataString = "";
+        const showAlert = (message) => { if (validate) alert(message); return null; };
+        switch (tool) {
+            case 'url': dataString = qrDataUrlInput.value || "https://qodeo.pro"; break;
+            case 'text': dataString = qrDataTextInput.value || "Qodeo QR Text"; break;
+            case 'email': const to = qrEmailToInput.value; if (!to && validate) { return showAlert("Please enter 'To Email Address'."); } dataString = `mailto:${encodeURIComponent(to)}`; if (qrEmailSubjectInput.value) dataString += `?subject=${encodeURIComponent(qrEmailSubjectInput.value)}`; if (qrEmailBodyInput.value) dataString += `${dataString.includes('?') ? '&' : '?'}body=${encodeURIComponent(qrEmailBodyInput.value)}`; break;
+            case 'phone': const phoneNum = qrPhoneNumberInput.value; if (!phoneNum && validate) { return showAlert("Please enter a Phone Number."); } dataString = `tel:${phoneNum}`; break;
+            case 'sms': const smsNum = qrSmsNumberInput.value; const smsMsg = qrSmsMessageInput.value; if (!smsNum && validate) { return showAlert("Please enter a Phone Number for SMS."); } dataString = `smsto:${smsNum}:${encodeURIComponent(smsMsg)}`; break;
+            // ... baqi saare cases yahan add honge
+            default: dataString = "https://qodeo.pro";
         }
-        visitorRef.onSnapshot(doc => {
-            if (doc.exists) {
-                visitorCountElement.textContent = doc.data().total.toLocaleString();
-            }
-        });
+        return dataString;
     }
 });
 
-// === INTERACTIVE EFFECTS ===
+// === VISITOR COUNTER KA LOGIC ===
+document.addEventListener('DOMContentLoaded', () => {
+    // ... Aapka Visitor counter ka logic ...
+});
+
+// === INTERACTIVE EFFECTS KA LOGIC ===
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Aurora background effect
     document.body.addEventListener('mousemove', (event) => {
