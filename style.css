@@ -1,4 +1,4 @@
-/* === Qodeo ULTIMATE DARK THEME v2.6 (PRO UPLOAD AREA ADDED) === */
+/* === Qodeo ULTIMATE DARK THEME v2.7 (FINAL & CLEANED UP) === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -52,15 +52,9 @@ body::before {
 }
 
 @keyframes button-pulse-glow {
-  0% {
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
-  }
-  100% {
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
-  }
+  0% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.2); }
+  50% { box-shadow: 0 0 16px rgba(59, 130, 246, 0.4); }
+  100% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.2); }
 }
 
 .container { width: 100%; max-width: 1140px; margin: 0 auto; padding-left: var(--container-padding); padding-right: var(--container-padding); }
@@ -219,43 +213,16 @@ input:checked + .slider:before { transform: translateX(22px); }
 .pro-button-container { text-align: center; margin: 25px 0; padding-top: 25px; border-top: 1px solid var(--border-color); }
 
 .button-pro-cta { 
-    display: inline-flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 12px; 
-    padding: 12px 28px; 
-    font-size: 1.1rem; 
-    font-weight: 700; 
-    text-decoration: none; 
-    background: linear-gradient(145deg, #FBB03B, #FFD700); 
-    color: #4B3621; 
-    border-radius: 50px; 
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    position: relative; 
-    overflow: hidden; 
-    z-index: 1; 
-    animation: pulse-zoom-pro 2.5s infinite ease-in-out; 
-    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+    display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 28px; font-size: 1.1rem; font-weight: 700; text-decoration: none; background: linear-gradient(145deg, #FBB03B, #FFD700); color: #4B3621; border-radius: 50px; border: 2px solid rgba(255, 255, 255, 0.7); position: relative; overflow: hidden; z-index: 1; animation: pulse-zoom-pro 2.5s infinite ease-in-out; transition: transform 0.2s ease, box-shadow 0.2s ease; 
 }
 .button-pro-cta:hover { 
-    animation-play-state: paused; 
-    transform: scale(1.05); 
-    box-shadow: 0 6px 20px rgba(251, 176, 59, 0.3), 0 0 0 4px rgba(255, 215, 0, 0.5); 
+    animation-play-state: paused; transform: scale(1.05); box-shadow: 0 6px 20px rgba(251, 176, 59, 0.3), 0 0 0 4px rgba(255, 215, 0, 0.5); 
 }
 
 @keyframes pulse-zoom-pro { 
-    0% { 
-        transform: scale(1);
-        box-shadow: 0 4px 15px rgba(251, 176, 59, 0.2), 0 0 0 3px rgba(251, 176, 59, 0.2);
-    } 
-    50% { 
-        transform: scale(1.04);
-        box-shadow: 0 6px 25px rgba(251, 176, 59, 0.4), 0 0 0 6px rgba(251, 176, 59, 0.4);
-    } 
-    100% { 
-        transform: scale(1);
-        box-shadow: 0 4px 15px rgba(251, 176, 59, 0.2), 0 0 0 3px rgba(251, 176, 59, 0.2);
-    } 
+    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(251, 176, 59, 0.2), 0 0 0 3px rgba(251, 176, 59, 0.2); } 
+    50% { transform: scale(1.04); box-shadow: 0 6px 25px rgba(251, 176, 59, 0.4), 0 0 0 6px rgba(251, 176, 59, 0.4); } 
+    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(251, 176, 59, 0.2), 0 0 0 3px rgba(251, 176, 59, 0.2); } 
 }
 
 .visitor-stats-section { padding: 40px 0; background-color: transparent; }
@@ -295,28 +262,33 @@ input:checked + .slider:before { transform: translateX(22px); }
 .pro-feature-card h3 { color: var(--text-light); }
 .pro-feature-card p { color: var(--text-muted); }
 
-/* === NAYE, BARE PRO UPLOAD SECTION KA STYLE (YAHAN ADD KIYA HAI) === */
+/* === NAYE, BARE PRO UPLOAD SECTION KA STYLE === */
+
+.pro-tool-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.pro-tool-title-wrapper i {
+    font-size: 2rem;
+}
+
+.pro-tool-title-wrapper h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin: 0;
+}
 
 .pro-upload-container {
     width: 100%;
-    margin-bottom: 25px;
 }
 
-.pro-feature-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.pro-feature-title i {
-    color: #ef4444; /* PDF ke icon ka laal rang */
-}
-
-/* Asal Upload Area ka Style */
 .upload-drop-area {
     display: flex;
     flex-direction: column;
@@ -337,7 +309,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 
 .upload-drop-area .upload-icon {
-    font-size: 3.5rem; /* Icon ka size bara kiya hai */
+    font-size: 3.5rem;
     color: var(--primary-color);
     margin-bottom: 15px;
     transition: transform 0.3s ease;
@@ -379,12 +351,10 @@ input:checked + .slider:before { transform: translateX(22px); }
     margin-bottom: 0;
 }
 
-/* Asal file input ko chupane ke liye */
 .hidden-file-input {
     display: none;
 }
 
-/* Jab file select ho to uska naam show karne ke liye */
 .file-name-display {
     margin-top: 15px;
     font-size: 0.9rem;
