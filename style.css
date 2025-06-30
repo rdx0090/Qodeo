@@ -1,4 +1,4 @@
-/* === Qodeo ULTIMATE DARK THEME v2.3 (FINAL & MAGNETIC BUTTONS) === */
+/* === Qodeo ULTIMATE DARK THEME v2.4 (FINAL & MAGNETIC BUTTONS) with 24/7 Pulsing Glow === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -49,6 +49,19 @@ body::before {
 
 @keyframes animate-border-glow {
     100% { transform: rotate(360deg); }
+}
+
+/* === YAHAN NAYI ANIMATION ADD KI HAI === */
+@keyframes button-pulse-glow {
+  0% {
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
+  }
 }
 
 .container { width: 100%; max-width: 1140px; margin: 0 auto; padding-left: var(--container-padding); padding-right: var(--container-padding); }
@@ -102,6 +115,8 @@ body::before {
     text-decoration: none;
     position: relative;
     overflow: hidden;
+    /* === YAHAN ANIMATION APPLY KI HAI === */
+    animation: button-pulse-glow 3s infinite ease-in-out;
 }
 .qr-type-button::before {
     content: '';
@@ -118,9 +133,23 @@ body::before {
 .qr-type-button:hover::before { opacity: 1; }
 .qr-type-button > * { position: relative; z-index: 2; }
 .qr-type-button i { font-size: 1.4rem; margin-bottom: 6px; color: var(--text-muted); transition: color 0.2s ease; }
-.qr-type-button:hover { background-color: rgba(255,255,255,0.1); border-color: var(--primary-color); color: var(--primary-color); transform: translateY(-3px); }
+.qr-type-button:hover { 
+    background-color: rgba(255,255,255,0.1); 
+    border-color: var(--primary-color); 
+    color: var(--primary-color); 
+    transform: translateY(-3px);
+    /* Jab hover ho to 24/7 wali animation ruk jaye */
+    animation-play-state: paused;
+}
 .qr-type-button:hover i { color: var(--primary-color); }
-.qr-type-button.active { background-color: var(--primary-color); border-color: var(--primary-color); color: white; transform: scale(1.05); }
+.qr-type-button.active { 
+    background-color: var(--primary-color); 
+    border-color: var(--primary-color); 
+    color: white; 
+    transform: scale(1.05);
+    /* Jab button active ho to bhi animation ruk jaye */
+    animation-play-state: paused; 
+}
 .qr-type-button.active i { color: white; }
 .qr-type-button.active::before { opacity: 0; }
 
