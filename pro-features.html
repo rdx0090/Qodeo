@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Features - Qodeo</title>
+    <!-- Tabdeeli 1: Title badla gaya -->
+    <title>Pro Features - I ♥️ QR</title>
     <link rel="stylesheet" href="style.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -15,9 +16,12 @@
 <body>
     <header class="site-header">
         <div class="container header-container">
-            <a href="index.html" id="logoLink">
-                <img src="images/qodeo-header-icon.jpg" alt="Qodeo Icon" id="headerIcon"> 
-                <span id="logoText">Qodeo</span>
+            <!-- Tabdeeli 2: Header logo bilkul index page jaisa kar diya gaya hai -->
+            <a href="index.html" id="logoLink" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <img src="images/qodeo-header-icon.jpg" alt="QR Icon" id="headerIcon"> 
+                <span id="logoText" style="font-size: 1.5em; color: white; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                    I <i class="fas fa-heart" style="color: #e53935;"></i> QR
+                </span>
             </a>
             <div id="login-container">
                 <button id="login-button">Login</button>
@@ -35,7 +39,8 @@
         <div class="container">
             <div class="pro-page-header">
                 <i class="fas fa-crown"></i>
-                <h1>Qodeo Pro Features</h1>
+                <!-- Tabdeeli 3: Main heading badli gayi -->
+                <h1>I <i class="fas fa-heart" style="color: #FFD700;"></i> QR Pro Features</h1>
                 <p>Unlock advanced QR code types and take your campaigns to the next level.</p>
             </div>
 
@@ -103,7 +108,6 @@
                     <!-- === NAYA, BARA AUR BEHTAR PDF UPLOAD SECTION === -->
                     <div id="pdfInputs" class="qr-input-group" style="display: none;">
                         <div class="pro-upload-container">
-                            <!-- Title yahan se hata diya hai kyunki woh upar h2 mein aa raha hai -->
                             <label for="pdfUpload" class="upload-drop-area">
                                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
                                 <p class="upload-text-main">Drag & drop your PDF file here</p>
@@ -171,7 +175,8 @@
                             <div class="control-group half-width"><input type="email" id="vcardEmail" placeholder="Email Address"></div>
                         </div>
                         <div class="control-group">
-                            <input type="url" id="vcardWebsite" placeholder="Website URL (e.g., https://qodeo.app)">
+                            <!-- Tabdeeli 4: Placeholder URL badla gaya -->
+                            <input type="url" id="vcardWebsite" placeholder="Website URL (e.g., https://your-website.com)">
                         </div>
 
                         <div class="vcard-section-title">Social Media Links (Optional)</div>
@@ -215,13 +220,15 @@
     </main>
 
     <footer class="site-footer">
-        <div class="container"><p>© <span id="year"></span> Qodeo. All Rights Reserved.</p></div>
+        <!-- Tabdeeli 5: Footer badla gaya -->
+        <div class="container"><p>© <span id="year"></span> I ♥️ QR. All Rights Reserved.</p></div>
     </footer>
 
     <!-- Login Modal -->
     <div id="login-modal-overlay" class="hidden">
         <div id="login-modal-content">
-            <h3>Join Qodeo to Use Pro Tools</h3>
+            <!-- Tabdeeli 6: Modal text badla gaya -->
+            <h3>Join I ♥️ QR to Use Pro Tools</h3>
             <button id="google-login-button"><i class="fab fa-google"></i> Continue with Google</button>
             <button id="github-login-button"><i class="fab fa-github"></i> Continue with GitHub</button>
             <button id="close-modal-button">×</button>
