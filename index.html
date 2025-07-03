@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Tabdeeli 1: Title ko badal diya gaya hai -->
     <title>I ♥️ QR - Modern QR Code Studio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -16,13 +15,17 @@
 <body>
     <header class="site-header">
         <div class="container header-container">
-            <!-- Tabdeeli 2: Logo ko "I ♥️ QR" se badal diya gaya hai (Professional Look ke saath) -->
-            <a href="index.html" id="logoLink">
-                <span id="logoText" style="font-size: 1.5em; display: flex; align-items: center; gap: 8px;">
+            <!-- === SAHI KIYA GAYA LOGO (ICON AUR TEXT DONO KE SAATH) === -->
+            <a href="index.html" id="logoLink" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <!-- Aapka Logo Icon -->
+                <img src="images/qodeo-header-icon.jpg" alt="QR Icon" id="headerIcon"> 
+                
+                <!-- Aapka Naya Text -->
+                <span id="logoText" style="font-size: 1.5em; color: white; font-weight: bold; display: flex; align-items: center; gap: 8px;">
                     I <i class="fas fa-heart" style="color: #e53935;"></i> QR
                 </span>
             </a>
-            <!-- ==================================================================================== -->
+            <!-- ========================================================= -->
             <div id="login-container">
                 <button id="login-button">Login</button>
                 <div id="user-profile" class="hidden">
@@ -147,7 +150,6 @@
                 <div class="stats-box">
                     <i class="fas fa-users"></i>
                     <span id="visitor-count" class="count-number">0</span>
-                    <!-- Tabdeeli 3: Visitor count text ko badal diya gaya hai -->
                     <p>Happy Visitors on I ♥️ QR</p>
                 </div>
             </div>
@@ -156,13 +158,11 @@
     </main>
 
     <footer class="site-footer">
-        <!-- Tabdeeli 4: Footer text ko badal diya gaya hai -->
         <div class="container"><p>© <span id="year"></span> I ♥️ QR. All Rights Reserved.</p></div>
     </footer>
 
     <div id="login-modal-overlay" class="hidden">
         <div id="login-modal-content">
-            <!-- Tabdeeli 5: Login modal ke title ko badal diya gaya hai -->
             <h3>Join I ♥️ QR</h3>
             <button id="google-login-button"><i class="fab fa-google"></i> Continue with Google</button>
             <button id="github-login-button"><i class="fab fa-github"></i> Continue with GitHub</button>
